@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/11 13:01:06 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/11 14:55:49 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ AR			:= ar rcs
 INCLUDES	:= -I./include
 
 SRCS		:= \
-	./playground/practice00.c 
+	playground/practice00.c 
 OBJS		:= $(SRCS:.c=.o)
 
 #SRCS_BONUS	:= 
@@ -37,13 +37,14 @@ all: $(NAME) #bonus
 
 $(NAME): $(LIBFT) $(OBJS) 
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) \
-	&& echo "$(GRAY)Compiled:$(COR) $(SRCS)"
+	&& echo "$(GRAY)File compiled:$(COR)	$(SRCS)"
 
 %.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT):
-	@make --silent --no-print-directory -C $(LIBFT_DIR)
+	@make --silent --no-print-directory -C $(LIBFT_DIR) \
+	&& echo "$(PURPLE)Library built:$(COR)	$(LIBFT)"
 
 libft : $(LIBFT)
 
@@ -74,7 +75,8 @@ YELLOW	:= \033[1;93m# yellow
 #Recomendation to define alias t="make test"
 test: all clean
 	@echo "$(COR)$(GRAY)\
-	========================================== $(NAME) START $(COR)" ; \
+	========================================== $(NAME) START\
+	$(COR)" ; \
 	valgrind	\
 		--show-error-list=yes \
 		--leak-check=full \
@@ -85,10 +87,11 @@ test: all clean
 		\
 		./minishell ; \
 	\
-	echo "$(COR)$(GRAY)========================================== $(NAME) END\n\
+	echo "$(COR)$(GRAY)\
+	========================================== $(NAME) END\n\
 	Return value: $$?$(COR)" ; \
 	\
-	tail -n 3 log.txt ; \
+	tail -n 3 log.txt | awk '{gsub(/^==[0-9]*== /, ""); if (length($0) > 0) print $0}' ; \
 	\
 	echo -n "$(YELLOW)" ; \
 	norminette | grep -v -E \
