@@ -6,12 +6,11 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/11 10:32:43 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/11 12:28:42 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= minishell
-NAME_BONUS	:= minishell
 LIBFT		:= libft/libft.a
 LIBFT_DIR	:= libft
 ##################################################################### Compiler #
@@ -25,8 +24,6 @@ CFLAGS		+= -g
 RM			:= rm -f
 AR			:= ar rcs
 ########################################################## Objects and Headers #
-#HEADERS		:= minishell.h
-#INCLUDES	:= minishell.h
 INCLUDES	:= -I./include
 
 SRCS		:= \
@@ -43,7 +40,7 @@ $(NAME): $(LIBFT) $(OBJS)
 	&& echo "$(GRAY)Compiled:$(COR) $(SRCS)"
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT):
 	@make --silent --no-print-directory -C $(LIBFT_DIR)
@@ -62,7 +59,7 @@ clean:
 
 fclean: clean
 	@make --silent --no-print-directory -C $(LIBFT_DIR) fclean \
-	&&$(RM) $(NAME) $(NAME_BONUS)
+	&&$(RM) $(NAME)
 
 re: fclean all
 	@echo "$(GRAY)redone$(COR)"
@@ -74,10 +71,22 @@ PURPLE	:= \033[1;35m# purple
 GRAY	:= \033[1;90m# gray
 YELLOW	:= \033[1;93m# yellow
 ######################################################################### Test #
-#Recomendation: alias t="make test"
+#Recomendation to define alias t="make test"
 test: all clean
-	@valgrind --quiet -s ./minishell ; \
+	@valgrind	\
+		--show-error-list=yes \
+		--leak-check=full \
+		--show-leak-kinds=all \
+		--track-origins=yes \
+		--verbose \
+		--log-file=valgrind-out.txt \
+		\
+		./minishell ; \
+	\
 	echo "$(COR)$(GRAY)Return value: $$?$(COR)" ; \
+	\
+	tail -n 3 valgrind-out.txt ; \
+	\
 	echo -n "$(YELLOW)" ; \
 	norminette | grep -v -E \
 	"Too many functions in file|Comment is invalid in this scope|Empty line in \
