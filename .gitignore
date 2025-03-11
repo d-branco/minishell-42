@@ -4,6 +4,7 @@ minishell
 *ignoreme*.*
 *ignoreme*/
 *.wav
+*.txt
 
 # Prerequisites
 *.d

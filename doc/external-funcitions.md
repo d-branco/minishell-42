@@ -2,10 +2,10 @@
 
 ## String and Command Line Functions
 - [`readline`](https://man7.org/linux/man-pages/man3/readline.3.html): Reads a line from user input with editing capabilities
-- [`rl_clear_history`](https://man7.org/linux/man-pages/man3/history.3.html): Clears the readline history list
-- [`rl_on_new_line`](https://man7.org/linux/man-pages/man3/readline.3.html): Tells readline that the cursor has moved to a new line
-- [`rl_replace_line`](https://man7.org/linux/man-pages/man3/readline.3.html): Replaces the current readline buffer content
-- [`rl_redisplay`](https://man7.org/linux/man-pages/man3/readline.3.html): Updates the display according to the current readline buffer
+- [`rl_clear_history`](https://tiswww.cwru.edu/php/chet/readline/readline.html#index-rl_005fclear_005fhistory): Clears the readline history list
+- [`rl_on_new_line`](https://tiswww.cwru.edu/php/chet/readline/readline.html#index-rl_005fon_005fnew_005fline): Tells readline that the cursor has moved to a new line
+- [`rl_replace_line`](https://tiswww.cwru.edu/php/chet/readline/readline.html#index-rl_005freplace_005fline): Replaces the current readline buffer content
+- [`rl_redisplay`](https://tiswww.cwru.edu/php/chet/readline/readline.html#Redisplay): Updates the display according to the current readline buffer
 - [`add_history`](https://man7.org/linux/man-pages/man3/history.3.html): Adds a line to the readline history
 
 ## Standard I/O Functions
@@ -72,9 +72,9 @@
 - [`getenv`](https://man7.org/linux/man-pages/man3/getenv.3.html): Gets an environment variable
 
 ## Terminal Capability Functions
-- [`tgetent`](https://man7.org/linux/man-pages/man3/tgetent.3.html): Loads terminal capability database
-- [`tgetflag`](https://man7.org/linux/man-pages/man3/tgetflag.3.html): Gets boolean terminal capability
-- [`tgetnum`](https://man7.org/linux/man-pages/man3/tgetnum.3.html): Gets numeric terminal capability
-- [`tgetstr`](https://man7.org/linux/man-pages/man3/tgetstr.3.html): Gets string terminal capability
-- [`tgoto`](https://man7.org/linux/man-pages/man3/tgoto.3.html): Formats cursor motion strings
-- [`tputs`](https://man7.org/linux/man-pages/man3/tputs.3.html): Outputs terminal capability strings
+- [`tgetent`](https://linux.die.net/man/3/tgetent): Loads terminal capability database
+- [`tgetflag`](https://linux.die.net/man/3/tgetflag): Gets boolean terminal capability
+- [`tgetnum`](https://linux.die.net/man/3/tgetnum): Gets numeric terminal capability
+- [`tgetstr`](https://linux.die.net/man/3/tgetstr): Gets string terminal capability
+- [`tgoto`](https://linux.die.net/man/3/tgoto): Formats cursor motion strings
+- [`tputs`](https://linux.die.net/man/3/tputs): Outputs terminal capability strings

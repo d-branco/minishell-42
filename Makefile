@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/11 12:28:42 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/11 13:01:06 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,19 +73,22 @@ YELLOW	:= \033[1;93m# yellow
 ######################################################################### Test #
 #Recomendation to define alias t="make test"
 test: all clean
-	@valgrind	\
+	@echo "$(COR)$(GRAY)\
+	========================================== $(NAME) START $(COR)" ; \
+	valgrind	\
 		--show-error-list=yes \
 		--leak-check=full \
 		--show-leak-kinds=all \
 		--track-origins=yes \
 		--verbose \
-		--log-file=valgrind-out.txt \
+		--log-file=log.txt \
 		\
 		./minishell ; \
 	\
-	echo "$(COR)$(GRAY)Return value: $$?$(COR)" ; \
+	echo "$(COR)$(GRAY)========================================== $(NAME) END\n\
+	Return value: $$?$(COR)" ; \
 	\
-	tail -n 3 valgrind-out.txt ; \
+	tail -n 3 log.txt ; \
 	\
 	echo -n "$(YELLOW)" ; \
 	norminette | grep -v -E \
