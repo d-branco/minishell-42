@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:30:42 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/10 15:27:31 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/11 09:12:30 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 int	main(void)
 {
-	printf("Hello ground!\n");
+	printf("Hello, friend.\n");
 }
