@@ -6,11 +6,11 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:30:42 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/11 09:12:30 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:36:39 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int	main(void)
 {

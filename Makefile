@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/11 09:20:57 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/11 10:32:43 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,6 @@ NAME		:= minishell
 NAME_BONUS	:= minishell
 LIBFT		:= libft/libft.a
 LIBFT_DIR	:= libft
-HEADERS		:= minishell.h
 ##################################################################### Compiler #
 CC			= cc
 CFLAGS		= -Wall -Wextra 
@@ -26,9 +25,14 @@ CFLAGS		+= -g
 RM			:= rm -f
 AR			:= ar rcs
 ########################################################## Objects and Headers #
+#HEADERS		:= minishell.h
+#INCLUDES	:= minishell.h
+INCLUDES	:= -I./include
+
 SRCS		:= \
 	./playground/practice00.c 
 OBJS		:= $(SRCS:.c=.o)
+
 #SRCS_BONUS	:= 
 #OBJS_BONUS	:= $(SRCS_BONUS:.c=.o)
 ###################################################################### Targets #
@@ -39,7 +43,7 @@ $(NAME): $(LIBFT) $(OBJS)
 	&& echo "$(GRAY)Compiled:$(COR) $(SRCS)"
 
 %.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT):
 	@make --silent --no-print-directory -C $(LIBFT_DIR)
@@ -70,7 +74,7 @@ PURPLE	:= \033[1;35m# purple
 GRAY	:= \033[1;90m# gray
 YELLOW	:= \033[1;93m# yellow
 ######################################################################### Test #
-Recomendation: alias t="make test"
+#Recomendation: alias t="make test"
 test: all clean
 	@valgrind --quiet -s ./minishell ; \
 	echo "$(COR)$(GRAY)Return value: $$?$(COR)" ; \
