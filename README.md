@@ -71,7 +71,7 @@ minishell/
 │   └── <features>.h
 ├── srcs/
 │   ├── main.c
-│   ├── <feature>/
+│   ├── <features>/
 │   └── utils/
 ├── libft/
 │   ├── <libraries>/

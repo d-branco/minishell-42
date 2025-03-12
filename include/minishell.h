@@ -6,12 +6,18 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/11 12:51:31 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/12 15:25:15 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
+
+# include "../libft/libft.h"
 
 //		String and Command Line Functions
 # include <readline/readline.h>
