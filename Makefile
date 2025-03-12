@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/12 17:31:27 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/12 20:29:26 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CFLAGS		+= -Werror
 READFLAGS	= -lreadline
 
 CFLAGS		+= -g
-#CFLAGS		+= -D DEBUG=1 # Comment before deliverance
+#CFLAGS		+= -D DEBUG=1
 #CFLAGS		+= -fsanitize=address -fsanitize=leak
 ########################################################### Intermidiate steps #
 RM			:= rm -f
@@ -38,31 +38,47 @@ OBJS		:= $(SRCS:.c=.o)
 ###################################################################### Targets #
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(READFLAGS) \
-	&& echo "$(GRAY)File compiled:$(COR)	$(SRCS)"
+$(NAME): $(LIBFT) $(OBJS) supp_doc
+	@\
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(READFLAGS) &&	\
+	echo "$(GRAY)File compiled:$(COR)	$(SRCS)"
 
 %.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT):
-	@make --silent --no-print-directory -C $(LIBFT_DIR) \
-	&& echo "$(PURPLE)Library built:$(COR)	$(LIBFT)"
+	@\
+	make --silent --no-print-directory -C $(LIBFT_DIR) &&	\
+	echo "$(GRAY)Library built:$(COR)	$(LIBFT)"
 
 libft : $(LIBFT)
+
+supp_doc:
+	@echo "\
+	{\n\
+		leak readline\n\
+		Memcheck:Leak\n\
+		...\n\
+		fun:readline\n\
+	}\n\
+	" > .readline.txt
 
 bonus: $(NAME)
 
 clean:
-	@$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS)\
-	;make --silent --no-print-directory -C $(LIBFT_DIR) clean
+	@\
+	make --silent --no-print-directory -C $(LIBFT_DIR) clean ;	\
+	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS)
 
 fclean: clean
-	@make --silent --no-print-directory -C $(LIBFT_DIR) fclean \
-	&&$(RM) $(NAME)
+	@\
+	make --silent --no-print-directory -C $(LIBFT_DIR) fclean ;	\
+	$(RM) $(NAME) &&											\
+	echo "$(GRAY)Files cleaned:$(COR)"
 
 re: fclean all
-	@echo "$(GRAY)redone$(COR)"
+	@echo "$(GRAY)redone$(COR)" &&	\
+	echo "$(GRAY)Files cleaned:$(COR)"
 
 .PHONY: all clean fclean re
 ####################################################################### Colors #
@@ -71,14 +87,14 @@ PURPLE	:= \033[1;35m# purple
 GRAY	:= \033[1;90m# gray
 YELLOW	:= \033[1;93m# yellow
 ######################################################################### Test #
-#Recomendation to define alias t="make all 'CFLAGS+=-D DEBUG=1';make test"
 test:
 	@\
+	$(MAKE) --silent fclean ;					\
 	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1 ;	\
 	$(MAKE) --silent clean ;					\
 	\
 	echo "$(COR)$(GRAY)========================================== $(NAME) START\
-	$(COR)" ;												\
+	$(COR)" ; \
 	\
 	valgrind							\
 		--track-fds=yes					\
@@ -86,16 +102,21 @@ test:
 		--leak-check=full				\
 		--show-leak-kinds=all			\
 		--track-origins=yes				\
-		--suppressions=readline.supp	\
+		--suppressions=.readline.txt	\
 		--log-file=log.txt				\
 										\
 		./minishell ;					\
 	\
 	echo "$(COR)$(GRAY)========================================== $(NAME) END\n\
-	Return value: $$?$(COR)" ;\
+	Return value: $$?$(COR)" ; \
 	\
-	tail -n 12 log.txt | awk '{gsub(/^==[0-9]*== /, "") ;	\
-	if (length($0) > 0) print $0}' ;						\
+	tail -n 12 log.txt |				\
+	awk '{								\
+	gsub(/^==[0-9]*== /, "") ;			\
+	gsub(/^--[0-9]*-- /, "") ;			\
+	gsub(/^used_suppression: /, "") ;	\
+	if (length($0) > 0) print $0		\
+	}' ;								\
 	\
 	echo -n "$(YELLOW)" ;				\
 		norminette						\

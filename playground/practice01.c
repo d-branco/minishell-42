@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:43:31 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/12 17:19:37 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/12 20:21:57 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(void)
 	char	*input;
 
 	if (DEBUG)
-		printf("Debug mode\n");
+		printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG-- \n");
 	else
 		printf("Hello, friend.\n");
 	while (42)
