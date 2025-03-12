@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/12 16:22:04 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/12 17:31:27 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CFLAGS		+= -Werror
 READFLAGS	= -lreadline
 
 CFLAGS		+= -g
-CFLAGS		+= -D DEBUG=1 # Comment before deliverance
+#CFLAGS		+= -D DEBUG=1 # Comment before deliverance
 #CFLAGS		+= -fsanitize=address -fsanitize=leak
 ########################################################### Intermidiate steps #
 RM			:= rm -f
@@ -30,12 +30,13 @@ INCLUDES	:= -I./include
 
 SRCS		:= \
 	playground/practice01.c
+#	playground/practice00.c
 OBJS		:= $(SRCS:.c=.o)
 
 #SRCS_BONUS	:=
 #OBJS_BONUS	:= $(SRCS_BONUS:.c=.o)
 ###################################################################### Targets #
-all: $(NAME) #bonus
+all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(READFLAGS) \
@@ -50,14 +51,10 @@ $(LIBFT):
 
 libft : $(LIBFT)
 
-#bonus: $(NAME)
-#
-#bonus: $(OBJS_BONUS) $(LIBFT)
-#	@$(CC) $(CFLAGS) $(OBJS_BONUS) $(LIBFT) -o $(NAME) $(READFLAGS) \
-#	&& echo "$(GRAY)Compiled:$(COR) $(SRCS_BONUS)"
+bonus: $(NAME)
 
 clean:
-	@$(RM) *.o *.gch *.exe $(OBJS) $(OBJS_BONUS)\
+	@$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS)\
 	;make --silent --no-print-directory -C $(LIBFT_DIR) clean
 
 fclean: clean
@@ -74,34 +71,37 @@ PURPLE	:= \033[1;35m# purple
 GRAY	:= \033[1;90m# gray
 YELLOW	:= \033[1;93m# yellow
 ######################################################################### Test #
-#Recomendation to define alias t="make test"
-test: all clean
-	@echo "$(COR)$(GRAY)\
-	========================================== $(NAME) START\
-	$(COR)" ; \
+#Recomendation to define alias t="make all 'CFLAGS+=-D DEBUG=1';make test"
+test:
+	@\
+	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1 ;	\
+	$(MAKE) --silent clean ;					\
 	\
-	valgrind \
-		--track-fds=yes \
-		--show-error-list=yes \
-		--leak-check=full \
-		--show-leak-kinds=all \
-		--track-origins=yes \
-		\
-		--suppressions=readline.supp \
-		--log-file=log.txt \
-		\
-		./minishell ; \
+	echo "$(COR)$(GRAY)========================================== $(NAME) START\
+	$(COR)" ;												\
 	\
-	echo "$(COR)$(GRAY)\
-	========================================== $(NAME) END\n\
-	Return value: $$?$(COR)" ; \
+	valgrind							\
+		--track-fds=yes					\
+		--show-error-list=yes			\
+		--leak-check=full				\
+		--show-leak-kinds=all			\
+		--track-origins=yes				\
+		--suppressions=readline.supp	\
+		--log-file=log.txt				\
+										\
+		./minishell ;					\
 	\
-	tail -n 12 log.txt | awk '{gsub(/^==[0-9]*== /, ""); \
-	if (length($0) > 0) print $0}' ; \
+	echo "$(COR)$(GRAY)========================================== $(NAME) END\n\
+	Return value: $$?$(COR)" ;\
 	\
-	echo -n "$(YELLOW)" ; \
-		norminette \
-		| grep -v OK \
-		| grep -v WRONG_SCOPE_COMMENT \
-		| grep -v GLOBAL_VAR_DETECTED \
-		; echo -n "$(COR)"
+	tail -n 12 log.txt | awk '{gsub(/^==[0-9]*== /, "") ;	\
+	if (length($0) > 0) print $0}' ;						\
+	\
+	echo -n "$(YELLOW)" ;				\
+		norminette						\
+		| grep -v OK 					\
+		| grep -v WRONG_SCOPE_COMMENT	\
+		| grep -v GLOBAL_VAR_DETECTED	\
+	; echo -n "$(COR)" ;				\
+	\
+	$(MAKE) --silent fclean ;

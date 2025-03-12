@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:43:31 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/12 16:14:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:19:37 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ int	main(void)
 	while (42)
 	{
 		input = readline(">_");
-		printf("01 echooing: %s\n", input);
 		if ((input == NULL) || (ft_strncmp(input, "exit", 5) == 0))
 		{
-			printf("01: Bye ;)\n");
+			printf("01 echooing: %s\n01: Bye ;)\n", input);
 			break ;
 		}
+		if (ft_strncmp(input, "", 1) != 0)
+			printf("01 echooing: %s\n", input);
 	}
 	return (0);
 }
