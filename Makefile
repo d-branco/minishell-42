@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/12 20:29:26 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/12 20:47:47 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,17 +68,17 @@ bonus: $(NAME)
 clean:
 	@\
 	make --silent --no-print-directory -C $(LIBFT_DIR) clean ;	\
-	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS)
+	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS) &&		\
+	echo "$(GRAY)Files cleaned.$(COR)"
 
 fclean: clean
 	@\
 	make --silent --no-print-directory -C $(LIBFT_DIR) fclean ;	\
 	$(RM) $(NAME) &&											\
-	echo "$(GRAY)Files cleaned:$(COR)"
+	echo "$(GRAY)File fcleaned.$(COR)"
 
 re: fclean all
-	@echo "$(GRAY)redone$(COR)" &&	\
-	echo "$(GRAY)Files cleaned:$(COR)"
+	@echo "$(GRAY)redone$(COR)" 
 
 .PHONY: all clean fclean re
 ####################################################################### Colors #
