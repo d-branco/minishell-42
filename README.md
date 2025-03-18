@@ -72,7 +72,15 @@ minishell/
 ├── srcs/
 │   ├── main.c
 │   ├── <features>/
-│   └── utils/
+│   ├── utils/
+│   └── builtins/
+│       ├── echo.c
+│       ├── cd.c
+│       ├── pwd.c
+│       ├── export.c
+│       ├── unset.c
+│       ├── env.c
+│       └── exit.c
 ├── libft/
 │   ├── <libraries>/
 │   └── Makefile

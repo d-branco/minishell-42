@@ -6,12 +6,12 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:30:42 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/12 14:43:13 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/18 18:59:11 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 int	g_global_variable;
 
 int	main(void)
@@ -22,3 +22,4 @@ int	main(void)
 	else
 		printf("Hello, friend.\n");
 }
+*/

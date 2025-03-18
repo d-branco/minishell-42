@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/12 20:47:47 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/18 13:31:57 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,8 @@ AR			:= ar rcs
 INCLUDES	:= -I./include
 
 SRCS		:= \
-	playground/practice01.c
+	src/minishell.c
+#	playground/practice01.c
 #	playground/practice00.c
 OBJS		:= $(SRCS:.c=.o)
 
@@ -78,7 +79,7 @@ fclean: clean
 	echo "$(GRAY)File fcleaned.$(COR)"
 
 re: fclean all
-	@echo "$(GRAY)redone$(COR)" 
+	@echo "$(GRAY)redone$(COR)"
 
 .PHONY: all clean fclean re
 ####################################################################### Colors #
@@ -124,5 +125,4 @@ test:
 		| grep -v WRONG_SCOPE_COMMENT	\
 		| grep -v GLOBAL_VAR_DETECTED	\
 	; echo -n "$(COR)" ;				\
-	\
-	$(MAKE) --silent fclean ;
+	
