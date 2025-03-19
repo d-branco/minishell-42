@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/12 15:25:15 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/19 18:19:44 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,5 +129,11 @@
 //	char			*tgetstr(char *id, char **area);
 //	char			*tgoto(const char *cap, int col, int row);
 //	int				tputs(const char *str, int affcnt, int (*putc)(int));
+
+//minishell.c
+//int			main(int argc, char **argv, char **envp);
+//cmd_interpreter.c
+int				ad_handle_parse_input(char	*input);
+int				ad_exit_code(int newcode);
 
 #endif

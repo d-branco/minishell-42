@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/18 13:31:57 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/19 18:23:42 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,8 @@ AR			:= ar rcs
 INCLUDES	:= -I./include
 
 SRCS		:= \
-	src/minishell.c
+	src/minishell.c \
+	src/cmd_interpreter.c 
 #	playground/practice01.c
 #	playground/practice00.c
 OBJS		:= $(SRCS:.c=.o)
@@ -91,11 +92,11 @@ YELLOW	:= \033[1;93m# yellow
 test:
 	@\
 	$(MAKE) --silent fclean ;					\
-	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1 ;	\
-	$(MAKE) --silent clean ;					\
+	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1 &&	\
+	$(MAKE) --silent clean &&					\
 	\
 	echo "$(COR)$(GRAY)========================================== $(NAME) START\
-	$(COR)" ; \
+	$(COR)" && \
 	\
 	valgrind							\
 		--track-fds=yes					\
@@ -109,20 +110,20 @@ test:
 		./minishell ;					\
 	\
 	echo "$(COR)$(GRAY)========================================== $(NAME) END\n\
-	Return value: $$?$(COR)" ; \
+	Return value: $$?$(COR)" && \
 	\
-	tail -n 12 log.txt |				\
-	awk '{								\
-	gsub(/^==[0-9]*== /, "") ;			\
-	gsub(/^--[0-9]*-- /, "") ;			\
-	gsub(/^used_suppression: /, "") ;	\
-	if (length($0) > 0) print $0		\
-	}' ;								\
+	tail -n 12 log.txt |					\
+	awk '{									\
+	gsub(/^==[0-9]*== /, "") ;				\
+	gsub(/^--[0-9]*-- /, "") ;				\
+	gsub(/^used_suppression: /, "") ;		\
+	if (length($0) > 0) print $0			\
+	}' ;									\
 	\
-	echo -n "$(YELLOW)" ;				\
-		norminette						\
-		| grep -v OK 					\
-		| grep -v WRONG_SCOPE_COMMENT	\
-		| grep -v GLOBAL_VAR_DETECTED	\
-	; echo -n "$(COR)" ;				\
+	echo -n "$(YELLOW)" ;						\
+		norminette src/ include/ playground/	\
+		| grep -v OK 							\
+		| grep -v WRONG_SCOPE_COMMENT			\
+		| grep -v GLOBAL_VAR_DETECTED			\
+	; echo -n "$(COR)" ;						\
 	

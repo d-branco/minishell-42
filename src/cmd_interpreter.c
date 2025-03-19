@@ -1,42 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   cmd_interpreter.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/19 18:22:11 by abessa-m         ###   ########.fr       */
+/*   Created: 2025/03/19 11:20:04 by abessa-m          #+#    #+#             */
+/*   Updated: 2025/03/19 18:25:18 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char **argv)
+int	ad_handle_parse_input(char	*input)
 {
-	char	*input;
-
-	(void) argv;
-	if (argc > 1)
-	{
-		ft_putstr_fd("Too many arguments, dear ;)\n", 2);
-		return (1);
-	}
 	if (DEBUG)
-		printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG-- \n");
-	else
-		printf("Hello, friend.\n");
-	ad_exit_code(-1);
-	while (42)
 	{
-		input = readline("% ");
-		if (input == NULL)
-		{
-			printf("Goodbye, friend ;)\n");
-			break ;
-		}
-		else
-			ad_handle_parse_input(input);
+		ft_putstr_fd("--DEBUG--INPUT: ", 1);
+		ft_putstr_fd(input, 1);
+		write(1, "\n", 1);
 	}
-	return (ad_exit_code(-1));
+	ft_putnbr_fd(ad_exit_code(-1), 1);
+	return (0);
+}
+
+int	ad_exit_code(int newcode)
+{
+	static int	code = 0;
+
+	if (newcode == -1)
+		return (code);
+	code = newcode;
+	return (code);
 }
