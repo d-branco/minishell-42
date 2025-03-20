@@ -6,13 +6,11 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:20:04 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/20 12:30:25 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:18:19 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	check_quotes(char *input);
 
 int	ad_handle_parse_input(char	*input)
 {
@@ -23,14 +21,57 @@ int	ad_handle_parse_input(char	*input)
 		write(1, "\n", 1);
 	}
 	ad_exit_code(0);
-	//if (check_quotes(input) || check_parenthesis(input) || check_logic(input))
-	if (check_quotes(input))
+	if (!more_than_one_command(input))
 	{
-		printf("Oh! There's a syntax error.\n");
-		ad_exit_code(2);
+		if (check_quotes(input) || check_parenthesis(input))
+		{
+			write(2, "Oh! There's a syntax error.\n", 29);
+			ad_exit_code(2);
+		}
 	}
 	ft_putnbr_fd(ad_exit_code(-1), 1);
 	return (ad_exit_code(-1));
+}
+
+int	more_than_one_command(char *input)
+{
+	int	len;
+
+	len = ft_strlen(input);
+	if ((ft_strnstr(input, "&&", len))
+		|| (ft_strnstr(input, "||", len))
+		|| (ft_strnstr(input, "|", len)))
+		return (printf("More than one command\n"), 1);
+	return (0);
+}
+
+int	check_logic(char *input)
+{
+	if (!input)
+		return (1);
+	return (0);
+}
+
+int	check_parenthesis(char *input)
+{
+	int	i;
+	int	sum;
+
+	sum = 0;
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == ')')
+			sum--;
+		if (sum < 0)
+			return (1);
+		if (input[i] == '(')
+			sum++;
+		i++;
+	}
+	if (sum != 0)
+		return (1);
+	return (0);
 }
 
 int	check_quotes(char *input)
@@ -43,7 +84,7 @@ int	check_quotes(char *input)
 	while (input[i])
 	{
 		if (input[i] == '"')
-		sum++;
+			sum++;
 		i++;
 	}
 	return (sum % 2);
