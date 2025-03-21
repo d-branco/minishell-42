@@ -1,6 +1,7 @@
 # Project
 minishell
 minishell_tester/
+log/
 *ignoreme*
 *ignoreme*.*
 *ignoreme*/
