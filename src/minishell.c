@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/24 16:50:12 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/24 16:57:50 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	if (DEBUG)
-		printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG-- \n");
+		printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG--\n");
 	while (42)
 	{
 		ft_putnbr_fd(ad_exit_code(-1), 1);

@@ -2,16 +2,15 @@
 
 echo "PS1='\$(echo \$?)% '" > ~/.bash_minishell_test
 
-# Pass all the arguments (commands) to expect
-#./expect_script.exp "$@"
-
-#./expect_script.exp "ls" "echo hello" "echo \"hello world\"" 
-#./expect_script.exp "ls" "echo hello" "\x04" > out.txt
-
-echo -e "==========================================                             MINISHELL" > out.txt
-./exp_minishell.exp "" "" >> out.txt
+echo -e "==========================================                             MINISHELL"
+./exp_minishell.exp "$@" > out_minishell.txt
+sed -i 's/\x1B\[[0-9;?]*[a-zA-Z]//g' out_minishell.txt
+cat out_minishell.txt
 sleep 0.2
-echo -e "==========================================                                  BASH" >> out.txt
-./exp_bash.exp "" "" >> out.txt
-
-cat out.txt
+echo -e "==========================================                                  BASH"
+./exp_bash.exp "$@" > out_bash.txt
+sed -i 's/\x1B\[[0-9;?]*[a-zA-Z]//g' out_bash.txt
+cat out_bash.txt
+echo -e "==========================================                                  diff"
+diff out_minishell.txt out_bash.txt
+#rm -f out_minishell.txt out_bash.txt

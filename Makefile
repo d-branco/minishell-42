@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/19 18:23:42 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/24 17:01:02 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -110,9 +110,9 @@ test:
 		./minishell ;					\
 	\
 	echo "$(COR)$(GRAY)========================================== $(NAME) END\n\
-	Return value: $$?$(COR)" && \
+	$(COR)RETURN VALUE: $$?" && \
 	\
-	tail -n 12 log.txt |					\
+	tail -n 18 log.txt |					\
 	awk '{									\
 	gsub(/^==[0-9]*== /, "") ;				\
 	gsub(/^--[0-9]*-- /, "") ;				\

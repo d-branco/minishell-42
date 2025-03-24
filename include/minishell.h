@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/24 13:54:22 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/24 16:56:37 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
-
-
 
 # include "../libft/libft.h"
 
