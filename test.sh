@@ -27,7 +27,7 @@ run_test() {
     BASH_EXIT=$?
     diff -u "$BASH_OUTPUT" "$MINISHELL_OUTPUT" > /dev/null
     STDOUT_DIFF=$?
-    printf "%-3s %-42s " "$TEST_COUNT" "\"$test_cmd\""
+    printf "%3s %-42s " "$TEST_COUNT" "\"$test_cmd\""
     if [ "$MINISHELL_EXIT" -eq "$expected_exit_code" ] && [ "$STDOUT_DIFF" -eq 0 ]; then
         echo -e "${GREEN}GOOD${RESET}  ($MINISHELL_EXIT/$expected_exit_code)"
         PASS_COUNT=$((PASS_COUNT + 1))
@@ -36,7 +36,7 @@ run_test() {
         if [ "$MINISHELL_EXIT" -eq "$BASH_EXIT" ]; then
             echo -e "($MINISHELL_EXIT/$BASH_EXIT)"
         else
-            echo -e "${RED}(mini:$MINISHELL_EXIT/bash:$BASH_EXIT)${RESET}"
+            echo -e "${RED}($MINISHELL_EXIT not $BASH_EXIT)${RESET}"
         fi
         FAIL_COUNT=$((FAIL_COUNT + 1))
         LOG_FILE="test_${TEST_COUNT}.txt"
@@ -67,7 +67,7 @@ run_signal_test() {
     TEST_COUNT=$((TEST_COUNT + 1))
     MINISHELL_OUTPUT=$(mktemp)
     MINISHELL_ERROR=$(mktemp)
-    printf "%-3s %-42s " "$TEST_COUNT" "$test_cmd ($signal_name)"
+    printf "%3s %-42s " "$TEST_COUNT" "$test_cmd ($signal_name)"
     # CTRL+D (EOF)
     if [ "$signal_code" = "EOF" ]; then
         $MINISHELL < /dev/null > "$MINISHELL_OUTPUT" 2> "$MINISHELL_ERROR"
@@ -76,7 +76,7 @@ run_signal_test() {
             echo -e "${GREEN}GOOD${RESET}  ($expected_exit_code/$MINISHELL_EXIT)"
             PASS_COUNT=$((PASS_COUNT + 1))
         else
-            echo -e "${RED}ERROR (mini:$MINISHELL_EXIT/bash:$expected_exit_code)${RESET}"
+            echo -e "${RED}ERROR ($MINISHELL_EXIT not $expected_exit_code)${RESET}"
             FAIL_COUNT=$((FAIL_COUNT + 1))
         fi
     # CTRL+C (SIGINT)
@@ -86,12 +86,11 @@ run_signal_test() {
         kill -SIGINT $MINISHELL_PID
         wait $MINISHELL_PID
         MINISHELL_EXIT=$?
-        
         if [ "$MINISHELL_EXIT" -eq "$expected_exit_code" ]; then
             echo -e "${GREEN}GOOD${RESET}  ($MINISHELL_EXIT/$expected_exit_code)"
             PASS_COUNT=$((PASS_COUNT + 1))
         else
-            echo -e "${RED}ERROR (mini:$MINISHELL_EXIT/bash:$expected_exit_code)${RESET}"
+            echo -e "${RED}ERROR ($MINISHELL_EXIT not $expected_exit_code)${RESET}"
             FAIL_COUNT=$((FAIL_COUNT + 1))
         fi
     # CTRL+\ (SIGQUIT)
@@ -106,7 +105,7 @@ run_signal_test() {
             echo -e "${GREEN}GOOD${RESET}  ($expected_exit_code/$MINISHELL_EXIT)"
             PASS_COUNT=$((PASS_COUNT + 1))
         else
-            echo -e "${RED}ERROR (mini:$MINISHELL_EXIT/bash:$expected_exit_code)${RESET}"
+            echo -e "${RED}ERROR ($MINISHELL_EXIT not $expected_exit_code)${RESET}"
             FAIL_COUNT=$((FAIL_COUNT + 1))
         fi
     fi
