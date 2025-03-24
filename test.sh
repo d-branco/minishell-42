@@ -12,7 +12,7 @@ BASH_MINISHELL="bash --noprofile --rcfile ~/.bash_minishell_test"
 make all
 make clean
 rm log/*.txt
-echo "PS1='\$(echo \$?) % '" > ~/.bash_minishell_test
+echo "PS1='\$(echo \$?)% '" > ~/.bash_minishell_test
 
 run_test() {
     local test_cmd="$1"
