@@ -71,7 +71,15 @@ minishell/
 │   └── <features>.h
 ├── srcs/
 │   ├── main.c
-│   ├── <features>/
+│   ├── prompt.c
+│   ├── lexer.c
+│   ├── parser.c
+│   ├── execution.c
+│   ├── signals.c
+│   ├── redirections.c
+│   ├── piping.c
+│   ├── environment.c
+│   ├── <other features>/
 │   ├── utils/
 │   └── builtins/
 │       ├── echo.c

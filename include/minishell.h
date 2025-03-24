@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/21 16:49:13 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/24 13:54:22 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@
 //minishell.c
 //int			main(int argc, char **argv, char **envp);
 //cmd_interpreter.c
-int				ad_handle_parse_input(char	*input);
+int				handle_parse_input(char	*input);
 int				ad_exit_code(int newcode);
 int				check_quotes(char *input);
 int				check_parenthesis(char *input);

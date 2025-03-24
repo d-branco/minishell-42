@@ -2,16 +2,17 @@
 
 GREEN="\033[32m"
 RED="\033[31m"
-YELLOW="\033[33m"
-BLUE="\033[34m"
 RESET="\033[0m"
 TEST_COUNT=0
 PASS_COUNT=0
 FAIL_COUNT=0
 MINISHELL="./minishell"
+BASH_MINISHELL="bash --noprofile --rcfile ~/.bash_minishell_test"
 
 make all
+make clean
 rm log/*.txt
+echo "PS1='\$(echo \$?) % '" > ~/.bash_minishell_test
 
 run_test() {
     local test_cmd="$1"
@@ -23,7 +24,7 @@ run_test() {
     BASH_ERROR=$(mktemp)
     echo "$test_cmd" | $MINISHELL > "$MINISHELL_OUTPUT" 2> "$MINISHELL_ERROR"
     MINISHELL_EXIT=$?
-    echo "$test_cmd" | bash > "$BASH_OUTPUT" 2> "$BASH_ERROR"
+    echo "$test_cmd" | $BASH_MINISHELL > "$BASH_OUTPUT" 2> "$BASH_ERROR"
     BASH_EXIT=$?
     diff -u "$BASH_OUTPUT" "$MINISHELL_OUTPUT" > /dev/null
     STDOUT_DIFF=$?
@@ -112,7 +113,7 @@ run_signal_test() {
     rm -f "$MINISHELL_OUTPUT" "$MINISHELL_ERROR"
 }
 
-printf "%-3s  %-42s%s\n" "NUM" "COMMAND" "RESULT RETURN "
+printf "%-3s  %-42s%s\n" "NUM" "COMMAND" "TEST  RETURN "
 # echo "Signal testing"
 run_signal_test "Ctrl+D (EOF)" "EOF" "" 0
 run_signal_test "Ctrl+C (SIGINT)" "SIGINT" "" 130
@@ -120,6 +121,7 @@ run_signal_test "Ctrl+\\ (SIGQUIT)" "SIGQUIT" "" 131
 # echo "Invalid Commands"
 run_test "Invalid \"singular double quote"
 # echo "Basic command tests"
+run_test ""
 run_test "echo Hello World"
 run_test "ls -la"
 run_test "pwd"

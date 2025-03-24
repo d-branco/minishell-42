@@ -6,13 +6,13 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:20:04 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/21 08:14:59 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/24 13:54:22 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ad_handle_parse_input(char	*input)
+int	handle_parse_input(char	*input)
 {
 	if (DEBUG)
 	{
@@ -29,7 +29,6 @@ int	ad_handle_parse_input(char	*input)
 			ad_exit_code(2);
 		}
 	}
-	ft_putnbr_fd(ad_exit_code(-1), 1);
 	return (ad_exit_code(-1));
 }
 

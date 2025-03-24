@@ -40,7 +40,7 @@ run_test() {
     STDOUT_DIFF=$?
     
     # Print a single line result
-    printf "%-3s %-42s " "[$TEST_COUNT]" "\"$test_cmd\""
+    printf "%3s %-42s " "$TEST_COUNT" "\"$test_cmd\""
     
     if [ "$MINISHELL_EXIT" -eq "$expected_exit_code" ] && [ "$STDOUT_DIFF" -eq 0 ]; then
         echo -e "${GREEN}GOOD${RESET}"
@@ -206,7 +206,7 @@ run_expect_signal_test() {
     # Create the expect script
     cat > "$EXPECT_SCRIPT" << EOF
 #!/usr/bin/expect -f
-set timeout 5
+set timeout 0.5
 set result_file [lindex \$argv 0]
 
 # Start minishell
@@ -313,7 +313,7 @@ EOF
     chmod +x "$EXPECT_SCRIPT"
     
     # Print test information
-    printf "%-3s %-42s " "[$TEST_COUNT]" "$signal_name ($test_cmd)"
+    printf "%3s %-42s " "$TEST_COUNT" "$signal_name ($test_cmd)"
     
     # Run the expect script
     "$EXPECT_SCRIPT" "$RESULT_FILE" > /dev/null 2>&1
@@ -321,12 +321,17 @@ EOF
     # Read the result
     RESULT=$(cat "$RESULT_FILE")
     
-    if [ "$RESULT" -eq 0 ]; then
-        echo -e "${GREEN}GOOD${RESET} - $expected_behavior"
-        PASS_COUNT=$((PASS_COUNT + 1))
+    if [[ "$RESULT" =~ ^[0-9]+$ ]]; then
+      if [ "$RESULT" -eq 0 ]; then
+          echo -e "${GREEN}GOOD${RESET}  - $expected_behavior"
+          PASS_COUNT=$((PASS_COUNT + 1))
+      else
+          echo -e "${RED}ERROR${RESET} - $expected_behavior not observed"
+          FAIL_COUNT=$((FAIL_COUNT + 1))
+      fi
     else
-        echo -e "${RED}ERROR${RESET} - $expected_behavior not observed"
-        FAIL_COUNT=$((FAIL_COUNT + 1))
+          echo -e "${RED}ERROR${RESET} - $expected_behavior not observed"
+          FAIL_COUNT=$((FAIL_COUNT + 1))
     fi
     
     # Clean up
@@ -396,6 +401,26 @@ run_test "nonexistentcommand" 127
 
 # Exit
 run_test "exit 42" 42
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Summary
 echo "--------------------------------------------------------------------------------"
