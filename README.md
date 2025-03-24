@@ -73,7 +73,8 @@ minishell/
 │   ├── main.c
 │   ├── prompt.c
 │   ├── lexer.c
-│   ├── parser.c
+│   ├── parser/
+│   │   └── parser.c
 │   ├── execution.c
 │   ├── signals.c
 │   ├── redirections.c

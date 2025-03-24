@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/24 17:01:02 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/25 09:22:59 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,6 +71,7 @@ clean:
 	@\
 	make --silent --no-print-directory -C $(LIBFT_DIR) clean ;	\
 	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS) &&		\
+	$(RM) ./*/*sync-conf*										\
 	echo "$(GRAY)Files cleaned.$(COR)"
 
 fclean: clean
