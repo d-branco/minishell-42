@@ -1,8 +1,8 @@
 #!/bin/bash
 
 echo "PS1='\$(echo \$?)% '" > ~/.bash_minishell_test
-make re
-make clean
+make minishell
+#make clean
 
 echo -e "=========================================="\
 			"                             MINISHELL"
