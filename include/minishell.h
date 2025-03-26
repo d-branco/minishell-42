@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/24 16:56:37 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/26 14:27:01 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 # endif
 
 # include "../libft/libft.h"
+
+# include "parser.h"
+
+# define TRUE	1
+# define FALSE	0
 
 //		String and Command Line Functions
 # include <readline/readline.h>
@@ -139,5 +144,7 @@ int				check_quotes(char *input);
 int				check_parenthesis(char *input);
 int				check_logic(char *input);
 int				more_than_one_command(char *input);
+//parser/parser.c
+void			parser(char *input);
 
 #endif
