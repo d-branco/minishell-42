@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/25 09:27:37 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/26 14:14:33 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	main(int argc, char **argv)
 			break ;
 		}
 		else
-			handle_parse_input(input);
+			parser(input);
 	}
 	if (DEBUG)
 		printf("--DEBUG-- Goodbye, friend.\n");
