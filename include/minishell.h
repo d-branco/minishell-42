@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/26 14:27:01 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/26 19:11:25 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@
 
 # include "parser.h"
 
-# define TRUE	1
-# define FALSE	0
+# define TRUE			1
+# define FALSE			0
+
+# define SYNTAX_ERROR	2
 
 //		String and Command Line Functions
 # include <readline/readline.h>

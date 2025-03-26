@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/26 17:03:02 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/26 19:13:54 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,23 @@ static int	print_lexer(char *input)
 	int	i;
 
 	i = 0;
-	if (input[i])
+	if (!input[i])
+		return (-1);
+	else
 	{
+		while (input[i])
+		{
+			if (input[i] == ';' || input[i] == '\\')
+				return (SYNTAX_ERROR);
+			i++;
+		}
+		i = 0;
 		if (input[i] == '|' || input[i] == '&')
-			return (2);
+			return (SYNTAX_ERROR);
 		if (input[i] != ' ')
 			write(1, &input[i], 1);
 	}
-	else
-		return (-1);
+	
 	i = 1;
 	while (input[i])
 	{
@@ -66,7 +74,7 @@ static int	print_lexer(char *input)
 				if (input[i + 2])
 				{
 					if (input[i + 2] == '|')
-						return (2);
+						return (SYNTAX_ERROR);
 					if (input[i - 1] != ' ')
 						write(1, " ", 1);
 					write(1, "OR", 3);
@@ -75,14 +83,14 @@ static int	print_lexer(char *input)
 					i++;
 				}
 				else
-					return (2);
+					return (SYNTAX_ERROR);
 			}
 			else if ((input[i] == '&') && (input[i + 1] == '&'))
 			{
 				if (input[i + 2])
 				{
 					if (input[i + 2] == '&')
-						return (2);
+						return (SYNTAX_ERROR);
 					if (input[i - 1] != ' ')
 						write(1, " ", 1);
 					write(1, "AND", 3);
@@ -92,12 +100,21 @@ static int	print_lexer(char *input)
 					i++;
 				}
 				else
-					return (2);
+					return (SYNTAX_ERROR);
 			}
 			else if ((input[i] == '\''))
 			{
 				if (input[i - 1] != ' ')
 					write(1, " ", 1);
+				write(1, "SINGLE_QUOTE", 12);
+				i++;
+				while (input[i] != '\'')
+				{
+					if (!input[i])
+						return (SYNTAX_ERROR);
+					write(1, &input[i], 1);
+					i++;
+				}
 				write(1, "SINGLE_QUOTE", 12);
 				if (input[i + 1] != ' ')
 					write(1, " ", 1);
@@ -106,6 +123,15 @@ static int	print_lexer(char *input)
 			{
 				if (input[i - 1] != ' ')
 					write(1, " ", 1);
+				write(1, "DOUBLE_QUOTE", 12);
+				i++;
+				while (input[i] != '\"')
+				{
+					if (!input[i])
+						return (SYNTAX_ERROR);
+					write(1, &input[i], 1);
+					i++;
+				}
 				write(1, "DOUBLE_QUOTE", 12);
 				if (input[i + 1] != ' ')
 					write(1, " ", 1);
