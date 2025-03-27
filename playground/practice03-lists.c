@@ -6,25 +6,14 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 09:23:00 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/27 13:43:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/27 13:51:53 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// usage:
+//	cc -Wall -Werror -Wextra playground/practice03-lists.c  libft/libft.a -g
+
 #include "../include/minishell.h"
-
-typedef enum e_token_type
-{
-	TOKEN_ARG,
-	TOKEN_QUOTE,
-	TOKEN_PIPE
-}	t_e_token_type;
-
-typedef struct s_token
-{
-	t_e_token_type	type;
-	char			*token_string;
-	int				length;
-}	t_s_token;
 
 t_s_token	*make_a_token(
 					t_e_token_type type, const char *token_string, int length)
