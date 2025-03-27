@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/26 17:42:48 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/27 13:22:13 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,11 +70,13 @@ bonus: $(NAME)
 
 clean:
 	@\
-	make --silent --no-print-directory -C $(LIBFT_DIR) clean ;	\
-	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS) &&		\
-	$(RM) ./*sync-conf*											\
-	$(RM) ./*/*sync-conf*										\
-	$(RM) ./*/*/*sync-conf*										\
+	make --silent --no-print-directory -C $(LIBFT_DIR) clean	; \
+	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS) 		; \
+	$(RM) ./*sync-conf*											; \
+	$(RM) ./*/*sync-conf*										; \
+	$(RM) ./*/*/*sync-conf*										; \
+	$(RM) ./a.out												; \
+	$(RM) ./playground/a.out									; \
 	echo "$(GRAY)Files cleaned.$(COR)"
 
 fclean: clean
