@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/26 19:11:25 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/28 08:20:14 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,5 +148,7 @@ int				check_logic(char *input);
 int				more_than_one_command(char *input);
 //parser/parser.c
 void			parser(char *input);
+//parser/lexer.c
+int				lexer(char *input);
 
 #endif

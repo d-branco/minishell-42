@@ -70,18 +70,18 @@ minishell/
 │   ├── minishell.h
 │   └── <features>.h
 ├── srcs/
-│   ├── main.c
-│   ├── prompt.c
-│   ├── lexer.c
+│   ├── minishell.c
+│   ├── (prompt.c)
 │   ├── parser/
+│   │   ├── lexer.c
 │   │   └── parser.c
-│   ├── execution.c
-│   ├── signals.c
-│   ├── redirections.c
-│   ├── piping.c
-│   ├── environment.c
-│   ├── <other features>/
-│   ├── utils/
+│   ├── (execution.c)
+│   ├── (signals.c)
+│   ├── (redirections.c)
+│   ├── (piping.c)
+│   ├── (environment.c)
+│   ├── (<other features>/)
+│   ├── (utils/)
 │   └── builtins/
 │       ├── echo.c
 │       ├── cd.c

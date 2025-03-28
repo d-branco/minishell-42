@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 09:23:00 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/27 13:51:53 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/27 22:41:18 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,20 +67,20 @@ void	*iterate_function(void *content)
 
 int	main(void)
 {
-	t_list	*list;
-	t_list	*iterated_list;
+	t_node	*head_node;
+	t_node	*iterated_list;
 
-	list = NULL;
-	ft_lstadd_back(&list, ft_lstnew(make_a_token(TOKEN_ARG, "echo", 4)));
-	ft_lstadd_back(&list, ft_lstnew(make_a_token(TOKEN_QUOTE, "", 0)));
-	ft_lstadd_back(&list, ft_lstnew(make_a_token(TOKEN_QUOTE, "\"", 1)));
+	head_node = NULL;
+	ft_lstadd_back(&head_node, ft_lstnew(make_a_token(TOKEN_ARG, "echo", 4)));
+	ft_lstadd_back(&head_node, ft_lstnew(make_a_token(TOKEN_QUOTE, "", 0)));
+	ft_lstadd_back(&head_node, ft_lstnew(make_a_token(TOKEN_QUOTE, "\"", 1)));
 	printf("Original List:\n");
-	ft_lstiter(list, print_token_list_info);
-	printf("\nList Size: %d\n", ft_lstsize(list));
-	iterated_list = ft_lstmap(list, iterate_function, delete_token);
+	ft_lstiter(head_node, print_token_list_info);
+	printf("\nList Size: %d\n", ft_lstsize(head_node));
+	iterated_list = ft_lstmap(head_node, iterate_function, delete_token);
 	printf("\nList after iterating over every member:\n");
 	ft_lstiter(iterated_list, print_token_list_info);
-	ft_lstclear(&list, delete_token);
+	ft_lstclear(&head_node, delete_token);
 	ft_lstclear(&iterated_list, delete_token);
 	return (0);
 }

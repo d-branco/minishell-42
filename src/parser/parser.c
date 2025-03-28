@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/27 13:55:49 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/28 08:22:44 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@
 	Redirections <, <<, > and >>
 	Pipelines |
 	Logical operators && and ||
+	Quotes (" and ')
 */
 
 //static int	check_logic_operator_existence(char *input);
-static int	print_lexer(char *input);
+//static int	print_lexer(char *input);
 
 void	parser(char *input)
 {
@@ -30,11 +31,12 @@ void	parser(char *input)
 
 	if (DEBUG)
 		printf("--DEBUG--input to parse: %s\n", input);
-	error_number = print_lexer(input);
+	error_number = lexer(input);
 	if (error_number == 2)
-		printf("\nSYNTAX ERROR, oh my!\n");
+		printf("SYNTAX ERROR, oh my!\n");
 }
 
+/*
 static int	print_lexer(char *input)
 {
 	int	i;
@@ -150,7 +152,7 @@ static int	print_lexer(char *input)
 	write(1, "\n", 1);
 	return (0);
 }
-/*
+
 static int	check_logic_operator_existence(char *input)
 {
 	int	i;
