@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/28 08:22:44 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/28 16:26:03 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,13 @@
 
 void	parser(char *input)
 {
+	t_node	*head_node;
 	int	error_number;
 
+	head_node = NULL;
 	if (DEBUG)
 		printf("--DEBUG--input to parse: %s\n", input);
-	error_number = lexer(input);
+	error_number = lexer(input, head_node);
 	if (error_number == 2)
 		printf("SYNTAX ERROR, oh my!\n");
 }

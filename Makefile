@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/27 16:12:00 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/28 16:55:25 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ SRCS		:= \
 	src/minishell.c \
 	src/cmd_interpreter.c \
 	src/parser/parser.c \
-	src/parser/lexer.c 
+	src/parser/lexer.c \
+	src/utils/ft_isspace.c 
 #	playground/practice03-lists.c
 #	playground/practice01.c
 #	playground/practice00.c
@@ -72,19 +73,19 @@ bonus: $(NAME)
 
 clean:
 	@\
-	make --silent --no-print-directory -C $(LIBFT_DIR) clean	; \
-	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS) 		; \
-	$(RM) ./*sync-conf*											; \
-	$(RM) ./*/*sync-conf*										; \
-	$(RM) ./*/*/*sync-conf*										; \
-	$(RM) ./a.out												; \
-	$(RM) ./playground/a.out									; \
+	make --silent --no-print-directory -C $(LIBFT_DIR) clean		; \
+	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS) 			; \
+	$(RM) ./*sync-conf*												; \
+	$(RM) ./*/*sync-conf*											; \
+	$(RM) ./*/*/*sync-conf*											; \
+	$(RM) ./a.out													; \
+	$(RM) ./playground/a.out										; \
 	echo "$(GRAY)Files cleaned.$(COR)"
 
 fclean: clean
 	@\
-	make --silent --no-print-directory -C $(LIBFT_DIR) fclean ;	\
-	$(RM) $(NAME) &&											\
+	make --silent --no-print-directory -C $(LIBFT_DIR) fclean ;		\
+	$(RM) $(NAME) &&												\
 	echo "$(GRAY)File fcleaned.$(COR)"
 
 re: fclean all
