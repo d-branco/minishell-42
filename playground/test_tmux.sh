@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make 
+make
 
 echo "PS1='$(echo $?) % '" > ~/.bash_minishell_test
 
