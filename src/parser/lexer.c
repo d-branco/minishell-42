@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/28 19:21:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/28 19:55:36 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,36 +68,105 @@ void	looping_lexer(char *input, t_l_no *head_node)
 							i++;
 						}
 						else
+						{
 							if (DEBUG)
 							{
 								write(2, "TESTE: ERROR DE SINTAXE\n", 24);
 								return ;
 							}
+						}
 					}
 					else
+					{
 						if (DEBUG)
 						{
 							write(2, "TESTE: ERROR DE SINTAXE\n", 24);
 							return ;
 						}
+					}
 				}
 			}
 			if (input[i] == '&')
 			{
 				if (input[i + 1] == '&')
 				{
-					if (input[i + 2])
+					if ((input[i + 2]) && (i > 0))
 					{
-						if (input[i + 2] != '&')
+						if ((input[i + 2] != '&') && (input[i - 1] != '&'))
 						{
 							if (DEBUG)
 								write(1, "AND ", 4);
 						}
+						else
+						{
+							write(2, "TESTE: ERROR DE SINTAXE\n", 24);
+							return ;
+						}
+					}
+					else
+					{
+						write(2, "TESTE: ERROR DE SINTAXE\n", 24);
+						return ;
 					}
 				}
 			}
-			//QUOTE (single, double)?
-			//PARANTHESIS?
+			if (input[i] == '\'')
+			{
+				if (DEBUG)
+					write(1, "SINGLE_QUOTES ", 14);
+			}
+			if (input[i] == '\"')
+			{
+				if (DEBUG)
+					write(1, "DOUBLE_QUOTES ", 14);
+			}
+			if (input[i] == '(')
+			{
+				if (DEBUG)
+					write(1, "PARENTHESIS_OPEN ", 17);
+			}
+			if (input[i] == ')')
+			{
+				if (DEBUG)
+					write(1, "PARENTHESIS_CLOSE ", 18);
+			}
+			if (input[i] == ')')
+			{
+				if (DEBUG)
+					write(1, "PARENTHESIS_CLOSE ", 18);
+			}
+			if (input[i] == '<')
+			{
+				if (i == 0)
+				{
+					if (input[i + 1] != '<')
+					{
+						if (DEBUG)
+							write(1, "REDIRECTION_INPUT ", 18);
+					}
+				}
+				else if ((input[i - 1] != '<') && (input[i + 1] != '<'))
+				{
+					if (DEBUG)
+						write(1, "REDIRECTION_INPUT ", 18);
+				}
+			}
+			if (input[i] == '>')
+			{
+				if (i == 0)
+				{
+					if (input[i + 1] != '>')
+					{
+						if (DEBUG)
+							write(1, "REDIRECTION_OUTPUT ", 19);
+					}
+				}
+				else if ((input[i - 1] != '<') && (input[i + 1] != '<'))
+				{
+					if (DEBUG)
+						write(1, "REDIRECTION_OUTPUT ", 19);
+				}
+			}
 			//REDIRECTION(<, <<, >, >>)?
 			//ARGUMENTS(separeted by spaces)
 		}
