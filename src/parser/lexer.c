@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/28 17:05:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/28 17:29:22 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,38 @@ void	looping_lexer(char *input, t_l_no *head_node)
 		printf("Nao comeca com espaco!\n");
 	while (input[i])
 	{
+		if (ft_isprint(input[i]) && !ft_isspace(input[i]))
+		{
+			if (input[i] == '|')
+			{
+				if (input[i + 1] != '|')
+				{
+					if (DEBUG)
+						write(1, "PIPE ", 5);
+				}
+				else if (input[i + 1] == '|')
+				{
+					if (input[i + 2])
+					{
+						if (input[i + 2] != '|')
+						{
+							if (DEBUG)
+								write(1, "OR ", 3);
+						}
+					}
+					i++;
+				}
+			}
+			//LOGIC (OR, AND)?
+			//QUOTE (single, double)?
+			//PARANTHESIS?
+			//REDIRECTION(<, <<, >, >>)?
+			
+		}
 		i++;
 	}
+	if (DEBUG)
+		write(1, "\n", 1);
 }
 
 static int	check_start_char(char *input)
