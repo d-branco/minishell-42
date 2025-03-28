@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/28 10:16:40 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/28 16:51:23 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,34 @@
 */
 
 static int	check_syntax_for_semicolon_backslash(char *input);
+static int	check_start_char(char *input);
 
-int	lexer(char *input)
+int	lexer(char *input, t_node *head_node)
 {
-	//t_node	*head_node;
-
-	//head_node = NULL;
 	if (!input)
 		return (-1);
-	else if (check_syntax_for_semicolon_backslash(input))
+	else if (check_syntax_for_semicolon_backslash(input)
+		|| check_start_char(input))
+		return (SYNTAX_ERROR);
+	looping_lexer(input, head_node);
+	return (0);
+}
+
+void	looping_lexer(char *input, t_node *head_node)
+{
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if 
+		i++;
+	}
+}
+
+static int	check_start_char(char *input)
+{
+	if (input[0] == '|' || input[0] == '&')
 		return (SYNTAX_ERROR);
 	return (0);
 }
