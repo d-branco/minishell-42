@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/28 16:26:03 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/28 17:02:27 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 void	parser(char *input)
 {
-	t_node	*head_node;
+	t_l_no	*head_node;
 	int	error_number;
 
 	head_node = NULL;

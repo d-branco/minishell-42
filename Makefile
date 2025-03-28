@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/03/28 16:55:25 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/03/28 17:01:17 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBFT_DIR	:= libft
 ##################################################################### Compiler #
 CC			= cc
 CFLAGS		+= -Wall -Wextra
-CFLAGS		+= -Werror
+#CFLAGS		+= -Werror
 READFLAGS	= -lreadline
 
 CFLAGS		+= -g

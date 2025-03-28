@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 09:23:00 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/27 22:41:18 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/28 17:02:27 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ void	*iterate_function(void *content)
 
 int	main(void)
 {
-	t_node	*head_node;
-	t_node	*iterated_list;
+	t_l_no	*head_node;
+	t_l_no	*iterated_list;
 
 	head_node = NULL;
 	ft_lstadd_back(&head_node, ft_lstnew(make_a_token(TOKEN_ARG, "echo", 4)));

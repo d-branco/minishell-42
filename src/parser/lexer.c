@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/28 16:51:23 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/28 17:05:36 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 static int	check_syntax_for_semicolon_backslash(char *input);
 static int	check_start_char(char *input);
 
-int	lexer(char *input, t_node *head_node)
+int	lexer(char *input, t_l_no *head_node)
 {
 	if (!input)
 		return (-1);
@@ -36,14 +36,15 @@ int	lexer(char *input, t_node *head_node)
 	return (0);
 }
 
-void	looping_lexer(char *input, t_node *head_node)
+void	looping_lexer(char *input, t_l_no *head_node)
 {
 	int	i;
 
 	i = 0;
+	if (!ft_isspace(input[i]))
+		printf("Nao comeca com espaco!\n");
 	while (input[i])
 	{
-		if 
 		i++;
 	}
 }
