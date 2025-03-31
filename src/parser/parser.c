@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/28 17:29:44 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/31 16:25:14 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 //static int	check_logic_operator_existence(char *input);
 //static int	print_lexer(char *input);
 
-void	parser(char *input)
+int	parser(char *input)
 {
 	t_l_no	*head_node;
 	int		error_number;
@@ -35,7 +35,16 @@ void	parser(char *input)
 		printf("--DEBUG--input to parse: %s\n", input);
 	error_number = lexer(input, head_node);
 	if (error_number == 2)
-		printf("SYNTAX ERROR, oh my!\n");
+		printf("SYNTAX ERROR Oh dear! Oh dear! Oh dear!\n");
+	//if (DEBUG)
+	//{
+	//	printf("Token list Size: %d\n", ft_lstsize(head_node));
+	//	printf("Token list:\n");
+	//	ft_lstiter(head_node, print_token_list_info);
+	//	printf("\nEnd\n");
+	//}
+	//ft_lstclear(&head_node, delete_token);
+	return (error_number);
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 09:23:00 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/28 17:02:27 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/31 15:23:20 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,16 @@ t_s_token	*make_a_token(
 	return (data);
 }
 
-void	print_token_list_info(void *content)
-{
-	t_s_token	*data;
-	const char	*type_strings[] = {"argument(s)", "quote", "length"};
-
-	data = (t_s_token *)content;
-	printf(
-		"Token struct	Token type: %s, Token string: %s, Token length: %d\n",
-		type_strings[data->type], data->token_string, data->length);
-}
+//void	print_token_list_info(void *content)
+//{
+//	t_s_token	*data;
+//	const char	*type_strings[] = {"argument(s)", "quote", "length"};
+//
+//	data = (t_s_token *)content;
+//	printf(
+//		"Token struct	Token type: %s, Token string: %s, Token length: %d\n",
+//		type_strings[data->type], data->token_string, data->length);
+//}
 
 void	delete_token(void *content)
 {
