@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/31 14:17:20 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/31 16:25:39 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@
 
 static int	check_syntax_for_semicolon_backslash(char *input);
 
-int	lexer(char *input, t_l_no *head_node)
+int	lexer(char *input, t_l_no *list_head)
 {
 	if (!input)
 		return (-1);
 	else if (check_syntax_for_semicolon_backslash(input))
 		return (SYNTAX_ERROR);
-	looping_lexer(input, head_node);
+	looping_lexer(input, list_head);
 	return (0);
 }
 
-void	looping_lexer(char *input, t_l_no *head_node)
+void	looping_lexer(char *input, t_l_no *list_head)
 {
 	int		i;
 	char	*str;
@@ -58,7 +58,11 @@ void	looping_lexer(char *input, t_l_no *head_node)
 				if (input[i - 1] != '|' && input[i + 1] && input[i + 1] != '|')
 				{
 					if (DEBUG)
-						write(1, "PIPE", 4);
+					{
+						ft_lstadd_back(&list_head, ft_lstnew(create_token(TOKEN_PIPE, "|")));
+						ft_lstclear(&list_head, delete_token);
+						//write(1, "PIPE", 4);
+					}
 				}
 				else if (input[i + 1] == '|')
 				{
@@ -230,6 +234,7 @@ void	looping_lexer(char *input, t_l_no *head_node)
 	}
 	if (DEBUG)
 		write(1, "\n", 1);
+	free(str);
 }
 
 static int	check_syntax_for_semicolon_backslash(char *input)
