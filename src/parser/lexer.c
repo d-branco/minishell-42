@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/28 19:55:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/03/31 14:17:20 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,11 @@ int	lexer(char *input, t_l_no *head_node)
 
 void	looping_lexer(char *input, t_l_no *head_node)
 {
-	int	i;
+	int		i;
+	char	*str;
 
+	str = malloc(sizeof(char));
+	str[0] = '\0';
 	i = 0;
 	if (DEBUG)
 		write(1, "--DEBUG--lexer: ", 16);
@@ -55,7 +58,7 @@ void	looping_lexer(char *input, t_l_no *head_node)
 				if (input[i - 1] != '|' && input[i + 1] && input[i + 1] != '|')
 				{
 					if (DEBUG)
-						write(1, "PIPE ", 5);
+						write(1, "PIPE", 4);
 				}
 				else if (input[i + 1] == '|')
 				{
@@ -64,7 +67,7 @@ void	looping_lexer(char *input, t_l_no *head_node)
 						if ((input[i + 2] != '|') && (input[i - 1] != '|'))
 						{
 							if (DEBUG)
-								write(1, "OR ", 3);
+								write(1, "OR", 2);
 							i++;
 						}
 						else
@@ -95,7 +98,7 @@ void	looping_lexer(char *input, t_l_no *head_node)
 						if ((input[i + 2] != '&') && (input[i - 1] != '&'))
 						{
 							if (DEBUG)
-								write(1, "AND ", 4);
+								write(1, "AND", 3);
 						}
 						else
 						{
@@ -113,27 +116,22 @@ void	looping_lexer(char *input, t_l_no *head_node)
 			if (input[i] == '\'')
 			{
 				if (DEBUG)
-					write(1, "SINGLE_QUOTES ", 14);
+					write(1, "SINGLE_QUOTES", 13);
 			}
 			if (input[i] == '\"')
 			{
 				if (DEBUG)
-					write(1, "DOUBLE_QUOTES ", 14);
+					write(1, "DOUBLE_QUOTES", 13);
 			}
 			if (input[i] == '(')
 			{
 				if (DEBUG)
-					write(1, "PARENTHESIS_OPEN ", 17);
+					write(1, "PARENTHESIS_OPEN", 16);
 			}
 			if (input[i] == ')')
 			{
 				if (DEBUG)
-					write(1, "PARENTHESIS_CLOSE ", 18);
-			}
-			if (input[i] == ')')
-			{
-				if (DEBUG)
-					write(1, "PARENTHESIS_CLOSE ", 18);
+					write(1, "PARENTHESIS_CLOSE", 17);
 			}
 			if (input[i] == '<')
 			{
@@ -142,13 +140,13 @@ void	looping_lexer(char *input, t_l_no *head_node)
 					if (input[i + 1] != '<')
 					{
 						if (DEBUG)
-							write(1, "REDIRECTION_INPUT ", 18);
+							write(1, "REDIRECTION_INPUT", 17);
 					}
 				}
 				else if ((input[i - 1] != '<') && (input[i + 1] != '<'))
 				{
 					if (DEBUG)
-						write(1, "REDIRECTION_INPUT ", 18);
+						write(1, "REDIRECTION_INPUT", 17);
 				}
 			}
 			if (input[i] == '>')
@@ -158,17 +156,75 @@ void	looping_lexer(char *input, t_l_no *head_node)
 					if (input[i + 1] != '>')
 					{
 						if (DEBUG)
-							write(1, "REDIRECTION_OUTPUT ", 19);
+							write(1, "REDIRECTION_OUTPUT", 18);
 					}
 				}
-				else if ((input[i - 1] != '<') && (input[i + 1] != '<'))
+				else if ((input[i - 1] != '>') && (input[i + 1] != '>'))
 				{
 					if (DEBUG)
-						write(1, "REDIRECTION_OUTPUT ", 19);
+						write(1, "REDIRECTION_OUTPUT", 18);
 				}
 			}
-			//REDIRECTION(<, <<, >, >>)?
-			//ARGUMENTS(separeted by spaces)
+			if (input[i] == '>')
+			{
+				if (i == 0)
+				{
+					if (input[i + 1] == '>')
+					{
+						if (input[i + 2])
+						{
+							if (input[i + 2] != '>')
+							{
+								if (DEBUG)
+									write(1, "REDIRECTION_APPEND", 18);
+							}
+						}
+					}
+				}
+				else if ((input[i - 1] != '>') && (input[i + 2]))
+				{
+					if (input[i + 2] != '>')
+					{
+						if (DEBUG)
+							write(1, "REDIRECTION_APPEND", 18);
+					}
+				}
+			}
+			if (input[i] == '<')
+			{
+				if (i == 0)
+				{
+					if (input[i + 1] == '<')
+					{
+						if (input[i + 2])
+						{
+							if (input[i + 2] != '<')
+							{
+								if (DEBUG)
+									write(1, "REDIRECTION_HEREDOC", 19);
+							}
+						}
+					}
+				}
+				else if ((input[i - 1] != '<') && (input[i + 2]))
+				{
+					if (input[i + 2] != '>')
+					{
+						if (DEBUG)
+							write(1, "REDIRECTION_HEREDOC", 19);
+					}
+				}
+			}
+			while (ft_strchr("\\;\'\"|&()<>", input[i]) == NULL)
+			{
+				if (DEBUG)
+					write(1, &input[i], 1);
+				if (ft_strchr("\\;\'\"|&()<> ", input[i + 1]) != NULL)
+					break ;
+				i++;
+			}
+			if (DEBUG)
+				write(1, " ", 1);
 		}
 		i++;
 	}

@@ -8,6 +8,10 @@ log/
 *.wav
 *.txt
 
+# IDEotisses
+.idea
+.vscode
+
 # Prerequisites
 *.d
 
