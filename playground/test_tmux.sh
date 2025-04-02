@@ -2,16 +2,16 @@
 
 make
 
-echo "PS1='$(echo $?) % '" > ~/.bash_minishell_test
+echo "PS1='$(echo $?)% '" > ~/.bash_minishell_test
 
 # Start a new tmux session in the background
 tmux new-session -d -s test3
 
 # Split the window vertically (left-right split)
-tmux split-window -h "bash --norc"
+tmux split-window -h "bash --noprofile --rcfile ~/.bash_minishell_test"
 # Split the bottom pane horizontally (top-bottom split)
 tmux select-pane -D
-tmux split-window -v "bash --norc"
+tmux split-window -v "bash --noprofile --rcfile ~/.bash_minishell_test"
 
 # Send the echo command to the bottom two panes simultaneously
 tmux select-pane -t 1
@@ -21,9 +21,9 @@ tmux send-keys 'clear ; bash --noprofile --rcfile ~/.bash_minishell_test' C-m
 
 # Send the echo command to the bottom two panes simultaneously
 tmux select-pane -t 1
-tmux send-keys 'echo "This is a pane"' C-m 
+tmux send-keys C-m C-m 'exit' C-m
 tmux select-pane -t 2
-tmux send-keys 'echo "This is a pane"' C-m 
+tmux send-keys C-m C-m 'exit' C-m 
 
 tmux select-pane -t 1 
 #tmux send-keys 'echo $?' C-m
