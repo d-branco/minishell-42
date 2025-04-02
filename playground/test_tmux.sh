@@ -4,8 +4,10 @@ make
 
 echo "PS1='$(echo $?)% '" > ~/.bash_minishell_test
 
+INPUT_COMMANDS="Enter Enter exit Enter"
+
 # Start a new tmux session in the background
-tmux new-session -d -s test3
+tmux new-session -d -s test3 'bash --noprofile --rcfile ~/.bash_minishell_test'
 
 # Split the window vertically (left-right split)
 tmux split-window -h "bash --noprofile --rcfile ~/.bash_minishell_test"
@@ -21,15 +23,13 @@ tmux send-keys 'clear ; bash --noprofile --rcfile ~/.bash_minishell_test' C-m
 
 # Send the echo command to the bottom two panes simultaneously
 tmux select-pane -t 1
-tmux send-keys C-m C-m 'exit' C-m
+tmux send-keys $INPUT_COMMANDS
 tmux select-pane -t 2
-tmux send-keys C-m C-m 'exit' C-m 
+tmux send-keys $INPUT_COMMANDS
 
 tmux select-pane -t 1 
-#tmux send-keys 'echo $?' C-m
 tmux capture-pane -pS - > ./pane1.txt
 tmux select-pane -t 2 
-#tmux send-keys 'echo $?' C-m
 tmux capture-pane -pS - > ./pane2.txt
 
 tmux select-pane -t 0 
