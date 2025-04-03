@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:20:04 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/03 13:08:12 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/03 14:22:01 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	check_quotes(char *input)
 	return (sum % 2);
 }
 */
-int	handle_exit_code(int newcode)
+int	ad_exit_code(int newcode)
 {
 	static int	code = 0;
 

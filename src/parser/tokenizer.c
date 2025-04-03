@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:22:15 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/31 16:09:50 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/03 14:42:21 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,20 @@ typedef enum e_token_type
 	TOKEN_INPUT_REDIRECTION,
 	TOKEN_HERE_DOC,
 	TOKEN_CMD_ARGS
-}	t_e_token_type;
+}	t_token_type;
+
+typedef struct s_token
+{
+	t_token_type	type;
+	char			*token_string;
+	int				length;
+}	t_token;
 */
 
+/*Second try:
 void	print_token_list_info(void *content)
 {
-	t_s_token	*data;
+	t_token	*data;
 	const char	*type_strings[] = {
 		"single_quote", "double_quote",
 		"open_parenthesis", "close_parenthesis",
@@ -40,24 +48,16 @@ void	print_token_list_info(void *content)
 		"output_redirection", "append", "input_redirection", "here_doc",
 		"argument"};
 
-	data = (t_s_token *)content;
+	data = (t_token *)content;
 	printf("Token type: %s, Token string: %s\n",
 		type_strings[data->type], data->token_string);
 }
 
-/*
-typedef struct s_token
+t_token	*create_token(t_token_type type, const char *token_string)
 {
-	t_e_token_type	type;
-	char			*token_string;
-}	t_s_token;
-*/
+	t_token	*data;
 
-t_s_token	*create_token(t_e_token_type type, const char *token_string)
-{
-	t_s_token	*data;
-
-	data = malloc(sizeof(t_s_token));
+	data = malloc(sizeof(t_token));
 	if (!data)
 		return (NULL);
 	data->type = type;
@@ -69,9 +69,10 @@ t_s_token	*create_token(t_e_token_type type, const char *token_string)
 
 void	delete_token(void *content)
 {
-	t_s_token	*data;
+	t_token	*data;
 
-	data = (t_s_token *)content;
+	data = (t_token *)content;
 	free(data->token_string);
 	free(data);
 }
+*/

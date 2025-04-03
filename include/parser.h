@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:07 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/31 16:09:22 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/03 13:42:01 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ typedef enum e_token_type
 	TOKEN_INPUT_REDIRECTION,
 	TOKEN_HERE_DOC,
 	TOKEN_CMD_ARGS
-}	t_e_token_type;
+}	t_token_type;
 
 typedef struct s_token
 {
-	t_e_token_type	type;
+	t_token_type	type;
 	char			*token_string;
 	int				length;
-}	t_s_token;
+}	t_token;

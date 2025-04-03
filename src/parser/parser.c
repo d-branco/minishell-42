@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/03 13:01:24 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/03 14:41:04 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 //static int	check_logic_operator_existence(char *input);
 //static int	print_lexer(char *input);
 
+/*Second try:
 int	parser(char *input)
 {
 	t_list	*head_node;
@@ -46,6 +47,7 @@ int	parser(char *input)
 	//ft_lstclear(&head_node, delete_token);
 	return (error_number);
 }
+*/
 
 /*
 static int	print_lexer(char *input)

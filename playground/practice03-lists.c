@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 09:23:00 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/03 13:01:24 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/03 14:20:32 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 #include "../include/minishell.h"
 
-t_s_token	*make_a_token(
-					t_e_token_type type, const char *token_string, int length)
+t_token	*make_a_token(
+					t_token_type type, const char *token_string, int length)
 {
-	t_s_token	*data;
+	t_token	*data;
 
-	data = malloc(sizeof(t_s_token));
+	data = malloc(sizeof(t_token));
 	if (!data)
 		return (NULL);
 	data->type = type;
@@ -31,10 +31,10 @@ t_s_token	*make_a_token(
 
 //void	print_token_list_info(void *content)
 //{
-//	t_s_token	*data;
+//	t_token	*data;
 //	const char	*type_strings[] = {"argument(s)", "quote", "length"};
 //
-//	data = (t_s_token *)content;
+//	data = (t_token *)content;
 //	printf(
 //		"Token struct	Token type: %s, Token string: %s, Token length: %d\n",
 //		type_strings[data->type], data->token_string, data->length);
@@ -42,21 +42,21 @@ t_s_token	*make_a_token(
 
 void	delete_token(void *content)
 {
-	t_s_token	*data;
+	t_token	*data;
 
-	data = (t_s_token *)content;
+	data = (t_token *)content;
 	free(data->token_string);
 	free(data);
 }
 
 void	*iterate_function(void *content)
 {
-	t_s_token	*old_data;
-	t_s_token	*new_data;
+	t_token	*old_data;
+	t_token	*new_data;
 	char		modified_token_string[256];
 
-	old_data = (t_s_token *)content;
-	new_data = malloc(sizeof(t_s_token));
+	old_data = (t_token *)content;
+	new_data = malloc(sizeof(t_token));
 	new_data->type = old_data->type;
 	new_data->length = old_data->length * 2;
 	snprintf(modified_token_string, sizeof(modified_token_string),
