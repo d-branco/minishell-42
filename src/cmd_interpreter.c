@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:20:04 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/26 14:33:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/03 14:44:44 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ int	handle_parse_input(char	*input)
 		ft_putstr_fd(input, 1);
 		write(1, "\n", 1);
 	}
-	ad_exit_code(0);
+	handle_exit_code(0);
 	if (!more_than_one_command(input))
 	{
 		if (check_quotes(input) || check_parenthesis(input))
 		{
 			write(2, "Oh! There's a syntax error.\n", 29);
-			ad_exit_code(2);
+			handle_exit_code(2);
 		}
 	}
-	return (ad_exit_code(-1));
+	return (handle_exit_code(-1));
 }
 
 int	more_than_one_command(char *input)
@@ -90,7 +90,8 @@ int	check_quotes(char *input)
 	return (sum % 2);
 }
 */
-int	ad_exit_code(int newcode)
+/*
+int	handle_exit_code(int newcode)
 {
 	static int	code = 0;
 
@@ -99,3 +100,4 @@ int	ad_exit_code(int newcode)
 	code = newcode;
 	return (code);
 }
+*/
