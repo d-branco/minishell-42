@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/04/03 13:07:19 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/04/03 15:04:10 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,12 +30,11 @@ INCLUDES	:= -I./include
 
 SRCS		:= \
 	src/minishell.c \
-	src/cmd_interpreter.c \
 	src/parser/parser.c \
 	src/parser/lexer.c \
 	src/parser/tokenizer.c \
 	src/utils/ft_isspace.c 
-#	playground/practice04-printf.c
+#	src/cmd_interpreter.c \
 #	playground/practice03-lists.c
 #	playground/practice01.c
 #	playground/practice00.c

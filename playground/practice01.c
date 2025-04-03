@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:43:31 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/24 18:48:13 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/03 14:44:44 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(void)
 		printf("Hello, friend.\n");
 	while (42)
 	{
-		ft_putnbr_fd(ad_exit_code(-1), 1);
+		ft_putnbr_fd(handle_exit_code(-1), 1);
 		write(1, " ", 1);
 		input = readline("% ");
 		if ((input == NULL) || (ft_strncmp(input, "exit", 5) == 0))

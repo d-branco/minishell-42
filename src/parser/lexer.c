@@ -6,9 +6,10 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/03 14:40:38 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:06:47 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -274,4 +275,7 @@ static int	check_syntax_for_semicolon_backslash(char *input)
 	}
 	return (0);
 }
+<<<<<<< HEAD
 */
+=======
+>>>>>>> main
