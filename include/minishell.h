@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/31 16:22:56 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/03 13:32:50 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,13 +149,15 @@ int				more_than_one_command(char *input);
 //parser/parser.c
 int				parser(char *input);
 //parser/lexer.c
-int				lexer(char *input, t_l_no *list_head);
-void			looping_lexer(char *input, t_l_no *list_head);
+int				lexer(char *input, t_list *list_head);
+void			looping_lexer(char *input, t_list *list_head);
 //parser/tokenizer.c
 void			print_token_list_info(void *content);
 t_s_token		*create_token(t_e_token_type type, const char *token_string);
 void			delete_token(void *content);
 //utils/ft_isspace.c
 int				ft_isspace(char chr);
+//utils/ft_malloc.c
+void			*ft_malloc(size_t total_size);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/31 16:25:39 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/03 13:01:24 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 static int	check_syntax_for_semicolon_backslash(char *input);
 
-int	lexer(char *input, t_l_no *list_head)
+int	lexer(char *input, t_list *list_head)
 {
 	if (!input)
 		return (-1);
@@ -34,7 +34,7 @@ int	lexer(char *input, t_l_no *list_head)
 	return (0);
 }
 
-void	looping_lexer(char *input, t_l_no *list_head)
+void	looping_lexer(char *input, t_list *list_head)
 {
 	int		i;
 	char	*str;
