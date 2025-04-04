@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:16:20 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/03 13:31:38 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/04 15:01:42 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	*ft_malloc(size_t total_size)
 	ptr = (void *) malloc(total_size);
 	if (ptr == NULL)
 	{
-		ft_putstr_fd("ERROR malloc failed to alloc memory!", 2)
-		exit(1)
+		ft_putstr_fd("ERROR malloc failed to alloc memory!", 2);
+		exit(1);
 	}
 	return (ptr);
 }

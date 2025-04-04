@@ -6,10 +6,9 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/03 15:06:47 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/04 14:58:38 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -84,7 +83,7 @@ void	looping_lexer(char *input, t_list *list_head)
 				{
 					if (DEBUG)
 					{
-						ft_lstadd_back(&list_head, ft_lstnew(create_token(TOKEN_PIPE, "|")));
+ft_lstadd_back(&list_head, ft_lstnew(create_token(TOKEN_PIPE, "|")));
 						ft_lstclear(&list_head, delete_token);
 						//write(1, "PIPE", 4);
 					}
@@ -275,7 +274,4 @@ static int	check_syntax_for_semicolon_backslash(char *input)
 	}
 	return (0);
 }
-<<<<<<< HEAD
 */
-=======
->>>>>>> main

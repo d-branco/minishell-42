@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/03 15:04:31 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/04 15:05:41 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # endif
 
 # include "../libft/libft.h"
-
 # include "parser.h"
 
 # define TRUE			1
@@ -148,14 +147,19 @@ int				handle_exit_code(int newcode);
 //int				more_than_one_command(char *input);
 //parser/parser.c
 int				parser(char *input);
+int				parse_input_into_token_list(t_token **list, char *input);
+void			get_token(t_token **list, char *input, int *pos);
+void			isolate_word_token(char *input, int *pos, char **token_string);
 //parser/lexer.c
-int				lexer(char *input, t_l_no *list_head);
-void			looping_lexer(char *input, t_l_no *list_head);
+//int				lexer(char *input, t_l_no *list_head);
+//void			looping_lexer(char *input, t_l_no *list_head);
 //parser/tokenizer.c
-void			print_token_list_info(void *content);
-t_s_token		*create_token(t_e_token_type type, const char *token_string);
-void			delete_token(void *content);
+//void			print_token_list_info(void *content);
+//t_token			*create_token(t_token_type type, const char *token_string);
+//void			delete_token(void *content);
 //utils/ft_isspace.c
 int				ft_isspace(char chr);
+//utils/ft_malloc.c
+void			*ft_malloc(size_t total_size);
 
 #endif

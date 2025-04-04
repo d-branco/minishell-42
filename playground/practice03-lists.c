@@ -6,10 +6,9 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 09:23:00 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/03 15:05:52 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/04 14:57:51 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 // usage:
 //	cc -Wall -Werror -Wextra playground/practice03-lists.c  libft/libft.a -g
@@ -54,7 +53,7 @@ void	*iterate_function(void *content)
 {
 	t_token	*old_data;
 	t_token	*new_data;
-	char		modified_token_string[256];
+	char	modified_token_string[256];
 
 	old_data = (t_token *)content;
 	new_data = malloc(sizeof(t_token));
