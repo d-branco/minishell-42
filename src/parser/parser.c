@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/04 17:22:30 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/04 20:01:25 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,32 @@ int	parser(char *input)
 {
 	t_token	*list_o_tokens;
 
+	list_o_tokens = NULL;
 	parse_input_into_token_list(&list_o_tokens, input);
 	//print list_o_tokens
+	tkn_lstclear(&list_o_tokens);
 	return (0);// temp
 }
 
-////typedef struct s_token
-////{
-////	t_token_type	type;
-////	char			*token_string;
-////	int				length;
-////}	t_token;
+// Adapted from libft
+void	tkn_lstclear(t_token **lst)
+{
+	t_token	*tmp;
 
-// Creates a list of tokens and returns 0 if success
+	if (!lst || !*lst)
+		return ;
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		if ((*lst)->token_string)
+			free((*lst)->token_string);
+		free(*lst);
+		*lst = tmp;
+	}
+	*lst = NULL;
+}
+
+// Creates a tokens and returns 0 if success
 int	parse_input_into_token_list(t_token **list, char *input)
 {
 	int	pos;
@@ -51,30 +64,49 @@ int	parse_input_into_token_list(t_token **list, char *input)
 		if (!input[pos])
 			break ;
 		get_token(list, input, &pos);
-		if (DEBUG)
-			ft_printf("--DEBUG-- TOKEN	type:	%i\n"
-				"--DEBUG-- TOKEN	str:	%s\n",
-				(*list)->type, (*list)->token_string);
-		free((*list)->token_string);
-		free(*list);
+	//	if (DEBUG)
+	//		ft_printf("--DEBUG-- TOKEN	type:	%i\n"
+	//			"--DEBUG-- TOKEN	str:	%s\n",
+	//			(*list)->type, (*list)->token_string);
+	//	free((*list)->token_string);
+	//	free(*list);
 	}
 	return (0); //temp
 }
 
 void	get_token(t_token **list, char *input, int *pos)
 {
-	char	*token_string;
+	char	*tkn_str;
 
 	//check the type of token
 	//if string
-	isolate_word_token(input, pos, &token_string);
+	isolate_word_token(input, pos, &tkn_str);
 	//else
 	//isolate_operator_token();
 	//then
 	//add token to list
-	*list = create_token(e_word, token_string);
+
+	//*list = create_token(e_word, tkn_str);
+	tkn_lstadd_back(list, create_token(e_word, tkn_str));
 	if (DEBUG)
-		ft_printf("--DEBUG-- Got token: %s\n", token_string);
+		ft_printf("--DEBUG-- Got token: %s\n", tkn_str);
+}
+
+void	tkn_lstadd_back(t_token **lst, t_token *new)
+{
+	t_token	*last;
+
+	if (!lst || !new)
+		return ;
+	if (!*lst)
+	{
+		*lst = new;
+		return ;
+	}
+	last = *lst;
+	while (last->next)
+		last = last->next;
+	last->next = new;
 }
 
 //	char	*ft_substr(char const *s, unsigned int start, size_t len);
@@ -104,5 +136,6 @@ t_token	*create_token(t_token_type token_type, char *str)
 	tkn = (t_token *)ft_malloc(sizeof(t_token) * 1);
 	tkn->type = token_type;
 	tkn->token_string = str;
+	tkn->next = NULL;
 	return (tkn);
 }

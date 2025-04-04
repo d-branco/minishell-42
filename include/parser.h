@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:07 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/04 15:56:17 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/04 18:45:20 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,5 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*token_string;
+	struct s_token	*next;
 }	t_token;

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/04 16:52:55 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/04 20:00:51 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,12 +145,18 @@ int				handle_exit_code(int newcode);
 //int				check_parenthesis(char *input);
 //int				check_logic(char *input);
 //int				more_than_one_command(char *input);
+//include/parser.h
+//typedef enum e_token_type;
+//typedef struct s_token;
 //parser/parser.c
 int				parser(char *input);
 int				parse_input_into_token_list(t_token **list, char *input);
 void			get_token(t_token **list, char *input, int *pos);
 void			isolate_word_token(char *input, int *pos, char **token_string);
 t_token			*create_token(t_token_type token_type, char *token_string);
+void			del_content(void *content);
+void			tkn_lstadd_back(t_token **lst, t_token *new);
+void			tkn_lstclear(t_token **lst);
 //parser/lexer.c
 //int				lexer(char *input, t_l_no *list_head);
 //void			looping_lexer(char *input, t_l_no *list_head);
