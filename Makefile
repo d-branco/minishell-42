@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/04/03 15:04:10 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/04/04 17:20:55 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ SRCS		:= \
 	src/parser/parser.c \
 	src/parser/lexer.c \
 	src/parser/tokenizer.c \
-	src/utils/ft_isspace.c 
+	src/utils/ft_isspace.c \
+	src/utils/ft_malloc.c 
 #	src/cmd_interpreter.c \
 #	playground/practice03-lists.c
 #	playground/practice01.c
@@ -139,6 +140,6 @@ test:
 		norminette src/ include/ playground/	\
 		| grep -v OK 							\
 		| grep -v WRONG_SCOPE_COMMENT			\
-		| grep -v GLOBAL_VAR_DETECTED			\
+		| grep -v EMPTY_LINE_FUNCTION			\
 	; echo -n "$(COR)" ;						\
 	
