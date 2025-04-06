@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/06 15:22:09 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/06 15:39:25 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	tkn_lst_printer(t_token *lst)
 		ft_printf("--DEBUG--TKN_LIST ======== token at %p\n", lst);
 		ft_printf("--DEBUG--TKN_LIST type: %s\n", token_string[lst->type]);
 		ft_printf("--DEBUG--TKN_LIST token_string: %s\n", lst->token_string);
-		ft_printf("--DEBUG--TKN_LIST Next token: %p\n", lst->next);
+		ft_printf("--DEBUG--TKN_LIST next tkn address: %p\n", lst->next);
 		lst = lst->next;
 	}
 	ft_printf("--DEBUG--TKN_LIST ======== END of token list\n");
@@ -181,6 +181,8 @@ void	isolate_word_token(char *input, int *pos, char **token_string)
 	while (input[*pos + i] && !ft_isspace(input[*pos + i])
 		&& (ft_isalnum(input[*pos + i]) || (input[*pos + i] == '-')))
 		i++;
+	if (i == 0)
+		i = 1;
 	*token_string = ft_substr(input, *pos, i);
 	*pos += i;
 }
