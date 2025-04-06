@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/06 10:20:53 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/06 10:28:14 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,6 @@ int	parse_input_into_token_list(t_token **list, char *input)
 		if (!input[pos])
 			break ;
 		get_token(list, input, &pos);
-	//	if (DEBUG)
-	//		ft_printf("--DEBUG-- TOKEN	type:	%i\n"
-	//			"--DEBUG-- TOKEN	str:	%s\n",
-	//			(*list)->type, (*list)->token_string);
-	//	free((*list)->token_string);
-	//	free(*list);
 	}
 	return (0); //temp
 }
@@ -98,14 +92,14 @@ void	get_token(t_token **list, char *input, int *pos)
 
 	//check the type of token
 	//if string
-	isolate_word_token(input, pos, &tkn_str);
+	isolate_WORD_token(input, pos, &tkn_str);
 	//else
 	//isolate_operator_token();
 	//then
 	//add token to list
 
-	//*list = create_token(e_word, tkn_str);
-	tkn_lstadd_back(list, create_token(e_word, tkn_str));
+	//*list = create_token(e_WORD, tkn_str);
+	tkn_lstadd_back(list, create_token(e_WORD, tkn_str));
 	if (DEBUG)
 		ft_printf("--DEBUG-- Got token: %s\n", tkn_str);
 }
@@ -129,7 +123,7 @@ void	tkn_lstadd_back(t_token **lst, t_token *new)
 }
 
 //	char	*ft_substr(char const *s, unsigned int start, size_t len);
-void	isolate_word_token(char *input, int *pos, char **token_string)
+void	isolate_WORD_token(char *input, int *pos, char **token_string)
 {
 	int	i;
 
