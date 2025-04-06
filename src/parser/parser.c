@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/04 20:01:25 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/06 10:18:02 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,35 @@
 	Quotes (" and ')
 */
 
+void	tkn_lst_printer(t_token *lst);
+
 int	parser(char *input)
 {
 	t_token	*list_o_tokens;
 
 	list_o_tokens = NULL;
 	parse_input_into_token_list(&list_o_tokens, input);
-	//print list_o_tokens
+	tkn_lst_printer(list_o_tokens);
 	tkn_lstclear(&list_o_tokens);
 	return (0);// temp
+}
+
+// Adapted from libft ft_lstiter()
+void	tkn_lst_printer(t_token *lst)
+{
+	const char	*token_string[] = {"string"};
+
+	if (!DEBUG || (lst == NULL))
+		return ;
+	while (lst)
+	{
+		ft_printf("--DEBUG--TKN_LIST ======== token at %p\n", lst);
+		ft_printf("--DEBUG--TKN_LIST type: %s\n", token_string[lst->type]);
+		ft_printf("--DEBUG--TKN_LIST token_string: %s\n", lst->token_string);
+		ft_printf("--DEBUG--TKN_LIST Next token: %p\n", lst->next);
+		lst = lst->next;
+	}
+	ft_printf("--DEBUG--TKN_LIST ======== END of token list\n");
 }
 
 // Adapted from libft
@@ -92,6 +112,7 @@ void	get_token(t_token **list, char *input, int *pos)
 		ft_printf("--DEBUG-- Got token: %s\n", tkn_str);
 }
 
+// Adapted from libft
 void	tkn_lstadd_back(t_token **lst, t_token *new)
 {
 	t_token	*last;
