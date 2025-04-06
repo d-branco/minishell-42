@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 09:23:00 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/04 14:57:51 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/06 15:12:35 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "../include/minishell.h"
 
 t_token	*make_a_token(
-					t_token_type type, const char *token_string, int length)
+					t_tkn_type type, const char *token_string, int length)
 {
 	t_token	*data;
 
