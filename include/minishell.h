@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/04 20:00:51 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/06 10:21:40 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,12 +139,6 @@
 //minishell.c
 //int			main(int argc, char **argv, char **envp);
 int				handle_exit_code(int newcode);
-//cmd_interpreter.c
-//int				handle_parse_input(char	*input);
-//int				check_quotes(char *input);
-//int				check_parenthesis(char *input);
-//int				check_logic(char *input);
-//int				more_than_one_command(char *input);
 //include/parser.h
 //typedef enum e_token_type;
 //typedef struct s_token;
@@ -157,13 +151,7 @@ t_token			*create_token(t_token_type token_type, char *token_string);
 void			del_content(void *content);
 void			tkn_lstadd_back(t_token **lst, t_token *new);
 void			tkn_lstclear(t_token **lst);
-//parser/lexer.c
-//int				lexer(char *input, t_l_no *list_head);
-//void			looping_lexer(char *input, t_l_no *list_head);
-//parser/tokenizer.c
-//void			print_token_list_info(void *content);
-//t_token			*create_token(t_token_type type, const char *token_string);
-//void			delete_token(void *content);
+void			tkn_lst_printer(t_token *lst);
 //utils/ft_isspace.c
 int				ft_isspace(char chr);
 //utils/ft_malloc.c

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/06 10:18:02 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/06 10:20:53 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@
 	Logical operators && and ||
 	Quotes (" and ')
 */
-
-void	tkn_lst_printer(t_token *lst);
 
 int	parser(char *input)
 {
