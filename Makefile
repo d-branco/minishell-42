@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/04/04 19:38:47 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/04/06 11:30:22 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,13 +28,13 @@ AR			:= ar rcs
 ########################################################## Objects and Headers #
 INCLUDES	:= -I./include
 
-SRCS		:= \
-	src/minishell.c \
-	src/parser/parser.c \
-	src/parser/lexer.c \
-	src/parser/tokenizer.c \
-	src/utils/ft_isspace.c \
-	src/utils/ft_malloc.c 
+SRCS		:=																\
+	src/minishell.c															\
+	src/parser/parser.c														\
+	src/parser/lexer.c														\
+	src/parser/tokenizer.c													\
+	src/utils/ft_isspace.c													\
+	src/utils/ft_malloc.c													
 #	src/cmd_interpreter.c \
 #	playground/practice03-lists.c
 #	playground/practice01.c
@@ -48,7 +48,7 @@ all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS) supp_doc
 	@\
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(READFLAGS) &&	\
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(READFLAGS)			&&	\
 	echo "$(GRAY)File compiled:$(COR)	$(SRCS)"
 
 %.o: %.c
@@ -56,7 +56,7 @@ $(NAME): $(LIBFT) $(OBJS) supp_doc
 
 $(LIBFT):
 	@\
-	make --silent --no-print-directory -C $(LIBFT_DIR) &&	\
+	make --silent --no-print-directory -C $(LIBFT_DIR)					&&	\
 	echo "$(GRAY)Library built:$(COR)	$(LIBFT)"
 
 libft : $(LIBFT)
@@ -74,25 +74,25 @@ supp_doc:
 bonus: $(NAME)
 
 debug:
-	@$(MAKE) --silent fclean				;	\
-	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1 &&	\
+	@$(MAKE) --silent fclean											;	\
+	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1							&&	\
 	$(MAKE) --silent clean
 
 clean:
 	@\
-	make --silent --no-print-directory -C $(LIBFT_DIR) clean		; \
-	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS) 			; \
-	$(RM) ./*sync-conf*												; \
-	$(RM) ./*/*sync-conf*											; \
-	$(RM) ./*/*/*sync-conf*											; \
-	$(RM) ./a.out													; \
-	$(RM) ./playground/a.out										; \
+	make --silent --no-print-directory -C $(LIBFT_DIR) clean			;	\
+	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS) 				;	\
+	$(RM) ./*sync-conf*													;	\
+	$(RM) ./*/*sync-conf*												;	\
+	$(RM) ./*/*/*sync-conf*												;	\
+	$(RM) ./a.out														;	\
+	$(RM) ./playground/a.out											;	\
 	echo "$(GRAY)Files cleaned.$(COR)"
 
 fclean: clean
 	@\
-	make --silent --no-print-directory -C $(LIBFT_DIR) fclean ;		\
-	$(RM) $(NAME) &&												\
+	make --silent --no-print-directory -C $(LIBFT_DIR) fclean			;	\
+	$(RM) $(NAME)														&&	\
 	echo "$(GRAY)File fcleaned.$(COR)"
 
 re: fclean all
@@ -107,9 +107,9 @@ YELLOW	:= \033[1;93m# yellow
 ######################################################################### Test #
 test:
 	@\
-	$(MAKE) --silent fclean ;					\
-	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1 &&	\
-	$(MAKE) --silent clean &&					\
+	$(MAKE) --silent fclean												;	\
+	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1							&&	\
+	$(MAKE) --silent clean												&&	\
 	\
 	echo "$(COR)$(GRAY)========================================== $(NAME) START\
 	$(COR)" && \
@@ -126,7 +126,7 @@ test:
 		./minishell ;					\
 	\
 	echo "$(COR)$(GRAY)========================================== $(NAME) END\n\
-	$(COR)RETURN VALUE: $$?" && \
+	$(COR)RETURN VALUE: $$?"											&&	\
 	\
 	tail -n 18 log.txt |					\
 	awk '{									\

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/06 10:28:14 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/06 11:38:32 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	get_token(t_token **list, char *input, int *pos)
 
 	//check the type of token
 	//if string
-	isolate_WORD_token(input, pos, &tkn_str);
+	isolate_word_token(input, pos, &tkn_str);
 	//else
 	//isolate_operator_token();
 	//then
@@ -123,15 +123,33 @@ void	tkn_lstadd_back(t_token **lst, t_token *new)
 }
 
 //	char	*ft_substr(char const *s, unsigned int start, size_t len);
-void	isolate_WORD_token(char *input, int *pos, char **token_string)
+void	isolate_word_token(char *input, int *pos, char **token_string)
 {
-	int	i;
+	int		i;
+	char	quote;
 
+	//if (!input[*pos])
+	//	return ;
+	quote = '\0';
 	i = 0;
+	if ((input[*pos] == '\"') || (input[*pos] == '\''))
+	{
+		quote == input[*pos];
+		i++;
+	}
 	while (input[*pos + i] && !ft_isspace(input[*pos + i])
 		&& input[*pos + i] != '\'' && input[*pos + i] != '\"')
 	{
+//		if (input[*pos + i] == '\"')
+//		{
+//			i++;
+//			while ((input[*pos + i] != '\"') || (input[*pos + i] != '\0'))
+//				i++;
+//			break ;
+//		}
 		i++;
+		if (input[*pos + i] == quote)
+			break ;
 	}
 	*token_string = ft_substr(input, *pos, i);
 	*pos += i;
