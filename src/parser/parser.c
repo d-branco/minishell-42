@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/07 09:58:06 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/07 10:14:09 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,6 +226,8 @@ t_token	*create_token(t_tkn_type token_type, char *str)
 	t_token	*tkn;
 
 	tkn = (t_token *)ft_malloc(sizeof(t_token) * 1);
+	//if (tkn == NULL)
+	//	clean_exit(); when this functions is made we can place malloc above
 	tkn->type = token_type;
 	tkn->token_string = str;
 	tkn->next = NULL;
