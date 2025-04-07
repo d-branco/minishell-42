@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/07 08:44:56 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/07 09:58:06 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	parser(char *input)
 	parse_input_into_token_list(&list_o_tokens, input);
 	tkn_lst_printer(list_o_tokens);
 	tkn_lstclear(&list_o_tokens);
-	return (0);// temp
+	return (handle_exit_code(-1));
 }
 
 // Adapted from libft ft_lstiter()
@@ -65,18 +65,49 @@ void	tkn_lstclear(t_token **lst)
 int	parse_input_into_token_list(t_token **list, char *input)
 {
 	int	pos;
+	int	empty_line;
 
 	pos = 0;
+	empty_line = TRUE;
 	while (input[pos])
 	{
 		while (ft_isspace(input[pos]))
 			pos++;
 		if (!input[pos])
 			break ;
+		if (empty_line)
+		{
+			empty_line = FALSE;
+			handle_exit_code(0);
+		}
 		get_token(list, input, &pos);
 	}
-	// validate syntax!
-	return (0); //temp
+	return (handle_exit_code(validate_syntax(input)));
+}
+
+// Returns -1 if ok
+// Returns 2 if there's a syntax error
+int	validate_syntax(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if ((i == 0) && (str[i] == '&') && (str[i + 1] != '&'))
+			return (2);
+		if (i >= 1)
+		{
+			if ((str[i - 1] != '&') && (str[i] == '&') && (str[i + 1] != '&'))
+				return (2);
+			if ((str[i - 1] == '&') && (str[i] == '&') && (str[i + 1] == '&'))
+				return (2);
+			if ((str[i - 1] == '|') && (str[i] == '|') && (str[i + 1] == '|'))
+				return (2);
+		}
+		i++;
+	}
+	return (handle_exit_code(-1));
 }
 
 void	get_token(t_token **list, char *input, int *pos)
@@ -90,13 +121,9 @@ void	get_token(t_token **list, char *input, int *pos)
 		isolate_word_token(input, pos, &tkn_str);
 	else
 		isolate_operator_token(input, pos, &tkn_str);
-	//then
-	//add token to list
-
-	//*list = create_token(e_WORD, tkn_str);
-	tkn_lstadd_back(list, create_token(token_type, tkn_str));
 	if (DEBUG)
 		ft_printf("--DEBUG-- Got token: %s\n", tkn_str);
+	tkn_lstadd_back(list, create_token(token_type, tkn_str));
 }
 
 //	Adapted from isolate_word_token()
@@ -115,7 +142,6 @@ void	isolate_operator_token(char *input, int *pos, char **token_string)
 		i = 2;
 	*token_string = ft_substr(input, *pos, i);
 	*pos += i;
-
 }
 
 void	handle_quoted_string(char *input, int *pos, char **str, char chr)
@@ -126,8 +152,11 @@ void	handle_quoted_string(char *input, int *pos, char **str, char chr)
 	(*pos)++;
 	while (input[*pos] && (input[*pos] != chr))
 		(*pos)++;
-	if (!input[*pos]) //SYNTAX ERROR
+	if (!input[*pos])
+	{
+		handle_exit_code(SYNTAX_ERROR);
 		return ;
+	}
 	(*pos)++;
 	*str = ft_substr(input, start, *pos - start);
 }
@@ -184,7 +213,7 @@ void	isolate_word_token(char *input, int *pos, char **token_string)
 	int		i;
 
 	i = 0;
-	while (!ft_strchr(" \\ ; \" \' ", input[*pos + i]))
+	while (!ft_strchr(" \\ ; \" \' ()&|><", input[*pos + i]))
 		i++;
 	if (i == 0)
 		i = 1;
