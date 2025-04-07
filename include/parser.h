@@ -6,13 +6,12 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:07 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/07 12:35:59 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:57:40 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//	'"()|&><
 typedef enum e_token_type
 {
 	e_WORD,

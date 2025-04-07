@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/07 18:32:06 by abessa-m         ###   ########.fr       */
+/*   Created: 2025/04/07 18:27:31 by abessa-m          #+#    #+#             */
+/*   Updated: 2025/04/07 18:34:23 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	parser(char *input)
-{
-	t_token	*list_o_tokens;
+t_ast_node *build_ast(t_token **tokens);
+//t_ast_node *parse_logical_ops(t_token **tokens);
+//t_ast_node *parse_pipe(t_token **tokens);
+//t_ast_node *parse_redirections(t_token **tokens);
+t_ast_node *parse_commands(t_token **tokens);
 
-	list_o_tokens = NULL;
-	parse_input_into_token_list(&list_o_tokens, input);
-	tkn_lst_printer(list_o_tokens);
-	tkn_lstclear(&list_o_tokens);
-	return (handle_exit_code(-1));
+t_ast_node *build_ast(t_token **tokens)
+{
+	
+	return ();
 }
 
-/*	Notes on parsing order of operation:
-1. Logic operators 						||, &&
-2. Pipes 								|
-3. Redirections							<, <<, >, >>
-4. Commands								et cetera
-*/
+// Recursive Descent Parsing

@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/04/07 13:47:54 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/04/07 18:36:40 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ SRCS		:=																\
 	src/parser/parser.c														\
 	src/parser/lexer.c														\
 	src/parser/lexer-list.c													\
-	src/parser/tokenizer.c													\
+	src/parser/lexer-tokenizer.c											\
 	src/utils/ft_isspace.c													\
 	src/utils/ft_malloc.c													
 OBJS		:= $(SRCS:.c=.o)
