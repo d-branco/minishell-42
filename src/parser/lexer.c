@@ -6,272 +6,90 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/06 15:12:35 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/07 12:43:06 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-	syntax error
-	Deal with normal command
-			normal commands + arguments
-	Redirections <, <<, > and >>
-	Pipelines |
-	Logical operators && and ||
-	Quotes (" and ')
-
-typedef enum e_token_type
+// Creates tokens and returns 0 if success
+int	parse_input_into_token_list(t_token **list, char *input)
 {
-	TOKEN_SINGLE_QUOTE,
-	TOKEN_DOUBLE_QUOTE,
-	TOKEN_PARENTHESIS_OPEN,
-	TOKEN_PARENTHESIS_CLOSE,
-	TOKEN_PIPE,
-	TOKEN_AND,
-	TOKEN_OR,
-	TOKEN_OUTPUT_REDIRECTION,
-	TOKEN_APPEND,
-	TOKEN_INPUT_REDIRECTION,
-	TOKEN_HERE_DOC,
-	TOKEN_CMD_ARGS
-}	t_tkn_type;
+	int	pos;
+	int	empty_line;
 
-typedef struct s_token
-{
-	t_tkn_type	type;
-	char			*token_string;
-	int				length;
-}	t_token;
-*/
-
-/* Second try:
-static int	check_syntax_for_semicolon_backslash(char *input);
-
-int	lexer(char *input, t_list *list_head)
-{
-	if (!input)
-		return (-1);
-	else if (check_syntax_for_semicolon_backslash(input))
-		return (SYNTAX_ERROR);
-	looping_lexer(input, list_head);
-	return (0);
-}
-
-void	looping_lexer(char *input, t_list *list_head)
-{
-	int		i;
-	char	*str;
-
-	str = malloc(sizeof(char));
-	str[0] = '\0';
-	i = 0;
-	if (DEBUG)
-		write(1, "--DEBUG--lexer: ", 16);
-	while (input[i])
+	pos = 0;
+	empty_line = TRUE;
+	while (input[pos])
 	{
-		if (ft_isprint(input[i]) && !ft_isspace(input[i]))
+		while (ft_isspace(input[pos]))
+			pos++;
+		if (!input[pos])
+			break ;
+		if (empty_line)
 		{
-			if (input[i] == '|')
-			{
-				if ((i == 0) || (!input[i + 1]))
-				{
-					write(2, "TESTE: ERROR DE SINTAXE\n", 24);
-					return ;
-				}
-				if (input[i - 1] != '|' && input[i + 1] && input[i + 1] != '|')
-				{
-					if (DEBUG)
-					{
-ft_lstadd_back(&list_head, ft_lstnew(create_token(TOKEN_PIPE, "|")));
-						ft_lstclear(&list_head, delete_token);
-						//write(1, "PIPE", 4);
-					}
-				}
-				else if (input[i + 1] == '|')
-				{
-					if (input[i + 2])
-					{
-						if ((input[i + 2] != '|') && (input[i - 1] != '|'))
-						{
-							if (DEBUG)
-								write(1, "OR", 2);
-							i++;
-						}
-						else
-						{
-							if (DEBUG)
-							{
-								write(2, "TESTE: ERROR DE SINTAXE\n", 24);
-								return ;
-							}
-						}
-					}
-					else
-					{
-						if (DEBUG)
-						{
-							write(2, "TESTE: ERROR DE SINTAXE\n", 24);
-							return ;
-						}
-					}
-				}
-			}
-			if (input[i] == '&')
-			{
-				if (input[i + 1] == '&')
-				{
-					if ((input[i + 2]) && (i > 0))
-					{
-						if ((input[i + 2] != '&') && (input[i - 1] != '&'))
-						{
-							if (DEBUG)
-								write(1, "AND", 3);
-						}
-						else
-						{
-							write(2, "TESTE: ERROR DE SINTAXE\n", 24);
-							return ;
-						}
-					}
-					else
-					{
-						write(2, "TESTE: ERROR DE SINTAXE\n", 24);
-						return ;
-					}
-				}
-			}
-			if (input[i] == '\'')
-			{
-				if (DEBUG)
-					write(1, "SINGLE_QUOTES", 13);
-			}
-			if (input[i] == '\"')
-			{
-				if (DEBUG)
-					write(1, "DOUBLE_QUOTES", 13);
-			}
-			if (input[i] == '(')
-			{
-				if (DEBUG)
-					write(1, "PARENTHESIS_OPEN", 16);
-			}
-			if (input[i] == ')')
-			{
-				if (DEBUG)
-					write(1, "PARENTHESIS_CLOSE", 17);
-			}
-			if (input[i] == '<')
-			{
-				if (i == 0)
-				{
-					if (input[i + 1] != '<')
-					{
-						if (DEBUG)
-							write(1, "REDIRECTION_INPUT", 17);
-					}
-				}
-				else if ((input[i - 1] != '<') && (input[i + 1] != '<'))
-				{
-					if (DEBUG)
-						write(1, "REDIRECTION_INPUT", 17);
-				}
-			}
-			if (input[i] == '>')
-			{
-				if (i == 0)
-				{
-					if (input[i + 1] != '>')
-					{
-						if (DEBUG)
-							write(1, "REDIRECTION_OUTPUT", 18);
-					}
-				}
-				else if ((input[i - 1] != '>') && (input[i + 1] != '>'))
-				{
-					if (DEBUG)
-						write(1, "REDIRECTION_OUTPUT", 18);
-				}
-			}
-			if (input[i] == '>')
-			{
-				if (i == 0)
-				{
-					if (input[i + 1] == '>')
-					{
-						if (input[i + 2])
-						{
-							if (input[i + 2] != '>')
-							{
-								if (DEBUG)
-									write(1, "REDIRECTION_APPEND", 18);
-							}
-						}
-					}
-				}
-				else if ((input[i - 1] != '>') && (input[i + 2]))
-				{
-					if (input[i + 2] != '>')
-					{
-						if (DEBUG)
-							write(1, "REDIRECTION_APPEND", 18);
-					}
-				}
-			}
-			if (input[i] == '<')
-			{
-				if (i == 0)
-				{
-					if (input[i + 1] == '<')
-					{
-						if (input[i + 2])
-						{
-							if (input[i + 2] != '<')
-							{
-								if (DEBUG)
-									write(1, "REDIRECTION_HEREDOC", 19);
-							}
-						}
-					}
-				}
-				else if ((input[i - 1] != '<') && (input[i + 2]))
-				{
-					if (input[i + 2] != '>')
-					{
-						if (DEBUG)
-							write(1, "REDIRECTION_HEREDOC", 19);
-					}
-				}
-			}
-			while (ft_strchr("\\;\'\"|&()<>", input[i]) == NULL)
-			{
-				if (DEBUG)
-					write(1, &input[i], 1);
-				if (ft_strchr("\\;\'\"|&()<> ", input[i + 1]) != NULL)
-					break ;
-				i++;
-			}
-			if (DEBUG)
-				write(1, " ", 1);
+			empty_line = FALSE;
+			handle_exit_code(0);
 		}
-		i++;
+		get_token(list, input, &pos);
 	}
-	if (DEBUG)
-		write(1, "\n", 1);
-	free(str);
+	return (handle_exit_code(validate_syntax(input)));
 }
 
-static int	check_syntax_for_semicolon_backslash(char *input)
+// Returns -1 if ok
+// Returns 2 if there's a syntax error
+int	validate_syntax(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (input[i])
+	while (str[i])
 	{
-		if (input[i] == ';' || input[i] == '\\')
-			return (SYNTAX_ERROR);
+		if ((i == 0) && (str[i] == '&') && (str[i + 1] != '&'))
+			return (2);
+		if (i >= 1)
+		{
+			if ((str[i - 1] != '&') && (str[i] == '&') && (str[i + 1] != '&'))
+				return (2);
+			if ((str[i - 1] == '&') && (str[i] == '&') && (str[i + 1] == '&'))
+				return (2);
+			if ((str[i - 1] == '|') && (str[i] == '|') && (str[i + 1] == '|'))
+				return (2);
+		}
 		i++;
 	}
-	return (0);
+	return (handle_exit_code(-1));
 }
-*/
+
+void	get_token(t_token **list, char *input, int *pos)
+{
+	char		*tkn_str;
+	t_tkn_type	token_type;
+
+	tkn_str = NULL;
+	token_type = check_type_of_token(input, pos);
+	if (token_type == 0)
+		isolate_word_token(input, pos, &tkn_str);
+	else
+		isolate_operator_token(input, pos, &tkn_str);
+	if (DEBUG)
+		ft_printf("--DEBUG-- Got token: %s\n", tkn_str);
+	tkn_lstadd_back(list, create_token(token_type, tkn_str));
+}
+
+void	handle_quoted_string(char *input, int *pos, char **str, char chr)
+{
+	int	start;
+
+	start = *pos;
+	(*pos)++;
+	while (input[*pos] && (input[*pos] != chr))
+		(*pos)++;
+	if (!input[*pos])
+	{
+		handle_exit_code(SYNTAX_ERROR);
+		return ;
+	}
+	(*pos)++;
+	*str = ft_substr(input, start, *pos - start);
+}
