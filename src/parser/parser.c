@@ -6,21 +6,11 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/06 15:39:25 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/07 07:59:25 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-	syntax error
-	Deal with normal command
-			normal commands + arguments
-	Redirections <, <<, > and >>
-	Pipelines |
-	Logical operators && and ||
-	Quotes (" and ')
-*/
 
 int	parser(char *input)
 {
@@ -175,11 +165,8 @@ void	isolate_word_token(char *input, int *pos, char **token_string)
 {
 	int		i;
 
-	//if (!input[*pos])
-	//	return ;
 	i = 0;
-	while (input[*pos + i] && !ft_isspace(input[*pos + i])
-		&& (ft_isalnum(input[*pos + i]) || (input[*pos + i] == '-')))
+	while (!ft_strchr(" \0\\;", input[*pos + i]))
 		i++;
 	if (i == 0)
 		i = 1;
@@ -187,11 +174,6 @@ void	isolate_word_token(char *input, int *pos, char **token_string)
 	*pos += i;
 }
 
-////typedef struct s_token
-////{
-////	t_tkn_type	type;
-////	char			*token_string;
-////}	t_token;
 t_token	*create_token(t_tkn_type token_type, char *str)
 {
 	t_token	*tkn;
