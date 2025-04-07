@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/04/07 12:44:18 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/04/07 13:47:54 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,10 +36,6 @@ SRCS		:=																\
 	src/parser/tokenizer.c													\
 	src/utils/ft_isspace.c													\
 	src/utils/ft_malloc.c													
-#	src/cmd_interpreter.c \
-#	playground/practice03-lists.c
-#	playground/practice01.c
-#	playground/practice00.c
 OBJS		:= $(SRCS:.c=.o)
 
 #SRCS_BONUS	:=
@@ -63,7 +59,8 @@ $(LIBFT):
 libft : $(LIBFT)
 
 supp_doc:
-	@echo "\
+	@\
+	echo "\
 	{\n\
 		leak readline\n\
 		Memcheck:Leak\n\
@@ -75,7 +72,8 @@ supp_doc:
 bonus: $(NAME)
 
 debug:
-	@$(MAKE) --silent fclean											;	\
+	@\
+	$(MAKE) --silent fclean												;	\
 	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1							&&	\
 	$(MAKE) --silent clean
 
@@ -112,36 +110,38 @@ test:
 	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1							&&	\
 	$(MAKE) --silent clean												&&	\
 	\
-	echo "$(COR)$(GRAY)========================================== $(NAME) START\
+	echo "\
+	$(COR)$(GRAY)========================================== $(NAME) START\
 	$(COR)" && \
 	\
-	valgrind							\
-		--track-fds=yes					\
-		--show-error-list=yes			\
-		--leak-check=full				\
-		--show-leak-kinds=all			\
-		--track-origins=yes				\
-		--suppressions=.readline.txt	\
-		--log-file=log.txt				\
-										\
-		./minishell ;					\
+	valgrind																\
+		--track-fds=yes														\
+		--show-error-list=yes												\
+		--leak-check=full													\
+		--show-leak-kinds=all												\
+		--track-origins=yes													\
+		--suppressions=.readline.txt										\
+		--log-file=log.txt													\
+																			\
+		./minishell														;	\
 	\
-	echo "$(COR)$(GRAY)========================================== $(NAME) END\n\
+	echo "\
+	$(COR)$(GRAY)========================================== $(NAME) END\n\
 	$(COR)RETURN VALUE: $$?"											&&	\
 	\
-	tail -n 18 log.txt |					\
-	awk '{									\
-	gsub(/^==[0-9]*== /, "") ;				\
-	gsub(/^--[0-9]*-- /, "") ;				\
-	gsub(/^used_suppression: /, "") ;		\
-	if (length($0) > 0) print $0			\
-	}' ;									\
+	tail -n 18 log.txt													|	\
+	awk '{																	\
+	gsub(/^==[0-9]*== /, "")											;	\
+	gsub(/^--[0-9]*-- /, "")											;	\
+	gsub(/^used_suppression: /, "")										;	\
+	if (length($0) > 0) print $0											\
+	}'																	;	\
 	\
-	echo -n "$(YELLOW)" ;						\
-		norminette src/ include/ playground/	\
-		| grep -v OK 							\
-		| grep -v WRONG_SCOPE_COMMENT			\
-		| grep -v EMPTY_LINE_FUNCTION			\
-		| grep -v TOO_MANY_FUNCS				\
-	; echo -n "$(COR)" ;						\
+	echo -n "$(YELLOW)" 												;	\
+		norminette src/ include/ playground/								\
+		| grep -v OK 														\
+		| grep -v WRONG_SCOPE_COMMENT										\
+		| grep -v EMPTY_LINE_FUNCTION										\
+		| grep -v TOO_MANY_FUNCS										;	\
+	echo -n "$(COR)" 													;	\
 	
