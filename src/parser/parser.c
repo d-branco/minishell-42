@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/07 07:59:25 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/07 08:26:55 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void	isolate_word_token(char *input, int *pos, char **token_string)
 	int		i;
 
 	i = 0;
-	while (!ft_strchr(" \0\\;", input[*pos + i]))
+	while (!ft_strchr(" \\ ; \" \' ", input[*pos + i]))
 		i++;
 	if (i == 0)
 		i = 1;
