@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/07 08:26:55 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/07 08:44:56 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,32 @@ void	isolate_operator_token(char *input, int *pos, char **token_string)
 {
 	int		i;
 
-	//if (!input[*pos])
-	//	return ;
+	if ((input[*pos] == '\'') || (input[*pos] == '\"'))
+	{
+		handle_quoted_string(input, pos, token_string, input[*pos]);
+		return ;
+	}
 	i = 1;
 	if (((input[*pos] == '|') || (input[*pos] == '&') || (input[*pos] == '>')
 			|| (input[*pos] == '<')) && (input[*pos] == input[*pos + 1]))
 		i = 2;
 	*token_string = ft_substr(input, *pos, i);
 	*pos += i;
+
+}
+
+void	handle_quoted_string(char *input, int *pos, char **str, char chr)
+{
+	int	start;
+
+	start = *pos;
+	(*pos)++;
+	while (input[*pos] && (input[*pos] != chr))
+		(*pos)++;
+	if (!input[*pos]) //SYNTAX ERROR
+		return ;
+	(*pos)++;
+	*str = ft_substr(input, start, *pos - start);
 }
 
 //	char	*ft_strchr(const char *s, int c)

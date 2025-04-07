@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/06 15:13:01 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/07 08:37:44 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ void		tkn_lstclear(t_token **lst);
 void		tkn_lst_printer(t_token *lst);
 t_tkn_type	check_type_of_token(char *input, int *pos);
 void		isolate_operator_token(char *input, int *pos, char **token_string);
+void		handle_quoted_string(char *input, int *pos, char **str, char chr);
 //utils/ft_isspace.c
 int			ft_isspace(char chr);
 //utils/ft_malloc.c
