@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:22:15 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/08 19:09:14 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/10 09:27:57 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	tkn_lst_printer(t_token *lst)
 void	tkn_lstclear(t_token **lst)
 {
 	t_token	*ahead;
-	t_token *current;
+	t_token	*current;
 
 	if (!lst || !*lst)
 		return ;
