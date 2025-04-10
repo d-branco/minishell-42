@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/10 09:45:02 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:03:29 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ int	main(int argc, char **argv)
 		ft_printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG--\n");
 	while (loop)
 	{
-		//ft_putnbr_fd(handle_exit_code(-1), 1);
-		//input = readline("% ");
+		//ft_putnbr_fd(handle_exit_code(-1), 1);//input = readline("% ");
 		input = "ls -l | grep .c && echo success || echo failure > output.txt";
 		if ((input == NULL) || (ft_strncmp(input, "exit", 5) == 0))
 		{
@@ -38,7 +37,7 @@ int	main(int argc, char **argv)
 		loop--;
 	}
 	if (DEBUG)
-		ft_printf("--DEBUG-- Goodbye, friend.\n");
+		ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
 	return (handle_exit_code(-1));
 }
 
