@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/07 09:20:48 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/08 19:21:24 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,15 @@
 int	main(int argc, char **argv)
 {
 	char	*input;
+	int		loop;
 
+	loop = 42;
 	(void) argv;
 	if (argc > 1)
-	{
-		ft_putstr_fd("Too many arguments, dear ;)\n", 2);
-		return (1);
-	}
+		return (ft_putstr_fd("Too many arguments, dear ;)\n", 2), 1);
 	if (DEBUG)
 		ft_printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG--\n");
-	while (42)
+	while (loop)
 	{
 		ft_putnbr_fd(handle_exit_code(-1), 1);
 		input = readline("% ");
@@ -35,6 +34,7 @@ int	main(int argc, char **argv)
 		}
 		else
 			handle_exit_code(parser(input));
+		loop--;
 	}
 	if (DEBUG)
 		ft_printf("--DEBUG-- Goodbye, friend.\n");
@@ -50,3 +50,6 @@ int	handle_exit_code(int newcode)
 	code = newcode;
 	return (code);
 }
+
+//char *input = "ls -l | grep .c && echo success || echo failure > output.txt";
+//char *input = "a&&b|c||(d&&e&&(f||g))";

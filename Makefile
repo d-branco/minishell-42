@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/04/07 18:36:40 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/04/08 18:08:49 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,12 +28,13 @@ AR			:= ar rcs
 ########################################################## Objects and Headers #
 INCLUDES	:= -I./include
 
-SRCS		:=																\
+SRCS		:=	\
 	src/minishell.c															\
 	src/parser/parser.c														\
 	src/parser/lexer.c														\
 	src/parser/lexer-list.c													\
 	src/parser/lexer-tokenizer.c											\
+	src/parser/ast.c														\
 	src/utils/ft_isspace.c													\
 	src/utils/ft_malloc.c													
 OBJS		:= $(SRCS:.c=.o)
@@ -129,7 +130,7 @@ test:
 	$(COR)$(GRAY)========================================== $(NAME) END\n\
 	$(COR)RETURN VALUE: $$?"											&&	\
 	\
-	tail -n 18 log.txt													|	\
+	cat log.txt													|	\
 	awk '{																	\
 	gsub(/^==[0-9]*== /, "")											;	\
 	gsub(/^--[0-9]*-- /, "")											;	\

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/07 12:35:54 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/07 21:01:08 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # include "../libft/libft.h"
 # include "parser.h"
+# include "ast.h"
 
 # define TRUE			1
 # define FALSE			0
