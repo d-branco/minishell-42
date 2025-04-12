@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:57:29 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/08 18:10:40 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/12 17:16:59 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,18 @@ typedef struct s_redirect
 }	t_redirect;
 
 t_ast_node		*build_ast(t_token **tokens);
-t_ast_node		*parse_commands(t_token **tokens);
 t_ast_node		*parse_logical_ops(t_token **tokens);
 t_ast_node		*parse_pipe(t_token **tokens);
 t_ast_node		*parse_redirections(t_token **tokens);
+t_ast_node		*create_ast_node(t_ast_type type, void *content);
+//parser/ast-print.c
+void			print_ast(t_ast_node *node, int depth);
+//parser/ast-free.c
 void			free_arg_list(t_list *arg_list);
 void			free_arg_list_structure(t_list *arg_list);
 void			free_ast_node(t_ast_node *node);
-t_ast_node		*create_ast_node(t_ast_type type, void *content);
-void			print_ast(t_ast_node *node, int depth);
+//parse/ast-parse-cmd.c
+t_ast_node		*parse_commands(t_token **tokens);
+//parse/ast-parse-cmd2.c
+t_ast_node		*handle_tokens_inside_parenthesis(t_token **tokens);
+int				is_valid_token_for_argument(t_token *token);

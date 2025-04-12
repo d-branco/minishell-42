@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/08 19:20:07 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/12 16:12:32 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,11 @@ int	parser(char *input)
 	if (DEBUG)
 		print_ast(ast, 0);
 	free_ast_node(ast);
-
 	return (handle_exit_code(-1));
 }
 
-/*	Notes on parsing order of operation:
-1. Logic operators 						||, &&
-2. Pipes 								|
-3. Redirections							<, <<, >, >>
-4. Commands								et cetera
-*/
+//	Parsing order:
+//1. Logic operators	||, &&
+//2. Pipes				|
+//3. Redirections		<, <<, >, >>
+//4. Commands			et cetera

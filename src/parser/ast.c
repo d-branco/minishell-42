@@ -6,17 +6,11 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:27:31 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/10 10:00:51 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/12 17:20:01 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_ast_node	*build_ast(t_token **tokens);
-t_ast_node	*parse_logical_ops(t_token **tokens);
-t_ast_node	*parse_pipe(t_token **tokens);
-//t_ast_node	*parse_redirections(t_token **tokens);
-//t_ast_node	*parse_commands(t_token **tokens);
 
 t_ast_node	*build_ast(t_token **tokens)
 {
@@ -32,7 +26,7 @@ t_ast_node	*parse_logical_ops(t_token **tokens)
 	t_ast_node	*op_node;
 	t_ast_type	op_type;
 
-	left = parse_pipe(tokens);// First parse the pipe expressions on the left
+	left = parse_pipe(tokens);
 	if (!left)
 		return (NULL);
 	while (*tokens && ((*tokens)->type == e_AND || (*tokens)->type == e_OR))
@@ -47,7 +41,7 @@ t_ast_node	*parse_logical_ops(t_token **tokens)
 		op_node = create_ast_node(op_type, NULL);
 		if (!op_node)
 			return (free_ast_node(left), free_ast_node(right), NULL);
-		op_node->left = left;// Set up the node
+		op_node->left = left;
 		op_node->right = right;
 		left = op_node;
 	}
@@ -65,7 +59,7 @@ t_ast_node	*parse_pipe(t_token **tokens)
 		return (NULL);
 	while (*tokens && (*tokens)->type == e_PIPE)
 	{
-		*tokens = (*tokens)->next;// Move past the pipe token
+		*tokens = (*tokens)->next;
 		right = parse_redirections(tokens);
 		if (!right)
 			return (free_ast_node(left), NULL);
@@ -77,4 +71,18 @@ t_ast_node	*parse_pipe(t_token **tokens)
 		left = pipe_node;
 	}
 	return (left);
+}
+
+t_ast_node	*create_ast_node(t_ast_type type, void *content)
+{
+	t_ast_node	*node;
+
+	node = malloc(sizeof(t_ast_node));
+	if (!node)
+		return (NULL);
+	node->type = type;
+	node->content = content;
+	node->left = NULL;
+	node->right = NULL;
+	return (node);
 }
