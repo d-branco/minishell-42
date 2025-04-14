@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:22:15 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/07 12:43:47 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/10 09:27:57 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,20 @@ void	tkn_lst_printer(t_token *lst)
 // Adapted from libft
 void	tkn_lstclear(t_token **lst)
 {
-	t_token	*tmp;
+	t_token	*ahead;
+	t_token	*current;
 
 	if (!lst || !*lst)
 		return ;
-	while (*lst)
+	current = *lst;
+	while (current)
 	{
-		tmp = (*lst)->next;
-		if ((*lst)->token_string)
-			free((*lst)->token_string);
-		free(*lst);
-		*lst = tmp;
+		ahead = (current)->next;
+		if ((current)->token_string)
+			free((current)->token_string);
+		free(current);
+		current = ahead;
 	}
-	*lst = NULL;
 }
 
 // if malloc fails
