@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/04/12 17:25:03 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/04/15 15:07:59 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ INCLUDES	:= -I./include
 
 SRCS		:=	\
 	src/minishell.c															\
+	src/execution/exe.c														\
 	src/parser/parser.c														\
 	src/parser/lexer.c														\
 	src/parser/lexer-list.c													\

@@ -6,16 +6,12 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/07 21:01:08 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:16:55 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-# ifndef DEBUG
-#  define DEBUG 0
-# endif
 
 # include "../libft/libft.h"
 # include "parser.h"
@@ -23,6 +19,10 @@
 
 # define TRUE			1
 # define FALSE			0
+
+# ifndef DEBUG
+#  define DEBUG FALSE
+# endif
 
 # define SYNTAX_ERROR	2
 
@@ -140,6 +140,8 @@
 //minishell.c
 //int			main(int argc, char **argv, char **envp);
 int			handle_exit_code(int newcode);
+//execution/exe.c
+int			execute_ast(t_ast_node *node);
 //utils/ft_isspace.c
 int			ft_isspace(char chr);
 //utils/ft_malloc.c

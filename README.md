@@ -63,25 +63,38 @@ Project Instructions
 - [ ] `exit` without options.
 
 Directory organization
------------------
+======================
 ```txt
 minishell/
 ├── include/
 │   ├── minishell.h
-│   └── <features>.h
+│   ├── ast.h
+│   ├── parser.h
+│   └── <et cetera>.h
 ├── srcs/
 │   ├── minishell.c
 │   ├── (prompt.c)
 │   ├── parser/
+│   │   ├── ast-free.c
+│   │   ├── ast-parse-cmd.c
+│   │   ├── ast-parse-cmd2.c
+│   │   ├── ast-print.c
+│   │   ├── ast-redirect.c
+│   │   ├── ast.c
+│   │   ├── lexer-list.c
+│   │   ├── lexer-tokenizer.c
 │   │   ├── lexer.c
 │   │   └── parser.c
-│   ├── (execution.c)
+│   ├── execution/
+│   │   └── exe.c
 │   ├── (signals.c)
 │   ├── (redirections.c)
 │   ├── (piping.c)
 │   ├── (environment.c)
 │   ├── (<other features>/)
-│   ├── (utils/)
+│   ├── utils/
+│   │   ├── ft_isspace.c
+│   │   └── ft_malloc.c
 │   └── builtins/
 │       ├── echo.c
 │       ├── cd.c
@@ -102,7 +115,7 @@ minishell/
 ```
 
 Allowed Functions
------------------
+=================
 ### String and Command Line Functions
 - [`readline`](https://man7.org/linux/man-pages/man3/readline.3.html): Reads a line from user input with editing capabilities
 - [`rl_clear_history`](https://tiswww.cwru.edu/php/chet/readline/readline.html#index-rl_005fclear_005fhistory): Clears the readline history list
