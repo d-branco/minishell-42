@@ -17,7 +17,7 @@ int	main(int argc, char **argv)
 	char	*input;
 	int		loop;
 
-	loop = 1;
+	loop = 42;
 	(void) argv;
 	if (argc > 1)
 		return (ft_putstr_fd("Too many arguments, dear ;)\n", 2), 1);
@@ -25,8 +25,8 @@ int	main(int argc, char **argv)
 		ft_printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG--\n");
 	while (loop)
 	{
-		input = "ls -l | grep .c && echo success || (echo"
-			" failure > output.txt && echo -n \"failure but redirected\")";
+		ft_putnbr_fd(handle_exit_code(-1), 1);
+		input = readline("% ");
 		if ((input == NULL) || (ft_strncmp(input, "exit", 5) == 0))
 		{
 			ft_putstr_fd("exit\n", 1);
@@ -51,7 +51,10 @@ int	handle_exit_code(int newcode)
 	return (code);
 }
 
-//ft_putnbr_fd(handle_exit_code(-1), 1);//input = readline("% ");
+
+
+//		input = "ls -l | grep .c && echo success || (echo"
+//			" failure > output.txt && echo -n \"failure but redirected\")";
 
 //char *input = "ls -l | grep .c && echo success || echo failure > output.txt";
 //char *input = "a&&b|c||(d&&e&&(f||g))";
