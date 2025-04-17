@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:02 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/07 22:07:16 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:15:58 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-
+/*
 static int	is_num(char *av)
 {
 	int	i;
@@ -65,3 +65,4 @@ int	main(int ac, char **av)
 {
 	return (ft_exit(ac, av));
 }
+ */

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 16:46:29 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/07 14:55:08 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:16:59 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-
+/*
 static int	n_flag(char *str)
 {
 	int	i;
@@ -53,8 +53,10 @@ int	main()
 	//ft_echo(av);
 	//char *av1[] = {"echo", "-nnnnn", "-n", "Hello", "-nn", "World", NULL};
 	//ft_echo(av1);
-	//char *av2[] = {"echo", "-nnnnnnnnnnnnnnnnnn", "-nnnnnnnnnnnnnnnunnnnnn", "Hello", "World", NULL};
+	//char *av2[] = {"echo", "-nnnnnnnnnnnnnnnnnn",
+				"-nnnnnnnnnnnnnnnunnnnnn", "Hello", "World", NULL};
 	//ft_echo(av2);
 	char *av3[] = {"echo", "$USER", NULL};
 	ft_echo(av3);
 }
+ */

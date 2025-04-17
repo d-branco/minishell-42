@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 14:29:16 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/13 19:46:14 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:15:37 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-
+/*
 char	*ft_getenv(char **envp, char *var_name)
 {
 	while (*envp)
@@ -126,3 +126,4 @@ int	main(int ac, char **av, char **envp)
 //	ft_free_vector(new_envp);
 	return (0);
 }
+ */

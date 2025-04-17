@@ -3,13 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:44:01 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/16 16:04:14 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:16:38 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-
-

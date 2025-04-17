@@ -6,42 +6,37 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/15 17:02:50 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/17 15:37:10 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	execute_command(t_ast_node *node);
+int	execute_and(t_ast_node *node);
+int	execute_or(t_ast_node *node);
 
 int	execute_ast(t_ast_node *node)
 {
-	t_command	*cmd;
-	int			i;
-
 	if (!node)
 		return (0);
 	handle_exit_code(0);
 	if (node->type == AST_COMMAND)
-	{
-		cmd = (t_command *)node->content;
-		i = 0;
-		printf("Executa commando: %s", cmd->args[i]);
-		i++;
-		while (cmd->args[i])
-		{
-			printf(" %s", cmd->args[i]);
-			i++;
-		}
-		printf("\n");
-		execute_command(node);
-	}
+		handle_exit_code(execute_command(node));
+	//else if (node->type == AST_PIPE)
+	//	handle_exit_code(execute_pipe(node));
+	//else if (node->type == AST_REDIRECT)
+	//	handle_exit_code(execute_redirect(node));
+	else if (node->type == AST_AND)
+		handle_exit_code(execute_and(node));
+	else if (node->type == AST_OR)
+		handle_exit_code(execute_or(node));
 	else
 	{
-		execute_ast(node->left);
-		execute_ast(node->right);
+		ft_putstr_fd("AST EXECUTION ERROR: On the TODO list!\n", 2);
+		return (1);
 	}
-	return (0);
+	return (handle_exit_code(-1));
 }
 
 int	execute_command(t_ast_node *node)
@@ -56,9 +51,15 @@ int	execute_command(t_ast_node *node)
 	pid = fork();
 	if (pid == 0)
 	{
+		if (DEBUG)
+			printf("--DEBUG--Hurray! A new child is born!\n");
 		execvp(cmd->command, cmd->args);
 		fprintf(stderr, "minishell: %s: command not found\n", cmd->command);
 		handle_exit_code(127);
+		if (DEBUG)
+			printf("--DEBUG--Hurray! One less mouth to feed!\n");
+		free_ast_node(node);
+		exit (1);
 	}
 	else if (pid < 0)
 	{
@@ -67,6 +68,26 @@ int	execute_command(t_ast_node *node)
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return (1);
+		return (handle_exit_code(WEXITSTATUS(status)));
+	return (handle_exit_code(-1));
+}
+
+int	execute_and(t_ast_node *node)
+{
+	int	left_status;
+
+	left_status = execute_ast(node->left);
+	if (left_status == 0)
+		return (execute_ast(node->right));
+	return (left_status);
+}
+
+int	execute_or(t_ast_node *node)
+{
+	int	left_status;
+
+	left_status = execute_ast(node->left);
+	if (left_status != 0)
+		return (execute_ast(node->right));
+	return (left_status);
 }

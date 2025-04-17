@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 15:38:09 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/07 15:06:19 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:15:51 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 Iterates through the "envp" array printing each line (string) of the enviroment
 variables to the standard output.*/
-
+/*
 int	ft_env(char **av, char **envp)
 {
 	int	i;
@@ -37,3 +37,4 @@ int	main(int ac, char **av, char **envp)
 {
 	return (ft_env(av, envp));
 }
+ */

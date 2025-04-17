@@ -6,16 +6,16 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:10:03 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/17 09:32:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:17:24 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-# define SUCCESS 0
-# define ERROR 1
-# define NON_EXECUTABLE 126
-# define UNKNOWN_COMMAND 127
+#define SUCCESS 0
+#define ERROR 1
+#define NON_EXECUTABLE 126
+#define UNKNOWN_COMMAND 127
 
 //# include "libft/libft.h"
 //# include <limits.h>

@@ -6,12 +6,12 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 15:55:05 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/17 09:33:22 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:16:29 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-
+/*
 void	remove_env_var(char ***envp, const char *var_name);
 
 void	remove_env_var(char ***envp, const char *var_name)
@@ -29,7 +29,8 @@ void	remove_env_var(char ***envp, const char *var_name)
 	new_env = malloc(sizeof(char*) * count);
 	while (i < count)
 	{
-		if (strncmp((*envp)[i], var_name, strlen(var_name)) == 0 && (*envp)[i][strlen(var_name)] == '=')
+		if (strncmp((*envp)[i], var_name, strlen(var_name)) == 0
+			&& (*envp)[i][strlen(var_name)] == '=')
 		{
 			//free((*envp)[i]);
 			i++;
@@ -75,3 +76,4 @@ int	main(int ac, char **av, char **envp)
 	//free(envp);
 	return result;
 }
+ */
