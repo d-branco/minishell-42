@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset1.c                                           :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 15:55:05 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/12 16:54:40 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/04/17 09:33:22 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	ft_unset(char **av, char ***envp)
 int	main(int ac, char **av, char **envp)
 {
 	//return (ft_unset(av, &envp));
-	
+
 	printf("Antes do unset:\n");
 	for (int i = 0; envp[i]; i++)
 		printf("%s -- %d\n", envp[i], i);

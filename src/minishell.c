@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/12 17:40:24 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/17 09:34:43 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ int	handle_exit_code(int newcode)
 	code = newcode;
 	return (code);
 }
-
-
 
 //		input = "ls -l | grep .c && echo success || (echo"
 //			" failure > output.txt && echo -n \"failure but redirected\")";
