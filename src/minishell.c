@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/17 10:46:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/17 15:48:53 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,12 @@ int	main(int argc, char **argv)
 	loop = 42;
 	(void) argv;
 	if (argc > 1)
-		return (ft_putstr_fd("Too many arguments, dear ;)\n", 2), 1);
+	{
+		if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
+			return (handle_exit_code(parser(argv[2])));
+		else
+			return (ft_putstr_fd("Too many arguments, dear ;)\n", 2), 1);
+	}
 	if (DEBUG)
 		ft_printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG--\n");
 	while (loop)

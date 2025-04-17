@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/17 15:37:10 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:23:30 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ int	execute_command(t_ast_node *node)
 		fprintf(stderr, "minishell: %s: command not found\n", cmd->command);
 		handle_exit_code(127);
 		if (DEBUG)
-			printf("--DEBUG--Hurray! One less mouth to feed!\n");
+			printf("--DEBUG-- Did they had to die today?\n");
 		free_ast_node(node);
-		exit (1);
+		exit (127);
 	}
 	else if (pid < 0)
 	{
