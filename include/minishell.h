@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/17 09:31:58 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:27:30 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,10 +137,18 @@
 //	int				tputs(const char *str, int affcnt, int (*putc)(int));
 
 //minishell.c
+typedef struct s_mnsh
+{
+	char				*prompt;
+	char				**envp;
+	struct s_ast_node	*ast_head;
+}	t_mnsh;
+
 //int			main(int argc, char **argv, char **envp);
+void		free_shell(t_mnsh *shell);
 int			handle_exit_code(int newcode);
 //execution/exe.c
-int			execute_ast(t_ast_node *node);
+int			execute_ast(t_ast_node *node, t_mnsh *shell);
 //utils/ft_isspace.c
 int			ft_isspace(char chr);
 //utils/ft_malloc.c
