@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/17 18:00:13 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/18 10:07:01 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ static void	run_left_child(t_ast_node *node, int *pipefd)
 	}
 	handle_exit_code(execute_ast(node->left));
 	free_ast_node(node);
+	if (DEBUG)
+		printf("--DEBUG-- __________________________________________\n");
 	exit (handle_exit_code(-1));
 }
 
@@ -127,6 +129,8 @@ static void	run_right_child(t_ast_node *node, int *pipefd)
 	}
 	handle_exit_code(execute_ast(node->right));
 	free_ast_node(node);
+	if (DEBUG)
+		printf("--DEBUG-- __________________________________________\n");
 	exit (handle_exit_code(-1));
 }
 
@@ -135,8 +139,6 @@ static int	wait_for_child(pid_t pid)
 	int	status;
 
 	waitpid(pid, &status, 0);
-	if (DEBUG)
-		printf("--DEBUG-- __________________________________________\n");
 	if (WIFEXITED(status))
 		return (handle_exit_code(WEXITSTATUS(status)));
 	return (handle_exit_code(1));
