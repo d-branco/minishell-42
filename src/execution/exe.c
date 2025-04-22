@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/18 14:40:26 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:15:43 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	execute_command(t_ast_node *node, t_mnsh *shell);
 int	execute_and(t_ast_node *node, t_mnsh *shell);
 int	execute_or(t_ast_node *node, t_mnsh *shell);
 int	execute_pipe(t_ast_node *node, t_mnsh *shell);
+int	execute_redirect(t_ast_node *node, t_mnsh *shell);
 
 int	execute_ast(t_ast_node *node, t_mnsh *shell)
 {
@@ -26,8 +27,8 @@ int	execute_ast(t_ast_node *node, t_mnsh *shell)
 		handle_exit_code(execute_command(node, shell));
 	else if (node->type == AST_PIPE)
 		handle_exit_code(execute_pipe(node, shell));
-	//else if (node->type == AST_REDIRECT)
-	//	handle_exit_code(execute_redirect(node), shell);
+	else if (node->type == AST_REDIRECT)
+		handle_exit_code(execute_redirect(node, shell));
 	else if (node->type == AST_AND)
 		handle_exit_code(execute_and(node, shell));
 	else if (node->type == AST_OR)
@@ -40,6 +41,35 @@ int	execute_ast(t_ast_node *node, t_mnsh *shell)
 	return (handle_exit_code(-1));
 }
 
+////////////////////////////////////////////////////////////////////////////////
+int	execute_redirect(t_ast_node *node, t_mnsh *shell)
+{
+	t_redirect	*redirection;
+
+	redirection = (t_redirect *)node->content;
+	if (!redirection)
+		return (1);
+	if (redirection->redirect_type == e_INPUT_REDIRECTION)
+	{
+		// INPUT REDIRECTOn <
+	}
+	else if (redirection->redirect_type == e_OUTPUT_REDIRECTION)
+	{
+		// OUTPUT REDIRECTION >
+	}
+	else if (redirection->redirect_type == e_HERE_DOC)
+	{
+		// HEREDOC <<
+	}
+	else if (redirection->redirect_type == e_APPEND)
+	{
+		// APPEND >>
+	}
+	handle_exit_code(execute_ast(node->left, shell));
+	return (handle_exit_code(-1));
+}
+
+////////////////////////////////////////////////////////////////////////////////
 int	execute_command(t_ast_node *node, t_mnsh *shell)
 {
 	t_command	*cmd;
@@ -57,7 +87,7 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 			printf("--DEBUG-- Hurray! A new child is born!\n");
 			print_ast(node, 0);
 		}
-		execvp(cmd->command, cmd->args);
+		execvp(cmd->command, cmd->args);// Funcaoi proibida
 		fprintf(stderr, "minishell: %s: command not found\n", cmd->command);
 		handle_exit_code(127);
 		if (DEBUG)

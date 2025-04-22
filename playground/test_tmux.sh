@@ -1,10 +1,10 @@
-#!/bin/bash
+q#!/bin/bash
 
 make
 
 echo "PS1='$(echo $?)% '" > ~/.bash_minishell_test
 
-INPUT_COMMANDS="Enter Enter exit Enter"
+INPUT_COMMANDS="Enter pwd Enter exit Enter"
 
 # Start a new tmux session in the background
 tmux new-session -d -s test3 'bash --noprofile --rcfile ~/.bash_minishell_test'

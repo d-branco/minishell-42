@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/18 14:31:57 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:20:44 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int	main(int argc, char **argv, char **envp)
 void	free_shell(t_mnsh *shell)
 {
 	free(shell->prompt);
+	//free ast;
+	//free t_mnsh
 }
 
 static void	init_shell(t_mnsh *shell, char **envp)
