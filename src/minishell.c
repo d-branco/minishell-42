@@ -18,14 +18,18 @@ int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
 	int		loop;
-	t_mnsh	shell;
+	t_mnsh	*shell;
 
-	init_shell(&shell, envp);
+	shell = ft_calloc(1, sizeof(t_mnsh));
+	init_shell(shell, envp);
+	int	i = -1;
+	while (shell->envp[++i])
+		printf("%s\n", shell->envp[i]);
 	if (argc > 1)
 	{
 		if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
-			return (handle_exit_code(parser(argv[2], &shell)),
-				free_shell(&shell), handle_exit_code(-1));
+			return (handle_exit_code(parser(argv[2], shell)),
+				free_shell(shell), handle_exit_code(-1));
 		else
 			return (ft_putstr_fd("Too many arguments, dear ;)\n", 2), 1);
 	}
@@ -34,19 +38,19 @@ int	main(int argc, char **argv, char **envp)
 	loop = 42; // to be removed
 	while (loop)
 	{
-		input = readline(shell.prompt);
+		input = readline(shell->prompt);
 		if ((input == NULL) || (ft_strncmp(input, "exit", 5) == 0))
 		{
 			ft_putstr_fd("exit\n", 1);
 			break ;
 		}
 		else
-			handle_exit_code(parser(input, &shell));
+			handle_exit_code(parser(input, shell));
 		loop--;
 	}
 	if (DEBUG)
 		ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
-	free_shell(&shell);
+	free_shell(shell);
 	return (handle_exit_code(-1));
 }
 
@@ -63,7 +67,8 @@ static void	init_shell(t_mnsh *shell, char **envp)
 	int		i;
 
 	temp = ft_itoa(handle_exit_code(-1));
-	(void) envp;
+	shell->envp = init_envp(envp);
+	handle_shlvl(shell);
 	shell->prompt = (char *) ft_malloc(sizeof(char) * 6);
 	i = 0;
 	while ((i < 3) && temp[i])
@@ -76,7 +81,6 @@ static void	init_shell(t_mnsh *shell, char **envp)
 	shell->prompt[i++] = ' ';
 	while (i < 6)
 		shell->prompt[i++] = '\0';
-	shell->envp = envp;
 	shell->ast_head = NULL;
 }
 
