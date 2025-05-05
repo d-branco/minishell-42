@@ -79,6 +79,8 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 	cmd = (t_command *)node->content;
 	if (!cmd || !cmd->command)
 		return (1);
+	if (is_builtin(cmd))
+		execute_builtin(cmd,shell);
 	pid = fork();
 	if (pid == 0)
 	{

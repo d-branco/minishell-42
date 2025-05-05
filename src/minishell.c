@@ -18,7 +18,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
 	int		loop;
-	t_mnsh	*shell;
 
 	shell = ft_calloc(1, sizeof(t_mnsh));
 	init_shell(shell, envp);

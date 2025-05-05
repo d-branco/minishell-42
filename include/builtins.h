@@ -36,9 +36,11 @@ int	ft_cd(int ac, char **av, char **envp);
 int	ft_exit(int ac, char **av);
 int	ft_export(char **av, char ***envp);
 int	replace_add_var(char *var_name, char *value, char ***envp);
+int	is_builtin(t_command *cmd);
 char	**init_envp(char **envp);
 char	*ft_getenv(char **envp, char *var_name);
 void	handle_shlvl(t_mnsh *shell);
+void	execute_builtin(t_command *cmd, t_mnsh *shell);
 void	ft_free_env(char **envp);
 
 #endif
