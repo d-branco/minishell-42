@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 static t_list		*build_argument_list(t_token **tokens, int *arg_count);
 static t_command	*create_command_structure(t_list *arg_list, int arg_count);

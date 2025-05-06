@@ -89,6 +89,6 @@ int	ft_cd(int ac,char **av, char **envp)
 	ft_setenv(envp, "OLDPWD=", cwd);
 	if (getcwd(cwd, sizeof(cwd)))
 		ft_setenv(envp, "PWD=", cwd);
-	free(path);
+	//free(path);
 	return (SUCCESS);
 }

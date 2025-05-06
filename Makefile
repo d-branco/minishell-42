@@ -31,6 +31,7 @@ INCLUDES	:= -I./include
 SRCS		:=	\
 	src/minishell.c															\
 	src/execution/exe.c														\
+	src/execution/signal.c													\
 	src/parser/parser.c														\
 	src/parser/lexer.c														\
 	src/parser/lexer-list.c													\
@@ -44,13 +45,14 @@ SRCS		:=	\
 	src/utils/ft_isspace.c													\
 	src/utils/ft_malloc.c													\
 	src/builtins/cd.c														\
+	src/builtins/clear.c													\
 	src/builtins/echo.c														\
 	src/builtins/env.c														\
 	src/builtins/exit.c														\
 	src/builtins/export.c													\
 	src/builtins/pwd.c														\
 	src/builtins/unset.c													\
-	src/builtins/check_builtins.c												\
+	src/builtins/check_builtins.c											\
 	src/builtins/init_utils.c
 
 OBJS		:= $(SRCS:.c=.o)

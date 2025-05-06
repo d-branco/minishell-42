@@ -10,20 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 static void	init_shell(t_mnsh *shell, char **envp);
 
+int	g_exit;
+
 int	main(int argc, char **argv, char **envp)
 {
+	t_mnsh	*shell;
 	char	*input;
 	int		loop;
 
 	shell = ft_calloc(1, sizeof(t_mnsh));
 	init_shell(shell, envp);
-	int	i = -1;
-	while (shell->envp[++i])
-		printf("%s\n", shell->envp[i]);
+	//int	i = -1;
+	//while (shell->envp[++i])
+	//	printf("%s\n", shell->envp[i]);
 	if (argc > 1)
 	{
 		if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
@@ -37,6 +40,7 @@ int	main(int argc, char **argv, char **envp)
 	loop = 42; // to be removed
 	while (loop)
 	{
+		ft_setup_interactive_signals();
 		input = readline(shell->prompt);
 		if ((input == NULL) || (ft_strncmp(input, "exit", 5) == 0))
 		{

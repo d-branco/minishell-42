@@ -29,8 +29,7 @@ static int	is_num(char *av)
 	}
 	return (1);
 }
-//(int ac, char **av, t_shell *sh)
-//implementar a função ft_end_free_sh()
+
 int	ft_exit(int ac, char **av)
 {
 	printf("exit\n");

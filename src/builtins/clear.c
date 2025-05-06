@@ -1,30 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   clear.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 13:16:20 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/04 16:53:21 by abessa-m         ###   ########.fr       */
+/*   Created: 2025/05/06 12:42:18 by alde-alm          #+#    #+#             */
+/*   Updated: 2025/05/06 12:43:48 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-//	malloc(nmemb * size);
-
-//void	*malloc(size_t size);
-//void	ft_putstr_fd(char *s, int fd);
-void	*ft_malloc(int total_size)
+int	ft_clear(void)
 {
-	void	*ptr;
-
-	ptr = (void *) malloc(total_size);
-	if (ptr == NULL)
-	{
-		ft_putstr_fd("ERROR malloc failed to alloc memory!", 2);
-		exit(1);
-	}
-	return (ptr);
+	printf("\033[H\033[J");
+	return (SUCCESS);
 }

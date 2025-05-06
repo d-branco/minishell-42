@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 // Creates tokens and returns 0 if success
 int	parse_input_into_token_list(t_token **list, char *input)

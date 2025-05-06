@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 // Adapted from libft ft_lstiter()
 void	tkn_lst_printer(t_token *lst)

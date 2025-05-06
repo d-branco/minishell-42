@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 int	execute_command(t_ast_node *node, t_mnsh *shell);
 int	execute_and(t_ast_node *node, t_mnsh *shell);
@@ -80,7 +80,7 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 	if (!cmd || !cmd->command)
 		return (1);
 	if (is_builtin(cmd))
-		execute_builtin(cmd,shell);
+		return (execute_builtin(cmd,shell));
 	pid = fork();
 	if (pid == 0)
 	{
