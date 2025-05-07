@@ -145,17 +145,17 @@ typedef struct s_mnsh
 	struct s_ast_node	*ast_head;
 }	t_mnsh;
 
-extern	int		g_exit;
+extern int	g_exit;
 
 //int			main(int argc, char **argv, char **envp);
-void		free_shell(t_mnsh *shell);
-int			handle_exit_code(int newcode);
+void	free_shell(t_mnsh *shell);
+int		handle_exit_code(int newcode);
 //execution/exe.c
-int			execute_ast(t_ast_node *node, t_mnsh *shell);
+int		execute_ast(t_ast_node *node, t_mnsh *shell);
 //utils/ft_isspace.c
-int			ft_isspace(char chr);
+int		ft_isspace(char chr);
 //utils/ft_malloc.c
-void		*ft_malloc(int total_size);
+void	*ft_malloc(int total_size);
 //execution/signal.c
 void	ft_setup_interactive_signals(void);
 void	ft_setup_fork_signals(void);

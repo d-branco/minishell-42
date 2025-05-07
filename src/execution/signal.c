@@ -15,6 +15,7 @@
 static void	ft_prompt_handler(int signo);
 static void	ft_exec_handler(int signo);
 /// @brief Configura sinais para modo interativo
+
 void	ft_setup_interactive_signals(void)
 {
 	struct sigaction	sa;
@@ -22,12 +23,12 @@ void	ft_setup_interactive_signals(void)
 	sa.sa_handler = ft_prompt_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART;
-
-	sigaction(SIGINT, &sa, NULL);	// Ctrl+C → nova linha
-	signal(SIGQUIT, SIG_IGN);		// Ctrl+\ → ignorado
-	signal(SIGTERM, SIG_IGN);		// kill -TERM → ignorado
+	sigaction(SIGINT, &sa, NULL);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTERM, SIG_IGN);
 }
 /// @brief Trata SIGINT (Ctrl+C) no prompt
+
 static void	ft_prompt_handler(int signo)
 {
 	if (signo == SIGINT)
@@ -36,10 +37,11 @@ static void	ft_prompt_handler(int signo)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		g_exit = 130; // ou EXIT_SIGINT
+		g_exit = 130;
 	}
 }
 /// @brief Configura sinais para processo filho (execução de comando)
+
 void	ft_setup_fork_signals(void)
 {
 	struct sigaction	sa;
@@ -47,21 +49,21 @@ void	ft_setup_fork_signals(void)
 	sa.sa_handler = ft_exec_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART;
-
-	sigaction(SIGINT, &sa, NULL);   // Ctrl+C → imprime \n
-	sigaction(SIGQUIT, &sa, NULL);  // Ctrl+\ → imprime Quit
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
 }
 /// @brief Trata sinais durante execução de comandos (forked)
+
 static void	ft_exec_handler(int signo)
 {
 	if (signo == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);
-		g_exit = 130; // ou EXIT_SIGINT
+		g_exit = 130;
 	}
 	else if (signo == SIGQUIT)
 	{
 		write(STDOUT_FILENO, "Quit\n", 5);
-		g_exit = 131; // ou EXIT_SIGQUIT
+		g_exit = 131;
 	}
 }
