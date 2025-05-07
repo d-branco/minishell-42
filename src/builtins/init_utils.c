@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils.c                                        :+:      :+:    :+:   */
+/*   init_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -32,14 +32,14 @@ void	ft_free_env(char **envp)
 char	**init_envp(char **envp)
 {
 	char	**new_envp;
-	int			count;
+	int		count;
 
 	count = 0;
 	while (envp[count])
 		count++;
 	new_envp = ft_calloc((count + 1), sizeof(char *));
 	if (!new_envp)
-		return (ft_putstr_fd("ERROR malloc failed to alloc memory!\n", 2), NULL);
+		return (ft_putstr_fd("ERROR malloc!\n", 2), NULL);
 	count = 0;
 	while (envp[count])
 	{
@@ -47,10 +47,10 @@ char	**init_envp(char **envp)
 		if (!new_envp[count])
 		{
 			ft_free_env(new_envp);
-			return (ft_putstr_fd("ERROR malloc failed to alloc memory!\n", 2), NULL);
+			return (ft_putstr_fd("ERROR malloc!\n", 2), NULL);
 		}
 		count++;
-	}	
+	}
 	new_envp[count] = NULL;
 	return (new_envp);
 }
@@ -59,7 +59,7 @@ void	handle_shlvl(t_mnsh *shell)
 {
 	char	*lvl;
 	char	*new_lvl;
-	int	n;
+	int		n;
 
 	lvl = ft_getenv(shell->envp, "SHLVL=");
 	if (lvl)
@@ -83,7 +83,7 @@ void	handle_shlvl(t_mnsh *shell)
 int	replace_add_var(char *var_name, char *value, char ***envp)
 {
 	char	*new_var;
-	int	i;
+	int		i;
 
 	if (!*envp || !var_name || !value)
 		return (-1);
@@ -106,11 +106,11 @@ int	replace_add_var(char *var_name, char *value, char ***envp)
 static int	add_var_env(char *new_var, int size, char ***envp)
 {
 	char	**new_env;
-	int	i;
+	int		i;
 
 	if (!new_var || !envp || !*envp)
 		return (-1);
-	new_env = malloc((size + 2) * sizeof(char*));
+	new_env = malloc((size + 2) * sizeof(char *));
 	if (!new_env)
 	{
 		free(new_var);

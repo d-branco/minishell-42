@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_utils.c                                       :+:      :+:    :+:   */
+/*   check_builtins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,8 +15,8 @@
 int	is_builtin(t_command *cmd)
 {
 	const char	*builtins[9];
-	int	i;
-	
+	int			i;
+
 	builtins[0] = "cd";
 	builtins[1] = "echo";
 	builtins[2] = "env";
@@ -27,11 +27,12 @@ int	is_builtin(t_command *cmd)
 	builtins[7] = "clear";
 	builtins[8] = NULL;
 	i = -1;
-	while (++i < 9)
+	while (++i < 8)
 	{
 		if (ft_strlen(builtins[i]) == ft_strlen(cmd->command))
 		{
-			if (ft_strncmp(builtins[i], cmd->command ,ft_strlen(cmd->command)) == 0)
+			if (ft_strncmp(builtins[i], cmd->command,
+					ft_strlen(cmd->command)) == 0)
 				return (1);
 		}
 	}

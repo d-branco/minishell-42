@@ -61,7 +61,7 @@ static void	ft_setenv(char **envp, const char *var_name, const char *cwd)
 	}
 }
 
-int	ft_cd(int ac,char **av, char **envp)
+int	ft_cd(int ac, char **av, char **envp)
 {
 	char	cwd[PATH_MAX];
 	char	*path;
@@ -77,10 +77,7 @@ int	ft_cd(int ac,char **av, char **envp)
 	{
 		path = ft_getenv(envp, "HOME=");
 		if (!path)
-		{
-			printf("bash: cd: HOME not set\n");
-			return (ERROR);
-		}
+			return (printf("bash: cd: HOME not set\n"), ERROR);
 	}
 	else
 		path = av[1];

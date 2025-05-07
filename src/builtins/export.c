@@ -39,7 +39,7 @@ static int	export_var(const char *av, char ***envp)
 	equal_posit = ft_strchr(av, '=');
 	if (equal_posit)
 	{
-		var_name = ft_substr(av, 0, equal_posit -av +1);
+		var_name = ft_substr(av, 0, equal_posit - av + 1);
 		value = ft_strdup(equal_posit + 1);
 	}
 	else
@@ -77,7 +77,10 @@ static void	print_sort_env(char **envp)
 			*equal_posit = '=';
 		}
 		else
-			ft_putstr_fd(env_copy[i], 1), ft_putchar_fd('\n', 1);
+		{
+			ft_putstr_fd(env_copy[i], 1);
+			ft_putchar_fd('\n', 1);
+		}
 	}
 	ft_free_env(env_copy);
 }
@@ -130,45 +133,3 @@ int	ft_export(char **av, char ***envp)
 	}
 	return (status);
 }
-// Funcoes para teste
-/*
-void	print_env(char **envp)
-{
-	int	i = 0;
-	while (envp[i])
-	{
-		printf("%s\n", envp[i]);
-		i++;
-	}
-}
-
-int	main(int ac, char **av, char **envp)
-{
-	char	**my_envp;
-	char	*test1[] = {"export", "VAR1=value1", "VAR_2=hello", "3INVALID=bad", NULL};
-	char	*test2[] = {"export", "VAR1", NULL};
-	char	*test3[] = {"export", NULL};
-
-	(void)ac;
-	(void)av;
-
-	printf("Duplicando ambiente inicial:\n");
-	my_envp = init_envp(envp);
-
-	// TESTE 1: múltiplas exportações com erro
-	printf("\n Teste 1: export VAR1=value1 VAR_2=hello 3INVALID=bad\n");
-	ft_export(test1, &my_envp);
-	print_env(my_envp);
-
-	// TESTE 2: exportação sem valor
-	printf("\n Teste 2: export VAR1\n");
-	ft_export(test2, &my_envp);
-	print_env(my_envp);
-
-	// TESTE 3: export sem argumentos (print ordenado)
-	printf("\n Teste 3: export (listar ordenadamente)\n");
-	ft_export(test3, &my_envp);
-
-	ft_free_env(my_envp);
-	return (0);
-}*/

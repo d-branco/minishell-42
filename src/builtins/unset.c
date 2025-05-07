@@ -16,9 +16,9 @@ void	remove_env_var(char ***envp, const char *var_name);
 
 void	remove_env_var(char ***envp, const char *var_name)
 {
-	int	count;
-	int	i;
-	int	j;
+	int		count;
+	int		i;
+	int		j;
 	char	**new_env;
 
 	i = 0;
@@ -26,17 +26,17 @@ void	remove_env_var(char ***envp, const char *var_name)
 	count = 0;
 	while ((*envp)[count])
 		count++;
-	new_env = malloc(sizeof(char*) * count);
+	new_env = malloc(sizeof(char *) * count);
 	while (i < count)
 	{
-		if (strncmp((*envp)[i], var_name, strlen(var_name)) == 0 && (*envp)[i][strlen(var_name)] == '=')
+		if (strncmp((*envp)[i], var_name, strlen(var_name)) == 0 &&
+			(*envp)[i][strlen(var_name)] == '=')
 		{
 			//free((*envp)[i]);
 			i++;
-			continue;
+			continue ;
 		}
-		new_env[j++] = (*envp)[i];
-		i++;
+		new_env[j++] = (*envp)[i++];
 	}
 	new_env[j] = NULL;
 	//free(*envp);

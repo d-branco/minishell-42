@@ -28,7 +28,7 @@ int	ft_env(char **av, char **envp)
 		return (UNKNOWN_COMMAND);
 	}
 	i = -1;
-	while(envp[++i])
+	while (envp[++i])
 		printf("%s\n", envp[i]);
 	return (SUCCESS);
 }
