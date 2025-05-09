@@ -6,19 +6,25 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/07 10:35:29 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:28:48 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	execute_command(t_ast_node *node, t_mnsh *shell);
-int	execute_and(t_ast_node *node, t_mnsh *shell);
-int	execute_or(t_ast_node *node, t_mnsh *shell);
-int	execute_pipe(t_ast_node *node, t_mnsh *shell);
-int	execute_redirect(t_ast_node *node, t_mnsh *shell);
-int	handle_input_redirection(
-		t_redirect *redir, t_ast_node *node, t_mnsh *shell);
+int			execute_command(t_ast_node *node, t_mnsh *shell);
+int			execute_and(t_ast_node *node, t_mnsh *shell);
+int			execute_or(t_ast_node *node, t_mnsh *shell);
+int			execute_pipe(t_ast_node *node, t_mnsh *shell);
+int			execute_redirect(t_ast_node *node, t_mnsh *shell);
+int			handle_input_redirection(
+				t_redirect *redir, t_ast_node *node, t_mnsh *shell);
+int			handle_output_redirection(
+				t_ast_node *node, t_mnsh *shell, const char *file);
+static int	open_output_file(const char *file);
+static int	backup_fd(int fd_to_backup);
+static int	redirect_fd(int new_fd, int old_fd);
+static int	restore_fd(int backup_fd, int original_fd);
 
 int	execute_ast(t_ast_node *node, t_mnsh *shell)
 {
@@ -54,9 +60,7 @@ int	execute_redirect(t_ast_node *node, t_mnsh *shell)
 	if (redirection->redirect_type == e_INPUT_REDIRECTION) //		<
 		return (handle_input_redirection(redirection, node, shell));
 	else if (redirection->redirect_type == e_OUTPUT_REDIRECTION) //	>
-	{
-		// OUTPUT REDIRECTION >
-	}
+		return (handle_output_redirection(node, shell, redirection->file));
 	else if (redirection->redirect_type == e_APPEND) //				>>
 	{
 		// APPEND >>
@@ -69,6 +73,64 @@ int	execute_redirect(t_ast_node *node, t_mnsh *shell)
 	return (handle_exit_code(-1));
 }
 
+////////////////////////////////////////////////////////////////////////////////
+int	handle_output_redirection(t_ast_node *node, t_mnsh *shell, const char *file)
+{
+	int	fd;
+	int	stdout_temp;
+	int	result;
+
+	fd = open_output_file(file);
+	if (fd == -1)
+		return (1);
+	stdout_temp = backup_fd(STDOUT_FILENO);
+	if (stdout_temp == -1)
+		return (close(fd), 1);
+	if (!redirect_fd(fd, STDOUT_FILENO))
+		return (close(fd), close(stdout_temp), 1);
+	close(fd);
+	result = execute_ast(node->left, shell);
+	if (!restore_fd(stdout_temp, STDOUT_FILENO))
+		return (close(stdout_temp), 1);
+	close(stdout_temp);
+	return (result);
+}
+
+static int	open_output_file(const char *file)
+{
+	int	fd;
+
+	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd == -1)
+		return (perror("minishell"), -1);
+	return (fd);
+}
+
+static int	backup_fd(int fd_to_backup)
+{
+	int	backup;
+
+	backup = dup(fd_to_backup);
+	if (backup == -1)
+		return (perror("minishell"), -1);
+	return (backup);
+}
+
+static int	redirect_fd(int new_fd, int old_fd)
+{
+	if (dup2(new_fd, old_fd) == -1)
+		return (perror("minishell"), 0);
+	return (1);
+}
+
+static int	restore_fd(int backup_fd, int original_fd)
+{
+	if (dup2(backup_fd, original_fd) == -1)
+		return (perror("minishell"), 0);
+	return (1);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 int	handle_input_redirection(t_redirect *redir, t_ast_node *node, t_mnsh *shell)
 {
 	int	fd;
