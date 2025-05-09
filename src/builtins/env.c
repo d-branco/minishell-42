@@ -21,14 +21,14 @@ int	ft_env(char **av, char **envp)
 	int	i;
 
 	if (!envp || !*envp)
-		return (SUCCESS);
+		return (handle_exit_code(0));
 	if (av[1])
 	{
 		printf("env: '%s': No such file or directory\n", av[1]);
-		return (UNKNOWN_COMMAND);
+		return (handle_exit_code(UNKNOWN_COMMAND));
 	}
 	i = -1;
 	while (envp[++i])
 		printf("%s\n", envp[i]);
-	return (SUCCESS);
+	return (handle_exit_code(0));
 }

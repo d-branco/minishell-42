@@ -32,7 +32,7 @@ static int	error_cd(const char *path)
 		printf("Bash: cd: %s - File name too long\n", path);
 	else
 		printf("Unknown cd Error");
-	return (ERROR);
+	return (1);
 }
 
 char	*ft_getenv(char **envp, char *var_name)
@@ -69,15 +69,15 @@ int	ft_cd(int ac, char **av, char **envp)
 	if (ac > 2)
 	{
 		printf("bash: cd: too many arguments\n");
-		return (ERROR);
+		return (handle_exit_code(1));
 	}
 	if (!getcwd(cwd, sizeof(cwd)))
-		return (ERROR);
+		return (handle_exit_code(1));
 	if (ac == 1)
 	{
 		path = ft_getenv(envp, "HOME=");
 		if (!path)
-			return (printf("bash: cd: HOME not set\n"), ERROR);
+			return (printf("bash: cd: HOME not set\n"), handle_exit_code(1));
 	}
 	else
 		path = av[1];
@@ -87,5 +87,5 @@ int	ft_cd(int ac, char **av, char **envp)
 	if (getcwd(cwd, sizeof(cwd)))
 		ft_setenv(envp, "PWD=", cwd);
 	//free(path);
-	return (SUCCESS);
+	return (handle_exit_code(0));
 }

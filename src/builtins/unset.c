@@ -48,14 +48,14 @@ int	ft_unset(char **av, char ***envp)
 	int	i;
 
 	if (!av[1] || !envp || !*envp)
-		return (SUCCESS);
+		return (handle_exit_code(0));
 	i = 1;
 	while (av[i])
 	{
 		remove_env_var(envp, av[i]);
 		i++;
 	}
-	return (SUCCESS);
+	return (handle_exit_code(0));
 }
 /*
 int	main(int ac, char **av, char **envp)

@@ -44,5 +44,5 @@ int	ft_echo(char **av)
 		i++;
 	}
 	printf("%c", nflag);
-	return (SUCCESS);
+	return (handle_exit_code(0));
 }

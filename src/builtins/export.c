@@ -52,7 +52,7 @@ static int	export_var(const char *av, char ***envp)
 	if (!var_name || !value)
 		return (free(var_name), free(value), -1);
 	replace_add_var(var_name, value, envp);
-	return (free(var_name), free(value), SUCCESS);
+	return (free(var_name), free(value), 0);
 }
 
 static void	print_sort_env(char **envp)
@@ -118,7 +118,7 @@ int	ft_export(char **av, char ***envp)
 
 	status = 0;
 	if (!av[1])
-		return (print_sort_env(*envp), SUCCESS);
+		return (print_sort_env(*envp), handle_exit_code(0));
 	i = 1;
 	while (av[i])
 	{
@@ -131,5 +131,5 @@ int	ft_export(char **av, char ***envp)
 			status = 1;
 		i++;
 	}
-	return (status);
+	return (handle_exit_code(status));
 }

@@ -19,10 +19,10 @@ int	ft_pwd(void)
 	if (getcwd(current_dir, PATH_MAX))
 	{
 		printf("%s\n", current_dir);
-		return (SUCCESS);
+		return (handle_exit_code(0));
 	}
 	else
-		return (ERROR);
+		return (handle_exit_code(1));
 }
 /*
 int	main(void)

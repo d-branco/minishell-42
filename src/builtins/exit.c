@@ -36,26 +36,26 @@ int	ft_exit(int ac, char **av)
 	if (ac == 1)
 	{
 		//ft_end_free_sh();
-		exit(0);
+		exit(handle_exit_code(0));
 	}
 	if (ac >= 2 && !is_num(av[1]))
 	{
 		printf("bash: exit: %s: numeric argument required\n", av[1]);
 		//ft_end_free_sh();
-		exit(2);
+		exit(handle_exit_code(2));
 	}
 	if (ac >= 2 && is_num(av[1]))
 	{
 		if (ac == 2)
 		{
 		//ft_end_free_sh();
-			exit(ft_atoi(av[1]));
+			exit(handle_exit_code(ft_atoi(av[1])));
 		}
 		else
 		{
 			printf("bash: exit: too many arguments\n");
-			return (ERROR);
+			return (handle_exit_code(1));
 		}
 	}
-	return (SUCCESS);
+	return (handle_exit_code(0));
 }

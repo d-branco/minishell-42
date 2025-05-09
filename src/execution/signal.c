@@ -37,7 +37,7 @@ static void	ft_prompt_handler(int signo)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		g_exit = 130;
+		handle_exit_code(130);
 	}
 }
 /// @brief Configura sinais para processo filho (execução de comando)
@@ -59,11 +59,11 @@ static void	ft_exec_handler(int signo)
 	if (signo == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);
-		g_exit = 130;
+		handle_exit_code(130);
 	}
 	else if (signo == SIGQUIT)
 	{
 		write(STDOUT_FILENO, "Quit\n", 5);
-		g_exit = 131;
+		handle_exit_code(131);
 	}
 }

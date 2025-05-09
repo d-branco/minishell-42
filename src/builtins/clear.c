@@ -15,5 +15,5 @@
 int	ft_clear(void)
 {
 	printf("\033[H\033[J");
-	return (SUCCESS);
+	return (handle_exit_code(0));
 }

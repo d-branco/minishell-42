@@ -68,7 +68,7 @@ void	handle_shlvl(t_mnsh *shell)
 		new_lvl = ft_itoa(n);
 		if (!new_lvl)
 		{
-			ft_putstr_fd("ERROR malloc failed to alloc memory!\n", 2);
+			ft_putstr_fd("ERROR malloc!\n", 2);
 			free(lvl);
 			return ;
 		}
@@ -89,7 +89,7 @@ int	replace_add_var(char *var_name, char *value, char ***envp)
 		return (-1);
 	new_var = ft_strjoin(var_name, value);
 	if (!new_var)
-		return (ft_putstr_fd("ERROR malloc failed to alloc memory!\n", 2), -1);
+		return (ft_putstr_fd("ERROR malloc!\n", 2), -1);
 	i = -1;
 	while ((*envp)[++i])
 	{
@@ -114,7 +114,7 @@ static int	add_var_env(char *new_var, int size, char ***envp)
 	if (!new_env)
 	{
 		free(new_var);
-		return (ft_putstr_fd("ERROR malloc failed to alloc memory!\n", 2), -1);
+		return (ft_putstr_fd("ERROR malloc!\n", 2), -1);
 	}
 	i = -1;
 	while ((*envp)[++i])
