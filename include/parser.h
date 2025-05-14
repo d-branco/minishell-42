@@ -6,11 +6,13 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:07 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/17 09:30:14 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:27:35 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+//#include "minishell.h"
+
+typedef struct s_mnsh	t_mnsh;
 
 typedef enum e_token_type
 {
@@ -57,6 +59,7 @@ typedef struct s_command
 {
 	char				*command;
 	char				**args;
+	int					argc;
 }	t_command;
 
 //	char				*file;				Filename or heredoc delimiter
@@ -85,7 +88,7 @@ t_ast_node	*handle_tokens_inside_parenthesis(t_token **tokens);
 int			is_valid_token_for_argument(t_token *token);
 
 //parser/parser.c
-int			parser(char *input);
+int			parser(char *input, t_mnsh *shell);
 //parser/lexer.c
 int			parse_input_into_token_list(t_token **list, char *input);
 int			validate_syntax(char *str);

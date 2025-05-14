@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 static t_list		*build_argument_list(t_token **tokens, int *arg_count);
 static t_command	*create_command_structure(t_list *arg_list, int arg_count);
@@ -93,6 +93,7 @@ static t_command	*create_command_structure(t_list *arg_list, int arg_count)
 	}
 	cmd->args[arg_count] = NULL;
 	cmd->command = cmd->args[0];
+	cmd->argc = arg_count;
 	return (cmd);
 }
 

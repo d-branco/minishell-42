@@ -6,11 +6,11 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 16:28:28 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/12 16:45:16 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/18 10:14:01 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 static void	free_ast_content(t_ast_node *node);
 static void	free_command(t_command *cmd);

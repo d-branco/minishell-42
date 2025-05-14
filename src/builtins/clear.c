@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   practice00.c                                       :+:      :+:    :+:   */
+/*   clear.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 14:30:42 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/03/18 18:59:11 by abessa-m         ###   ########.fr       */
+/*   Created: 2025/05/06 12:42:18 by alde-alm          #+#    #+#             */
+/*   Updated: 2025/05/06 12:43:48 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-/*
-int	g_global_variable;
+#include "../../include/minishell.h"
 
-int	main(void)
+int	ft_clear(void)
 {
-	g_global_variable = DEBUG;
-	if (g_global_variable)
-		printf("Debug mode\n");
-	else
-		printf("Hello, friend.\n");
+	printf("\033[H\033[J");
+	return (handle_exit_code(0));
 }
-*/

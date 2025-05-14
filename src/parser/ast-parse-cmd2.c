@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 t_ast_node	*handle_tokens_inside_parenthesis(t_token **tokens)
 {

@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/04/15 15:07:59 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/04/17 14:18:34 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ INCLUDES	:= -I./include
 SRCS		:=	\
 	src/minishell.c															\
 	src/execution/exe.c														\
+	src/execution/signal.c													\
 	src/parser/parser.c														\
 	src/parser/lexer.c														\
 	src/parser/lexer-list.c													\
@@ -42,7 +43,18 @@ SRCS		:=	\
 	src/parser/ast-print.c													\
 	src/parser/ast-redirect.c												\
 	src/utils/ft_isspace.c													\
-	src/utils/ft_malloc.c
+	src/utils/ft_malloc.c													\
+	src/builtins/cd.c														\
+	src/builtins/clear.c													\
+	src/builtins/echo.c														\
+	src/builtins/env.c														\
+	src/builtins/exit.c														\
+	src/builtins/export.c													\
+	src/builtins/pwd.c														\
+	src/builtins/unset.c													\
+	src/builtins/check_builtins.c											\
+	src/builtins/init_utils.c
+
 OBJS		:= $(SRCS:.c=.o)
 
 #SRCS_BONUS	:=
@@ -129,21 +141,12 @@ test:
 		--show-leak-kinds=all												\
 		--track-origins=yes													\
 		--suppressions=.readline.txt										\
-		--log-file=log.txt													\
-																			\
+	\
 		./minishell														;	\
 	\
 	echo "\
 	$(COR)$(GRAY)========================================== $(NAME) END\n\
 	$(COR)RETURN VALUE: $$?"											&&	\
-	\
-	tail -n +4 log.txt													|	\
-	awk '{																	\
-	gsub(/^==[0-9]*== /, "")											;	\
-	gsub(/^--[0-9]*-- /, "")											;	\
-	gsub(/^used_suppression: /, "")										;	\
-	if (length($0) > 0) print $0											\
-	}'																	;	\
 	\
 	echo -n "$(YELLOW)" 												;	\
 		norminette src/ include/ playground/								\
@@ -151,4 +154,15 @@ test:
 		| grep -v WRONG_SCOPE_COMMENT										\
 		| grep -v EMPTY_LINE_FUNCTION										\
 		| grep -v TOO_MANY_FUNCS										;	\
-	echo -n "$(COR)" 													;	\
+	echo -n "$(COR)"
+
+#	\
+#	tail -n +4 log.txt													|	\
+#	awk '{																	\
+#	gsub(/^==[0-9]*== /, "")											;	\
+#	gsub(/^--[0-9]*-- /, "")											;	\
+#	gsub(/^used_suppression: /, "")										;	\
+#	if (length($0) > 0) print $0											\
+#	}'																	;	\
+
+#		--log-file=log.txt													\

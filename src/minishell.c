@@ -6,39 +6,85 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/17 09:34:43 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:20:44 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
-int	main(int argc, char **argv)
+static void	init_shell(t_mnsh *shell, char **envp);
+
+int	g_exit;
+
+int	main(int argc, char **argv, char **envp)
 {
+	t_mnsh	*shell;
 	char	*input;
 	int		loop;
 
-	loop = 42;
-	(void) argv;
+	shell = ft_calloc(1, sizeof(t_mnsh));
+	init_shell(shell, envp);
+	//int	i = -1;
+	//while (shell->envp[++i])
+	//	printf("%s\n", shell->envp[i]);
 	if (argc > 1)
-		return (ft_putstr_fd("Too many arguments, dear ;)\n", 2), 1);
+	{
+		if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
+			return (handle_exit_code(parser(argv[2], shell)),
+				free_shell(shell), handle_exit_code(-1));
+		else
+			return (ft_putstr_fd("Too many arguments, dear ;)\n", 2), 1);
+	}
 	if (DEBUG)
 		ft_printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG--\n");
+	loop = 42; // to be removed
 	while (loop)
 	{
-		ft_putnbr_fd(handle_exit_code(-1), 1);
-		input = readline("% ");
+		ft_setup_interactive_signals();
+		input = readline(shell->prompt);
 		if ((input == NULL) || (ft_strncmp(input, "exit", 5) == 0))
 		{
 			ft_putstr_fd("exit\n", 1);
 			break ;
 		}
 		else
-			handle_exit_code(parser(input));
+			handle_exit_code(parser(input, shell));
 		loop--;
 	}
 	if (DEBUG)
 		ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
+	free_shell(shell);
 	return (handle_exit_code(-1));
+}
+
+void	free_shell(t_mnsh *shell)
+{
+	free(shell->prompt);
+	//free ast;
+	//free t_mnsh
+}
+
+static void	init_shell(t_mnsh *shell, char **envp)
+{
+	char	*temp;
+	int		i;
+
+	temp = ft_itoa(handle_exit_code(-1));
+	shell->envp = init_envp(envp);
+	handle_shlvl(shell);
+	shell->prompt = (char *) ft_malloc(sizeof(char) * 6);
+	i = 0;
+	while ((i < 3) && temp[i])
+	{
+		shell->prompt[i] = temp[i];
+		i++;
+	}
+	free(temp);
+	shell->prompt[i++] = '%';
+	shell->prompt[i++] = ' ';
+	while (i < 6)
+		shell->prompt[i++] = '\0';
+	shell->ast_head = NULL;
 }
 
 int	handle_exit_code(int newcode)

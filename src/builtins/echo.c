@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../include/minishell.h"
 
 static int	n_flag(char *str)
 {
@@ -44,17 +44,5 @@ int	ft_echo(char **av)
 		i++;
 	}
 	printf("%c", nflag);
-	return (SUCCESS);
-}
-
-int	main()
-{
-	//char *av[] = {"echo", "-nf", "Hello", "World", NULL};
-	//ft_echo(av);
-	//char *av1[] = {"echo", "-nnnnn", "-n", "Hello", "-nn", "World", NULL};
-	//ft_echo(av1);
-	//char *av2[] = {"echo", "-nnnnnnnnnnnnnnnnnn", "-nnnnnnnnnnnnnnnunnnnnn", "Hello", "World", NULL};
-	//ft_echo(av2);
-	char *av3[] = {"echo", "$USER", NULL};
-	ft_echo(av3);
+	return (handle_exit_code(0));
 }

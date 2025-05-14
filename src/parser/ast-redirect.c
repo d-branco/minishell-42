@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 static t_redirect	*create_redirect(t_token **tokens);
 static t_ast_node	*link_redirection_node(

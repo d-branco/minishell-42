@@ -6,13 +6,13 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/15 16:15:37 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:39:46 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
-int	parser(char *input)
+int	parser(char *input, t_mnsh *shell)
 {
 	t_token		*list_o_tokens;
 	t_token		*list_o_tokens_origin;
@@ -26,8 +26,9 @@ int	parser(char *input)
 	tkn_lstclear(&list_o_tokens_origin);
 	if (DEBUG)
 		print_ast(ast, 0);
-	execute_ast(ast);
-	free_ast_node(ast);
+	shell->ast_head = ast;
+	execute_ast(shell->ast_head, shell);
+	free_ast_node(shell->ast_head);
 	return (handle_exit_code(-1));
 }
 
