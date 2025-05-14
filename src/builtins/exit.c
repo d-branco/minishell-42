@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:02 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/14 11:09:23 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/14 13:21:44 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,17 @@ int	ft_exit(int ac, char **av)
 	printf("exit\n");
 	if (ac == 1)
 	{
-		//ft_end_free_sh();
 		exit(handle_exit_code(0));
 	}
 	if (ac >= 2 && !is_num(av[1]))
 	{
 		printf("minishell: exit: %s: numeric argument required\n", av[1]);
-		//ft_end_free_sh();
 		exit(handle_exit_code(2));
 	}
 	if (ac >= 2 && is_num(av[1]))
 	{
 		if (ac == 2)
 		{
-		//ft_end_free_sh();
 			exit(handle_exit_code(ft_atoi(av[1])));
 		}
 		else

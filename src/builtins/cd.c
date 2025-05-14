@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 14:29:16 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/14 11:09:48 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:07:13 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ static int	error_cd(const char *path)
 	else if (errno == ENOTDIR)
 		printf("minishell: cd: %s - Not a directory\n", path);
 	else if (errno == ELOOP)
-		printf("minishell:cd : %s - Too many levels of symbolic links\n", path);
+		printf("minishell: cd: %s - Too many levels of symbolic links\n", path);
 	else if (errno == EINVAL)
-		printf("minishell:cd : %s - Invalid argument\n", path);
+		printf("minishell: cd: %s - Invalid argument\n", path);
 	else if (errno == EFAULT)
 		printf("minishell: cd: %s - Bad address\n", path);
 	else if (errno == ENAMETOOLONG)
@@ -67,17 +67,16 @@ int	ft_cd(int ac, char **av, char **envp)
 	char	*path;
 
 	if (ac > 2)
-	{
-		printf("minishell: cd: too many arguments\n");
-		return (handle_exit_code(1));
-	}
+		return (printf("minishell: cd: too many arguments\n"),
+			handle_exit_code(1));
 	if (!getcwd(cwd, sizeof(cwd)))
 		return (handle_exit_code(1));
 	if (ac == 1)
 	{
 		path = ft_getenv(envp, "HOME=");
 		if (!path)
-			return (printf("minishell: cd: HOME not set\n"), handle_exit_code(1));
+			return (printf("minishell: cd: HOME not set\n"),
+				handle_exit_code(1));
 	}
 	else
 		path = av[1];

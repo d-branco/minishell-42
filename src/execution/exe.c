@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/14 11:04:30 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/14 13:29:03 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static int	backup_fd(int fd_to_backup);
 static int	redirect_fd(int new_fd, int old_fd);
 static int	restore_fd(int backup_fd, int original_fd);
 void		fd_bug(char *location, int fd, char *action);
+static void	execute_command_child(t_command *cmd, t_mnsh *shell);
 
 void	fd_bug(char *location, int fd, char *action)
 {
@@ -191,23 +192,26 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 		return (execute_builtin(cmd, shell));
 	}
 	pid = fork();
+	if ((DEBUG) && (pid == 0))
+		print_ast(node, 0);
 	if (pid == 0)
-	{
-		if (DEBUG)
-			print_ast(node, 0);
-		execvp(cmd->command, cmd->args);// proibida
-		fprintf(stderr, "minishell: %s: command not found\n", cmd->command);
-		handle_exit_code(127);
-		free_ast_node(shell->ast_head);
-		free_shell(shell);
-		exit (handle_exit_code(-1));
-	}
+		execute_command_child(cmd, shell);
 	else if (pid < 0)
 		return (perror("minishell: fork"), 1);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		return (handle_exit_code(WEXITSTATUS(status)));
 	return (handle_exit_code(-1));
+}
+
+static void	execute_command_child(t_command *cmd, t_mnsh *shell)
+{
+	execvp(cmd->command, cmd->args);// proibida
+	fprintf(stderr, "minishell: %s: command not found\n", cmd->command);
+	handle_exit_code(127);
+	free_ast_node(shell->ast_head);
+	free_shell(shell);
+	exit (handle_exit_code(-1));
 }
 
 int	execute_and(t_ast_node *node, t_mnsh *shell)
