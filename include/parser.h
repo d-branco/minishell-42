@@ -59,6 +59,7 @@ typedef struct s_command
 {
 	char				*command;
 	char				**args;
+	int					argc;
 }	t_command;
 
 //	char				*file;				Filename or heredoc delimiter

@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   unset.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 15:55:05 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/17 11:16:29 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/04/12 16:54:40 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
-/*
+#include "../../include/minishell.h"
+
 void	remove_env_var(char ***envp, const char *var_name);
 
 void	remove_env_var(char ***envp, const char *var_name)
 {
-	int	count;
-	int	i;
-	int	j;
+	int		count;
+	int		i;
+	int		j;
 	char	**new_env;
 
 	i = 0;
@@ -26,18 +26,17 @@ void	remove_env_var(char ***envp, const char *var_name)
 	count = 0;
 	while ((*envp)[count])
 		count++;
-	new_env = malloc(sizeof(char*) * count);
+	new_env = malloc(sizeof(char *) * count);
 	while (i < count)
 	{
-		if (strncmp((*envp)[i], var_name, strlen(var_name)) == 0
-			&& (*envp)[i][strlen(var_name)] == '=')
+		if (strncmp((*envp)[i], var_name, strlen(var_name)) == 0 &&
+			(*envp)[i][strlen(var_name)] == '=')
 		{
 			//free((*envp)[i]);
 			i++;
-			continue;
+			continue ;
 		}
-		new_env[j++] = (*envp)[i];
-		i++;
+		new_env[j++] = (*envp)[i++];
 	}
 	new_env[j] = NULL;
 	//free(*envp);
@@ -47,23 +46,22 @@ void	remove_env_var(char ***envp, const char *var_name)
 int	ft_unset(char **av, char ***envp)
 {
 	int	i;
-	int	j;
 
 	if (!av[1] || !envp || !*envp)
-		return (SUCCESS);
+		return (handle_exit_code(0));
 	i = 1;
 	while (av[i])
 	{
 		remove_env_var(envp, av[i]);
 		i++;
 	}
-	return (SUCCESS);
+	return (handle_exit_code(0));
 }
-
+/*
 int	main(int ac, char **av, char **envp)
 {
 	//return (ft_unset(av, &envp));
-
+	
 	printf("Antes do unset:\n");
 	for (int i = 0; envp[i]; i++)
 		printf("%s -- %d\n", envp[i], i);
@@ -75,5 +73,4 @@ int	main(int ac, char **av, char **envp)
 	//	free(envp[i]);
 	//free(envp);
 	return result;
-}
- */
+}*/
