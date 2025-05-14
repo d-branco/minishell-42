@@ -6,13 +6,14 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/23 16:20:44 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/14 09:16:33 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 static void	init_shell(t_mnsh *shell, char **envp);
+static char	*init_prompt(int exit_code);
 
 int	g_exit;
 
@@ -48,7 +49,9 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		}
 		else
-			handle_exit_code(parser(input, shell));
+			handle_exit_code(parser(input, &shell));
+		free(shell.prompt);
+		shell.prompt = init_prompt(handle_exit_code(-1));
 		loop--;
 	}
 	if (DEBUG)
@@ -61,30 +64,42 @@ void	free_shell(t_mnsh *shell)
 {
 	free(shell->prompt);
 	//free ast;
-	//free t_mnsh
+	//free t_mnsh;
 }
 
 static void	init_shell(t_mnsh *shell, char **envp)
 {
-	char	*temp;
+	(void) envp;
+
+	shell->prompt = init_prompt(handle_exit_code(-1));
+	shell->envp = envp;
+	shell->ast_head = NULL;
+}
+
+static char	*init_prompt(int exit_code)
+{
+	char	*exit_code_str;
+	char	*prompt;
 	int		i;
 
-	temp = ft_itoa(handle_exit_code(-1));
-	shell->envp = init_envp(envp);
-	handle_shlvl(shell);
-	shell->prompt = (char *) ft_malloc(sizeof(char) * 6);
+	exit_code_str = ft_itoa(exit_code);
+	if (!exit_code_str)
+		return (NULL);
+	i = ft_strlen(exit_code_str);
+	prompt = (char *)ft_malloc(sizeof(char) * (i + 3));
+	if (!prompt)
+		return (free(exit_code_str), NULL);
 	i = 0;
-	while ((i < 3) && temp[i])
+	while (exit_code_str[i])
 	{
-		shell->prompt[i] = temp[i];
+		prompt[i] = exit_code_str[i];
 		i++;
 	}
-	free(temp);
-	shell->prompt[i++] = '%';
-	shell->prompt[i++] = ' ';
-	while (i < 6)
-		shell->prompt[i++] = '\0';
-	shell->ast_head = NULL;
+	prompt[i++] = '%';
+	prompt[i++] = ' ';
+	prompt[i] = '\0';
+	free(exit_code_str);
+	return (prompt);
 }
 
 int	handle_exit_code(int newcode)

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:22:15 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/10 09:27:57 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:32:53 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void	tkn_lst_printer(t_token *lst)
 		return ;
 	while (lst)
 	{
-		ft_printf("--DEBUG--TKN_LIST ======== token at %p\n", lst);
-		ft_printf("--DEBUG--TKN_LIST type: %s\n", token_string[lst->type]);
-		ft_printf("--DEBUG--TKN_LIST token_string: %s\n", lst->token_string);
-		ft_printf("--DEBUG--TKN_LIST next tkn address: %p\n", lst->next);
+		ft_printf("--DEBUG-- TKN_LIST ======== token at %p\n", lst);
+		ft_printf("--DEBUG-- TKN_LIST type: %s\n", token_string[lst->type]);
+		ft_printf("--DEBUG-- TKN_LIST token_string: %s\n", lst->token_string);
+		ft_printf("--DEBUG-- TKN_LIST next tkn address: %p\n", lst->next);
 		lst = lst->next;
 	}
-	ft_printf("--DEBUG--TKN_LIST ======== END of token list\n");
+	ft_printf("--DEBUG-- TKN_LIST ======== END of token list\n");
 }
 
 // Adapted from libft
