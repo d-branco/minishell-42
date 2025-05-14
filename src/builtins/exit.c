@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:02 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/07 22:07:16 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:09:23 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 static int	is_num(char *av)
 {
@@ -40,7 +40,7 @@ int	ft_exit(int ac, char **av)
 	}
 	if (ac >= 2 && !is_num(av[1]))
 	{
-		printf("bash: exit: %s: numeric argument required\n", av[1]);
+		printf("minishell: exit: %s: numeric argument required\n", av[1]);
 		//ft_end_free_sh();
 		exit(handle_exit_code(2));
 	}
@@ -53,7 +53,7 @@ int	ft_exit(int ac, char **av)
 		}
 		else
 		{
-			printf("bash: exit: too many arguments\n");
+			printf("minishell: exit: too many arguments\n");
 			return (handle_exit_code(1));
 		}
 	}

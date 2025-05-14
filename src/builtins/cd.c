@@ -3,33 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 14:29:16 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/18 18:58:45 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:09:48 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 char	*ft_getenv(char **envp, char *var_name);
 
 static int	error_cd(const char *path)
 {
 	if (errno == ENOENT)
-		printf("bash: cd: %s - No such file or directory\n", path);
+		printf("minishell: cd: %s - No such file or directory\n", path);
 	else if (errno == EACCES)
-		printf("Bash: cd: %s - Permission denied\n", path);
+		printf("minishell: cd: %s - Permission denied\n", path);
 	else if (errno == ENOTDIR)
-		printf("Bash: cd: %s - Not a directory\n", path);
+		printf("minishell: cd: %s - Not a directory\n", path);
 	else if (errno == ELOOP)
-		printf("Bash:cd : %s - Too many levels of symbolic links\n", path);
+		printf("minishell:cd : %s - Too many levels of symbolic links\n", path);
 	else if (errno == EINVAL)
-		printf("Bash:cd : %s - Invalid argument\n", path);
+		printf("minishell:cd : %s - Invalid argument\n", path);
 	else if (errno == EFAULT)
-		printf("Bash: cd: %s - Bad address\n", path);
+		printf("minishell: cd: %s - Bad address\n", path);
 	else if (errno == ENAMETOOLONG)
-		printf("Bash: cd: %s - File name too long\n", path);
+		printf("minishell: cd: %s - File name too long\n", path);
 	else
 		printf("Unknown cd Error");
 	return (1);
@@ -68,7 +68,7 @@ int	ft_cd(int ac, char **av, char **envp)
 
 	if (ac > 2)
 	{
-		printf("bash: cd: too many arguments\n");
+		printf("minishell: cd: too many arguments\n");
 		return (handle_exit_code(1));
 	}
 	if (!getcwd(cwd, sizeof(cwd)))
@@ -77,7 +77,7 @@ int	ft_cd(int ac, char **av, char **envp)
 	{
 		path = ft_getenv(envp, "HOME=");
 		if (!path)
-			return (printf("bash: cd: HOME not set\n"), handle_exit_code(1));
+			return (printf("minishell: cd: HOME not set\n"), handle_exit_code(1));
 	}
 	else
 		path = av[1];

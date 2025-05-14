@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:44:01 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/16 16:04:14 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:09:02 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 static void	ft_sort_env_tabs(char **tabs);
 
@@ -124,7 +124,7 @@ int	ft_export(char **av, char ***envp)
 	{
 		if (!is_valid_arg(av[i]))
 		{
-			printf("Bash: export: '%s': not a valid identifier\n", av[i]);
+			printf("minishell: export: '%s': not a valid identifier\n", av[i]);
 			status = 1;
 		}
 		else if (export_var(av[i], envp) == -1)

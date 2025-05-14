@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:10:29 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/18 18:59:11 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 static int	add_var_env(char *new_var, int size, char ***envp);
 

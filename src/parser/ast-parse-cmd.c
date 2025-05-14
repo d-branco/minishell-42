@@ -6,11 +6,11 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 17:11:54 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/12 17:19:23 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 static t_list		*build_argument_list(t_token **tokens, int *arg_count);
 static t_command	*create_command_structure(t_list *arg_list, int arg_count);

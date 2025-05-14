@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 void	remove_env_var(char ***envp, const char *var_name);
 
@@ -61,7 +61,7 @@ int	ft_unset(char **av, char ***envp)
 int	main(int ac, char **av, char **envp)
 {
 	//return (ft_unset(av, &envp));
-	
+
 	printf("Antes do unset:\n");
 	for (int i = 0; envp[i]; i++)
 		printf("%s -- %d\n", envp[i], i);

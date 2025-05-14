@@ -6,11 +6,11 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/07 13:41:47 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 // Creates tokens and returns 0 if success
 int	parse_input_into_token_list(t_token **list, char *input)

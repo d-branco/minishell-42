@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/18 14:27:30 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:47:11 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,6 @@ typedef struct s_mnsh
 	char				**envp;
 	struct s_ast_node	*ast_head;
 }	t_mnsh;
-
-extern int	g_exit;
 
 //int			main(int argc, char **argv, char **envp);
 void	free_shell(t_mnsh *shell);

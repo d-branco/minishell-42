@@ -6,11 +6,11 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/14 08:58:28 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:04:30 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 int			execute_command(t_ast_node *node, t_mnsh *shell);
 int			execute_and(t_ast_node *node, t_mnsh *shell);
@@ -185,7 +185,11 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 	if (!cmd || !cmd->command)
 		return (1);
 	if (is_builtin(cmd))
-		return (execute_builtin(cmd,shell));
+	{
+		if (DEBUG)
+			ft_printf("--DEBUG-- built-in		%s\n", cmd->command);
+		return (execute_builtin(cmd, shell));
+	}
 	pid = fork();
 	if (pid == 0)
 	{
