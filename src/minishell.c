@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/14 10:50:41 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/16 16:01:36 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,23 @@ static char	*init_prompt(int exit_code);
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_mnsh	shell;
+	t_mnsh	*shell;
 	char	*input;
 	int		loop;
 
-	init_shell(&shell, envp);
+	shell = ft_malloc(sizeof(t_mnsh) * 1);
+	init_shell(shell, envp);
 	if (DEBUG)
 	{
 		loop = -1;
-		while (shell.envp[++loop])
-			ft_printf("--DEBUG-- [envp] %s\n", shell.envp[loop]);
+		while (shell->envp[++loop])
+			ft_printf("--DEBUG-- [envp] %s\n", shell->envp[loop]);
 	}
 	if (argc > 1)
 	{
 		if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
-			return (handle_exit_code(parser(argv[2], &shell)),
-				free_shell(&shell), handle_exit_code(-1));
+			return (handle_exit_code(parser(argv[2], shell)),
+				free_shell(shell), handle_exit_code(-1));
 		else
 			return (ft_putstr_fd("Too many arguments, dear ;)\n", 2), 1);
 	}
@@ -42,37 +43,46 @@ int	main(int argc, char **argv, char **envp)
 	while (loop)
 	{
 		ft_setup_interactive_signals();
-		input = readline(shell.prompt);
+		input = readline(shell->prompt);
 		if ((input == NULL) || (ft_strncmp(input, "exit", 5) == 0))
 		{
 			ft_putstr_fd("exit\n", 1);
 			break ;
 		}
 		else
-			handle_exit_code(parser(input, &shell));
-		free(shell.prompt);
-		shell.prompt = init_prompt(handle_exit_code(-1));
+			handle_exit_code(parser(input, shell));
+		free(shell->prompt);
+		shell->prompt = init_prompt(handle_exit_code(-1));
 		loop--;
 	}
 	if (DEBUG)
 		ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
-	free_shell(&shell);
+	free_shell(shell);
+	//free (shell);
 	return (handle_exit_code(-1));
 }
 
 void	free_shell(t_mnsh *shell)
 {
-	free(shell->prompt);
+	int	i;
+
+	if (shell->prompt)
+		free(shell->prompt);
 	//free ast;
-	//free t_mnsh;
+	if (shell->envp)
+	{
+		i = 0;
+		while (shell->envp[i])
+			free(shell->envp[i++]);
+		free (shell->envp);
+	}
+	free (shell);
 }
 
 static void	init_shell(t_mnsh *shell, char **envp)
 {
-	(void) envp;
-
 	shell->prompt = init_prompt(handle_exit_code(-1));
-	shell->envp = envp;
+	shell->envp = init_envp(envp);
 	shell->ast_head = NULL;
 }
 
