@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:44:01 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/14 15:56:58 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:23:05 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,14 @@ static void	print_sort_env(char **envp)
 		if (equal_posit)
 		{
 			*equal_posit = '\0';
-			printf("%s=\"%s\"", env_copy[i], equal_posit + 1);
+			printf("%s=\"%s\"\n", env_copy[i], equal_posit + 1);
 			*equal_posit = '=';
 		}
 		else
+		{
 			ft_putstr_fd(env_copy[i], 1);
-		ft_putchar_fd('\n', 1);
+			ft_putchar_fd('\n', 1);
+		}
 	}
 	ft_free_env(env_copy);
 }
