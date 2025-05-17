@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:02 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/17 13:41:44 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:50:42 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,8 @@ int	ft_exit(int ac, char **av, t_mnsh *shell)
 			exit(handle_exit_code(ft_atoi(av[1])));
 		}
 		else
-		{
-			printf("minishell: exit: too many arguments\n");
-			return (handle_exit_code(1));
-		}
+			return (printf("minishell: exit: too many arguments\n"),
+				handle_exit_code(1));
 	}
 	return (handle_exit_code(0));
 }
