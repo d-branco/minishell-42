@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/16 16:01:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/17 15:03:51 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	main(int argc, char **argv, char **envp)
 	loop = 42; // to be removed
 	while (loop)
 	{
-		ft_setup_interactive_signals();
 		input = readline(shell->prompt);
 		if ((input == NULL) || (ft_strncmp(input, "exit", 5) == 0))
 		{
@@ -84,6 +83,7 @@ static void	init_shell(t_mnsh *shell, char **envp)
 	shell->prompt = init_prompt(handle_exit_code(-1));
 	shell->envp = init_envp(envp);
 	shell->ast_head = NULL;
+	ft_setup_interactive_signals();
 }
 
 static char	*init_prompt(int exit_code)
