@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:02 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/17 14:51:38 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/17 15:32:19 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ int	ft_exit(int ac, char **av, t_mnsh *shell)
 	printf("exit\n");
 	if (ac == 1)
 	{
+		free_ast_node(shell->ast_head);
 		free_shell(shell);
 		exit(handle_exit_code(0));
 	}
 	if (ac >= 2 && !is_num(av[1]))
 	{
 		printf("minishell: exit: %s: numeric argument required\n", av[1]);
+		free_ast_node(shell->ast_head);
 		free_shell(shell);
 		exit(handle_exit_code(2));
 	}
@@ -48,8 +50,10 @@ int	ft_exit(int ac, char **av, t_mnsh *shell)
 	{
 		if (ac == 2)
 		{
+			handle_exit_code(ft_atoi(av[1]));
+			free_ast_node(shell->ast_head);
 			free_shell(shell);
-			exit(handle_exit_code(ft_atoi(av[1])));
+			exit(handle_exit_code(-1));
 		}
 		else
 			return (printf("minishell: exit: too many arguments\n"),
