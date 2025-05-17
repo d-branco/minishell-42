@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:24:23 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:42:45 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	execute_builtin(t_command *cmd, t_mnsh *shell)
 	else if (ft_strncmp(cmd->command, "env", ft_strlen(cmd->command)) == 0)
 		ft_env(cmd->args, shell->envp);
 	else if (ft_strncmp(cmd->command, "exit", ft_strlen(cmd->command)) == 0)
-		ft_exit(cmd->argc, cmd->args);
+		ft_exit(cmd->argc, cmd->args, shell);
 	else if (ft_strncmp(cmd->command, "export", ft_strlen(cmd->command)) == 0)
 		ft_export(cmd->args, &shell->envp);
 	else if (ft_strncmp(cmd->command, "pwd", ft_strlen(cmd->command)) == 0)
