@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/14 13:29:03 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/19 17:05:19 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ static int	redirect_fd(int new_fd, int old_fd);
 static int	restore_fd(int backup_fd, int original_fd);
 void		fd_bug(char *location, int fd, char *action);
 static void	execute_command_child(t_command *cmd, t_mnsh *shell);
+int			handle_append_redirection(
+				t_ast_node *node, t_mnsh *shell, char *file);
+int			open_append_file(const char *file);
 
 void	fd_bug(char *location, int fd, char *action)
 {
@@ -71,7 +74,7 @@ int	execute_redirect(t_ast_node *node, t_mnsh *shell)
 		return (handle_output_redirection(node, shell, redirection->file));
 	else if (redirection->redirect_type == e_APPEND) //				>>
 	{
-		// APPEND >>
+		return (handle_append_redirection(node, shell, redirection->file));/////
 	}
 	else if (redirection->redirect_type == e_HERE_DOC) //			<<
 	{
@@ -79,6 +82,42 @@ int	execute_redirect(t_ast_node *node, t_mnsh *shell)
 	}
 	handle_exit_code(execute_ast(node->left, shell));
 	return (handle_exit_code(-1));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int	handle_append_redirection(t_ast_node *node, t_mnsh *shell, char *file)
+{
+	int	fd;
+	int	stdout_temp;
+	int	result;
+
+	fd = open_append_file(file);
+	if (fd == -1)
+		return (1);
+	stdout_temp = backup_fd(STDOUT_FILENO);
+	if (stdout_temp == -1)
+		return (close(fd), 1);
+	if (!redirect_fd(fd, STDOUT_FILENO))
+		return (close(fd), close(stdout_temp), 1);
+	fd_bug("handle_append_redirection", fd, "closing after redirection");
+	close(fd);
+	result = execute_ast(node->left, shell);
+	if (!restore_fd(stdout_temp, STDOUT_FILENO))
+		return (close(stdout_temp), 1);
+	fd_bug("handle_append_redirection", stdout_temp, "closing after restore");
+	close(stdout_temp);
+	return (result);
+}
+
+int	open_append_file(const char *file)
+{
+	int	fd;
+
+	fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if (fd == -1)
+		return (perror("minishell"), -1);
+	fd_bug("open_append_file", fd, "opened");
+	return (fd);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
