@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/19 17:05:19 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:56:47 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ static char	*resolve_command_path(char *cmd, char **envp);
 int			handle_append_redirection(
 				t_ast_node *node, t_mnsh *shell, char *file);
 int			open_append_file(const char *file);
+int			handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter);
+void		read_heredoc_input(int fd, char *delimiter);
 
 void	fd_bug(char *location, int fd, char *action)
 {
@@ -79,10 +81,79 @@ int	execute_redirect(t_ast_node *node, t_mnsh *shell)
 	}
 	else if (redirection->redirect_type == e_HERE_DOC) //			<<
 	{
-		// HEREDOC <<
+		return (handle_here_doc(node, shell, redirection->file));
 	}
 	handle_exit_code(execute_ast(node->left, shell));
 	return (handle_exit_code(-1));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
+{
+	int		pipefd[2];
+	int		original_stdin;
+	int		result;
+	pid_t	pid;
+
+	if (pipe(pipefd) == -1)
+		return (perror("minishell: pipe"), 1);
+	fd_bug("handle_here_doc", pipefd[0], "pipe read end created");
+	fd_bug("handle_here_doc", pipefd[1], "pipe write end created");
+	original_stdin = backup_fd(STDIN_FILENO);
+	if (original_stdin == -1)
+		return (close(pipefd[0]), close(pipefd[1]), 1);
+	pid = fork();
+	if (pid == -1)
+		return (perror("minishell: fork"),
+			close(pipefd[0]), close(pipefd[1]), 1);
+	if (pid == 0)
+	{
+		close(pipefd[0]);
+		read_heredoc_input(pipefd[1], delimiter);
+		close(pipefd[1]);
+		free_shell(shell);
+		//free_ast
+		exit(0);
+	}
+	else
+	{
+		close(pipefd[1]);
+		wait(NULL);
+		if (!redirect_fd(pipefd[0], STDIN_FILENO))
+			return (close(pipefd[0]), close(original_stdin), 1);
+		fd_bug("handle_here_doc", pipefd[0], "closing after redirection");
+		close(pipefd[0]);
+		result = execute_ast(node->left, shell);
+		if (!restore_fd(original_stdin, STDIN_FILENO))
+			return (close(original_stdin), 1);
+		fd_bug("handle_here_doc", original_stdin, "closing after restore");
+		close(original_stdin);
+
+		return (result);
+	}
+}
+
+void	read_heredoc_input(int fd, char *delimiter)
+{
+	char	*line;
+	size_t	delim_len;
+
+	delim_len = strlen(delimiter);
+	while (1)
+	{
+		write(STDOUT_FILENO, "> ", 2);
+		line = get_next_line(STDIN_FILENO);
+		if (!line)
+			break ;
+		if (strncmp(line, delimiter, delim_len) == 0
+			&& (line[delim_len] == '\n' || line[delim_len] == '\0'))
+		{
+			free(line);
+			break ;
+		}
+		write(fd, line, strlen(line));
+		free(line);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
