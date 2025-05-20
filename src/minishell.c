@@ -83,6 +83,7 @@ static void	init_shell(t_mnsh *shell, char **envp)
 {
 	shell->prompt = init_prompt(handle_exit_code(-1));
 	shell->envp = init_envp(envp);
+	handle_shlvl(shell);
 	shell->ast_head = NULL;
 	ft_setup_interactive_signals();
 }
