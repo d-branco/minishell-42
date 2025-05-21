@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/20 16:56:47 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/21 08:47:03 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,9 @@ int	execute_redirect(t_ast_node *node, t_mnsh *shell)
 	else if (redirection->redirect_type == e_OUTPUT_REDIRECTION) //	>
 		return (handle_output_redirection(node, shell, redirection->file));
 	else if (redirection->redirect_type == e_APPEND) //				>>
-	{
-		return (handle_append_redirection(node, shell, redirection->file));/////
-	}
+		return (handle_append_redirection(node, shell, redirection->file));
 	else if (redirection->redirect_type == e_HERE_DOC) //			<<
-	{
 		return (handle_here_doc(node, shell, redirection->file));
-	}
 	handle_exit_code(execute_ast(node->left, shell));
 	return (handle_exit_code(-1));
 }
@@ -111,7 +107,7 @@ int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
 		read_heredoc_input(pipefd[1], delimiter);
 		close(pipefd[1]);
 		free_shell(shell);
-		//free_ast
+		free_ast_node(shell->ast_head);
 		exit(0);
 	}
 	else
