@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 16:24:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/21 10:22:05 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:29:50 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_ast_node	*parse_redirections(t_token **tokens)
 	t_redirect	*redir;
 	int			is_at_start;
 	t_ast_node	*real_cmd;
+	t_ast_node	*empty_cmd_node;
 
 	is_at_start = FALSE;
 	if (*tokens && ((*tokens)->type == e_INPUT_REDIRECTION
@@ -50,7 +51,16 @@ t_ast_node	*parse_redirections(t_token **tokens)
 	{
 		real_cmd = parse_commands(tokens);
 		if (real_cmd)
+		{
+			empty_cmd_node = cmd_node->left;
 			cmd_node->left = real_cmd;
+			if (empty_cmd_node)
+			{
+				empty_cmd_node->left = NULL;
+				empty_cmd_node->right = NULL;
+				free_ast_node(empty_cmd_node);
+			}
+		}
 	}
 	return (cmd_node);
 }
