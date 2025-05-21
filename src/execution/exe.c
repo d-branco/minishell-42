@@ -366,8 +366,8 @@ static char	*resolve_command_path(char *cmd, char **envp)
 	char	*full_path;
 	int		i;
 
-	//if (ft_strchr(cmd, '/')) // comando com caminho direto
-	//	return (ft_strdup(cmd));
+	if (ft_strchr(cmd, '/')) // comando com caminho direto
+		return (ft_strdup(cmd));
 	path_var = ft_getenv(envp, "PATH=");
 	if (!path_var)
 		return (NULL);

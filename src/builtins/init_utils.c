@@ -55,6 +55,23 @@ char	**init_envp(char **envp)
 	return (new_envp);
 }
 
+static bool	is_valid_num(char *str)
+{
+	if (!str || !*str)
+		return (false);
+	if (*str == '-')
+		str++;
+	if (*str == '+')
+		str++;
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return (false);
+		str++;
+	}
+	return (true);
+}
+
 void	handle_shlvl(t_mnsh *shell)
 {
 	char	*lvl;
@@ -62,19 +79,23 @@ void	handle_shlvl(t_mnsh *shell)
 	int		n;
 
 	lvl = ft_getenv(shell->envp, "SHLVL=");
-	if (lvl)
+	if (lvl && is_valid_num(lvl))
 	{
 		n = ft_atoi(lvl) + 1;
 		new_lvl = ft_itoa(n);
 		if (!new_lvl)
+			return (ft_putstr_fd("ERROR malloc!\n", 2), free(lvl), (void)0);
+		if (n > 999)
 		{
-			ft_putstr_fd("ERROR malloc!\n", 2);
-			free(lvl);
-			return ;
+			new_lvl = "1";
+			printf("minishell: warning: shell level (%d) too high, "
+				"resetting to 1\n", n);
 		}
+		else if (n < 0)
+			new_lvl = "0";
 		replace_add_var("SHLVL=", new_lvl, &shell->envp);
-		free(new_lvl);
 		free(lvl);
+		//free(new_lvl);
 	}
 	else
 		replace_add_var("SHLVL=", "1", &shell->envp);
