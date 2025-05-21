@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/21 08:47:03 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/21 09:33:53 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
 		read_heredoc_input(pipefd[1], delimiter);
 		close(pipefd[1]);
 		free_shell(shell);
-		free_ast_node(shell->ast_head);
+		//free_ast_node(shell->ast_head);
 		exit(0);
 	}
 	else
@@ -124,7 +124,6 @@ int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
 			return (close(original_stdin), 1);
 		fd_bug("handle_here_doc", original_stdin, "closing after restore");
 		close(original_stdin);
-
 		return (result);
 	}
 }
@@ -141,13 +140,13 @@ void	read_heredoc_input(int fd, char *delimiter)
 		line = get_next_line(STDIN_FILENO);
 		if (!line)
 			break ;
-		if (strncmp(line, delimiter, delim_len) == 0
+		if (ft_strncmp(line, delimiter, delim_len) == 0
 			&& (line[delim_len] == '\n' || line[delim_len] == '\0'))
 		{
 			free(line);
 			break ;
 		}
-		write(fd, line, strlen(line));
+		write(fd, line, ft_strlen(line));
 		free(line);
 	}
 }
@@ -273,7 +272,6 @@ int	handle_input_redirection(t_redirect *redir, t_ast_node *node, t_mnsh *shell)
 	fd_bug("handle_input_redirection", fd, "closing after redirection");
 	close(fd);
 	handle_exit_code(execute_ast(node->left, shell));
-	dup2(original_stdin, STDIN_FILENO);
 	if (dup2(original_stdin, STDIN_FILENO) == -1)
 		return (perror("minishell: dup2 restore"), close(original_stdin), 1);
 	fd_bug("handle_input_redirection", STDIN_FILENO, "after restoration");
