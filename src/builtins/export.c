@@ -41,6 +41,9 @@ static int	export_var(const char *av, char ***envp)
 	{
 		var_name = ft_substr(av, 0, equal_posit - av + 1);
 		value = ft_strdup(equal_posit + 1);
+		printf("Var_name: %s\n", var_name);
+		printf("value: %s\n", value);
+		printf("Equal_posit: %s\n", equal_posit);
 		//replace_add_var(var_name, value, envp);
 	}
 	else
