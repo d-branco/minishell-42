@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 16:24:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:22:05 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,24 @@
 static t_redirect	*create_redirect(t_token **tokens);
 static t_ast_node	*link_redirection_node(
 						t_ast_node *cmd_node, t_redirect *redir);
+static t_command	*create_empty_command(void);
 
 t_ast_node	*parse_redirections(t_token **tokens)
 {
 	t_ast_node	*cmd_node;
 	t_redirect	*redir;
+	int			is_at_start;
+	t_ast_node	*real_cmd;
 
-	cmd_node = parse_commands(tokens);
+	is_at_start = FALSE;
+	if (*tokens && ((*tokens)->type == e_INPUT_REDIRECTION
+			|| (*tokens)->type == e_OUTPUT_REDIRECTION
+			|| (*tokens)->type == e_APPEND || (*tokens)->type == e_HERE_DOC))
+		is_at_start = TRUE;
+	if (is_at_start)
+		cmd_node = create_ast_node(AST_COMMAND, create_empty_command());
+	else
+		cmd_node = parse_commands(tokens);
 	if (!cmd_node)
 		return (NULL);
 	while (*tokens && ((*tokens)->type == e_INPUT_REDIRECTION
@@ -30,15 +41,34 @@ t_ast_node	*parse_redirections(t_token **tokens)
 	{
 		redir = create_redirect(tokens);
 		if (!redir)
-		{
-			free_ast_node(cmd_node);
-			return (NULL);
-		}
+			return (free_ast_node(cmd_node), NULL);
 		cmd_node = link_redirection_node(cmd_node, redir);
 		if (!cmd_node)
 			return (NULL);
 	}
+	if (is_at_start && *tokens && is_valid_token_for_argument(*tokens))
+	{
+		real_cmd = parse_commands(tokens);
+		if (real_cmd)
+			cmd_node->left = real_cmd;
+	}
 	return (cmd_node);
+}
+
+static t_command	*create_empty_command(void)
+{
+	t_command	*cmd;
+
+	cmd = malloc(sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	cmd->args = malloc(sizeof(char *) * 1);
+	if (!cmd->args)
+		return (free(cmd), NULL);
+	cmd->args[0] = NULL;
+	cmd->command = NULL;
+	cmd->argc = 0;
+	return (cmd);
 }
 
 static t_redirect	*create_redirect(t_token **tokens)
