@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/21 09:33:53 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:58:46 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
 	else
 	{
 		close(pipefd[1]);
-		wait(NULL);
+		wait(NULL);// TODO
 		if (!redirect_fd(pipefd[0], STDIN_FILENO))
 			return (close(pipefd[0]), close(original_stdin), 1);
 		fd_bug("handle_here_doc", pipefd[0], "closing after redirection");
@@ -374,7 +374,6 @@ static void	run_right_child(t_ast_node *node, int *pipefd, t_mnsh *shell)
 	close(pipefd[0]);
 	if (DEBUG)
 	{
-
 		printf("--DEBUG-- Did the right child had to be killed today?\n");
 		print_ast(node->right, 0);
 	}
