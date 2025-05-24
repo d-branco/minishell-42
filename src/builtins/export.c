@@ -41,20 +41,13 @@ static int	export_var(const char *av, char ***envp)
 	{
 		var_name = ft_substr(av, 0, equal_posit - av + 1);
 		value = ft_strdup(equal_posit + 1);
-		printf("Var_name: %s\n", var_name);
-		printf("value: %s\n", value);
-		printf("Equal_posit: %s\n", equal_posit);
-		//replace_add_var(var_name, value, envp);
 	}
 	else
 	{
 		var_name = ft_strjoin(av, "=");
 		value = ft_getenv(*envp, var_name);
 		if (!value)
-		{
-			var_name = (char *)av;
 			value = ft_strdup("");
-		}
 	}
 	if (!var_name || !value)
 		return (free(var_name), free(value), -1);
