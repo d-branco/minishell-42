@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/24 19:04:43 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	parse_input_into_token_list(t_token **list, char *input)
 		}
 		get_token(list, input, &pos);
 	}
-	return (handle_exit_code(validate_syntax(input)));
+	return (handle_exit_code(-1));
 }
 
 // Returns -1 if ok
@@ -41,24 +41,47 @@ int	parse_input_into_token_list(t_token **list, char *input)
 int	validate_syntax(char *str)
 {
 	int	i;
+	int	n_parenthese;
+	int	n_d_quote;
+	int	n_s_quote;
 
 	i = 0;
 	while (str[i])
 	{
 		if ((i == 0) && (str[i] == '&') && (str[i + 1] != '&'))
-			return (2);
+			return (SYNTAX_ERROR);
 		if (i >= 1)
 		{
 			if ((str[i - 1] != '&') && (str[i] == '&') && (str[i + 1] != '&'))
-				return (2);
+				return (SYNTAX_ERROR);
 			if ((str[i - 1] == '&') && (str[i] == '&') && (str[i + 1] == '&'))
-				return (2);
+				return (SYNTAX_ERROR);
 			if ((str[i - 1] == '|') && (str[i] == '|') && (str[i + 1] == '|'))
-				return (2);
+				return (SYNTAX_ERROR);
 		}
 		i++;
 	}
-	return (handle_exit_code(-1));
+	i = 0;
+	n_parenthese = 0;
+	n_d_quote = 0;
+	n_s_quote = 0;
+	while (str[i])
+	{
+		if (str[i] == '(')
+			n_parenthese++;
+		else if (str[i] == ')')
+			n_parenthese--;
+		else if (str[i] == '\'')
+			n_s_quote++;
+		else if (str[i] == '\"')
+			n_d_quote++;
+		i++;
+		if (n_parenthese < 0)
+			return (SYNTAX_ERROR);
+	}
+	if ((n_parenthese != 0) || ((n_s_quote % 2) != 0) || ((n_d_quote % 2) != 0))
+		return (SYNTAX_ERROR);
+	return (1);
 }
 
 void	get_token(t_token **list, char *input, int *pos)
