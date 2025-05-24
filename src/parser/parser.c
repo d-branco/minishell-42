@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/24 19:05:55 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ int	parser(char *input, t_mnsh *shell)
 	t_token		*list_o_tokens_origin;
 	t_ast_node	*ast;
 
+	if (validate_syntax(input) == SYNTAX_ERROR)
+	{
+		printf("Minishell: Syntax error: %s\n", input);
+		return (handle_exit_code(2));
+	}
 	list_o_tokens = NULL;
 	parse_input_into_token_list(&list_o_tokens, input);
 	tkn_lst_printer(list_o_tokens);
