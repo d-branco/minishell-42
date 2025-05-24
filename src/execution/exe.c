@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/22 20:58:46 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/24 17:10:28 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
 	int		original_stdin;
 	int		result;
 	pid_t	pid;
+	int		status;
 
 	if (pipe(pipefd) == -1)
 		return (perror("minishell: pipe"), 1);
@@ -113,7 +114,8 @@ int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
 	else
 	{
 		close(pipefd[1]);
-		wait(NULL);// TODO
+		//wait(NULL);// DOING
+		waitpid(pid, &status, 0);
 		if (!redirect_fd(pipefd[0], STDIN_FILENO))
 			return (close(pipefd[0]), close(original_stdin), 1);
 		fd_bug("handle_here_doc", pipefd[0], "closing after redirection");
@@ -133,7 +135,7 @@ void	read_heredoc_input(int fd, char *delimiter)
 	size_t	delim_len;
 
 	delim_len = strlen(delimiter);
-	while (1)
+	while (TRUE)
 	{
 		write(STDOUT_FILENO, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
@@ -145,7 +147,8 @@ void	read_heredoc_input(int fd, char *delimiter)
 			free(line);
 			break ;
 		}
-		write(fd, line, ft_strlen(line));
+		//write(fd, line, ft_strlen(line));
+		write(STDIN_FILENO, line, ft_strlen(line));
 		free(line);
 	}
 }
