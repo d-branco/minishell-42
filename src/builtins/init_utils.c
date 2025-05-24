@@ -118,6 +118,7 @@ int	replace_add_var(char *var_name, char *value, char ***envp)
 		{
 			free((*envp)[i]);
 			(*envp)[i] = new_var;
+			printf("DEBUG: new_var: %s / i: %d\n", new_var, i);
 			return (SUCCESS);
 		}
 	}
