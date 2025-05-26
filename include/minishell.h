@@ -148,6 +148,7 @@ typedef struct s_mnsh
 //int			main(int argc, char **argv, char **envp);
 void	free_shell(t_mnsh *shell);
 int		handle_exit_code(int newcode);
+bool	ft_check_input(const char *input);
 //execution/exe.c
 int		execute_ast(t_ast_node *node, t_mnsh *shell);
 //utils/ft_isspace.c

@@ -49,17 +49,32 @@ int	main(int argc, char **argv, char **envp)
 			ft_putstr_fd("exit\n", 1);
 			break ;
 		}
-		else
-			handle_exit_code(parser(input, shell));
+		if (ft_check_input(input))
+			add_history(input);
+		if (input[0])
+				handle_exit_code(parser(input, shell));
+		free(input);
 		free(shell->prompt);
 		shell->prompt = init_prompt(handle_exit_code(-1));
 		loop--;
 	}
+	rl_clear_history();
 	if (DEBUG)
 		ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
 	free_shell(shell);
 	//free (shell);
 	return (handle_exit_code(-1));
+}
+
+bool	ft_check_input(const char *input)
+{
+	while (*input)
+	{
+		if (!ft_isspace(*input))
+			return (true);
+		input++;
+	}
+	return (false);
 }
 
 void	free_shell(t_mnsh *shell)
