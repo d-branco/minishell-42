@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/24 17:10:28 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:34:30 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ void	read_heredoc_input(int fd, char *delimiter)
 	char	*line;
 	size_t	delim_len;
 
+	(void) fd; // to avoid error
 	delim_len = strlen(delimiter);
 	while (TRUE)
 	{
