@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 static void	ft_sort_env_tabs(char **tabs);
 
@@ -47,7 +47,11 @@ static int	export_var(const char *av, char ***envp)
 		var_name = ft_strjoin(av, "=");
 		value = ft_getenv(*envp, var_name);
 		if (!value)
+		{
 			value = ft_strdup("");
+			replace_add_var((char *)av, value, envp);
+			return (free(var_name), free(value), 0);
+		}
 	}
 	if (!var_name || !value)
 		return (free(var_name), free(value), -1);

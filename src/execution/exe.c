@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 int			execute_command(t_ast_node *node, t_mnsh *shell);
 int			execute_and(t_ast_node *node, t_mnsh *shell);
@@ -27,6 +27,7 @@ static int	redirect_fd(int new_fd, int old_fd);
 static int	restore_fd(int backup_fd, int original_fd);
 void		fd_bug(char *location, int fd, char *action);
 static void	execute_command_child(t_command *cmd, t_mnsh *shell);
+static char	*resolve_command_path(char *cmd, char **envp);
 int			handle_append_redirection(
 				t_ast_node *node, t_mnsh *shell, char *file);
 int			open_append_file(const char *file);
@@ -245,13 +246,88 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 
 static void	execute_command_child(t_command *cmd, t_mnsh *shell)
 {
+	char	*full_path;
+
+	full_path = resolve_command_path(cmd->command, shell->envp);
+	if (!full_path)
+	{
+		fprintf(stderr, "minishell: %s: command not found\n", cmd->command);
+		handle_exit_code(127);
+		free_ast_node(shell->ast_head);
+		free_shell(shell);
+		//exit (handle_exit_code(-1));
+	}
+	execve(full_path, cmd->args, shell->envp);
+	//perror("minishell");
+	free(full_path);
+	free_ast_node(shell->ast_head);
+	free_shell(shell);
+	exit (handle_exit_code(-1));
+}
+
+static char	*build_full_path(char *path, char *cmd)
+{
+	char	*full_path;
+
+	full_path = malloc(strlen(path) + strlen(cmd) + 2);
+	if (!full_path)
+		return (NULL);
+	ft_strlcpy(full_path, path, strlen(path) + 1);
+	ft_strlcat(full_path, "/", strlen(path) + 2);
+	ft_strlcat(full_path, cmd, strlen(path) + strlen(cmd) + 2);
+	return (full_path);
+}
+
+static void	free_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	if (!array)
+		return ;
+	while (array[i])
+		free(array[i++]);
+	free(array);
+}
+
+static char	*resolve_command_path(char *cmd, char **envp)
+{
+	char	**paths;
+	char	*path_var;
+	char	*full_path;
+	int		i;
+
+	if (ft_strchr(cmd, '/')) // comando com caminho direto
+		return (ft_strdup(cmd));
+	path_var = ft_getenv(envp, "PATH=");
+	if (!path_var)
+		return (NULL);
+	paths = ft_split(path_var, ':');
+	if (!paths)
+		return (NULL);
+	i = 0;
+	while (paths[i])
+	{
+		full_path = build_full_path(paths[i], cmd);
+		if (access(full_path, X_OK) == 0)
+			return (free_array(paths), full_path);
+		free(full_path);
+		i++;
+	}
+	free_array(paths);
+	return (NULL);
+}
+
+/*
+static void	execute_command_child(t_command *cmd, t_mnsh *shell)
+{
 	execvp(cmd->command, cmd->args);// proibida
 	fprintf(stderr, "minishell: %s: command not found\n", cmd->command);
 	handle_exit_code(127);
 	free_ast_node(shell->ast_head);
 	free_shell(shell);
 	exit (handle_exit_code(-1));
-}
+}*/
 
 int	execute_and(t_ast_node *node, t_mnsh *shell)
 {

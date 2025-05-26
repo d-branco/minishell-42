@@ -10,11 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-/*
-Iterates through the "envp" array printing each line (string) of the enviroment
-variables to the standard output.*/
+#include "../../include/minishell.h"
 
 int	ft_env(char **av, char **envp)
 {
@@ -29,6 +25,10 @@ int	ft_env(char **av, char **envp)
 	}
 	i = -1;
 	while (envp[++i])
+	{
+		if (!ft_strchr(envp[i], '='))
+			continue ;
 		printf("%s\n", envp[i]);
+	}
 	return (handle_exit_code(0));
 }

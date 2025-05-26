@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 int	is_builtin(t_command *cmd)
 {
@@ -58,4 +58,19 @@ int	execute_builtin(t_command *cmd, t_mnsh *shell)
 	else if (ft_strncmp(cmd->command, "clear", ft_strlen(cmd->command)) == 0)
 		ft_clear();
 	return (0);
+}
+
+void	ft_free_env(char **envp)
+{
+	size_t	i;
+
+	if (!envp)
+		return ;
+	i = 0;
+	while (envp[i])
+	{
+		free(envp[i]);
+		i++;
+	}
+	free(envp);
 }

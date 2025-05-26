@@ -10,24 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 static int	add_var_env(char *new_var, int size, char ***envp);
-
-void	ft_free_env(char **envp)
-{
-	size_t	i;
-
-	if (!envp)
-		return ;
-	i = 0;
-	while (envp[i])
-	{
-		free(envp[i]);
-		i++;
-	}
-	free(envp);
-}
 
 char	**init_envp(char **envp)
 {
@@ -55,6 +40,23 @@ char	**init_envp(char **envp)
 	return (new_envp);
 }
 
+static bool	is_valid_num(char *str)
+{
+	if (!str || !*str)
+		return (false);
+	if (*str == '-')
+		str++;
+	if (*str == '+')
+		str++;
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return (false);
+		str++;
+	}
+	return (true);
+}
+
 void	handle_shlvl(t_mnsh *shell)
 {
 	char	*lvl;
@@ -62,19 +64,23 @@ void	handle_shlvl(t_mnsh *shell)
 	int		n;
 
 	lvl = ft_getenv(shell->envp, "SHLVL=");
-	if (lvl)
+	if (lvl && is_valid_num(lvl))
 	{
 		n = ft_atoi(lvl) + 1;
 		new_lvl = ft_itoa(n);
 		if (!new_lvl)
+			return (ft_putstr_fd("ERROR malloc!\n", 2), free(lvl), (void)0);
+		if (n > 999)
 		{
-			ft_putstr_fd("ERROR malloc!\n", 2);
-			free(lvl);
-			return ;
+			new_lvl = "1";
+			printf("minishell: warning: shell level (%d) too high, "
+				"resetting to 1\n", n);
 		}
+		else if (n < 0)
+			new_lvl = "0";
 		replace_add_var("SHLVL=", new_lvl, &shell->envp);
-		free(new_lvl);
 		free(lvl);
+		free(new_lvl);
 	}
 	else
 		replace_add_var("SHLVL=", "1", &shell->envp);
@@ -83,24 +89,29 @@ void	handle_shlvl(t_mnsh *shell)
 int	replace_add_var(char *var_name, char *value, char ***envp)
 {
 	char	*new_var;
+	char	*key;
 	int		i;
 
 	if (!*envp || !var_name || !value)
 		return (-1);
+	key = ft_substr(var_name, 0, ft_strchr(var_name, '=') - var_name);
+	if (!key)
+		return (-1);
 	new_var = ft_strjoin(var_name, value);
 	if (!new_var)
-		return (ft_putstr_fd("ERROR malloc!\n", 2), -1);
+		return (free(key), ft_putstr_fd("ERROR malloc!\n", 2), -1);
 	i = -1;
 	while ((*envp)[++i])
 	{
-		if (ft_strncmp((*envp)[i], var_name, ft_strlen(var_name)) == 0)
+		if (ft_strncmp((*envp)[i], key, ft_strlen(key)) == 0)
 		{
 			free((*envp)[i]);
 			(*envp)[i] = new_var;
+			free(key);
 			return (SUCCESS);
 		}
 	}
-	return (add_var_env(new_var, i, envp));
+	return (free(key), add_var_env(new_var, i, envp));
 }
 
 static int	add_var_env(char *new_var, int size, char ***envp)
@@ -122,6 +133,7 @@ static int	add_var_env(char *new_var, int size, char ***envp)
 	new_env[i] = ft_strdup(new_var);
 	new_env[i + 1] = NULL;
 	free((*envp));
+	free(new_var);
 	*envp = new_env;
 	return (SUCCESS);
 }

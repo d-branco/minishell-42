@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 void	remove_env_var(char ***envp, const char *var_name);
 
@@ -30,16 +30,16 @@ void	remove_env_var(char ***envp, const char *var_name)
 	while (i < count)
 	{
 		if (strncmp((*envp)[i], var_name, strlen(var_name)) == 0 &&
-			(*envp)[i][strlen(var_name)] == '=')
+			((*envp)[i][strlen(var_name)] == '='
+			|| (*envp)[i][strlen(var_name)] == '\0'))
 		{
-			//free((*envp)[i]);
 			i++;
 			continue ;
 		}
 		new_env[j++] = (*envp)[i++];
 	}
 	new_env[j] = NULL;
-	//free(*envp);
+	free(*envp);
 	*envp = new_env;
 }
 

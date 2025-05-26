@@ -10,7 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
+
+static void	free_exit_s(t_mnsh *shell)
+{
+	free_ast_node(shell->ast_head);
+	free_shell(shell);
+}
 
 static int	is_num(char *av)
 {
@@ -35,15 +41,13 @@ int	ft_exit(int ac, char **av, t_mnsh *shell)
 	printf("exit\n");
 	if (ac == 1)
 	{
-		free_ast_node(shell->ast_head);
-		free_shell(shell);
+		free_exit_s(shell);
 		exit(handle_exit_code(0));
 	}
 	if (ac >= 2 && !is_num(av[1]))
 	{
 		printf("minishell: exit: %s: numeric argument required\n", av[1]);
-		free_ast_node(shell->ast_head);
-		free_shell(shell);
+		free_exit_s(shell);
 		exit(handle_exit_code(2));
 	}
 	if (ac >= 2 && is_num(av[1]))
@@ -51,8 +55,7 @@ int	ft_exit(int ac, char **av, t_mnsh *shell)
 		if (ac == 2)
 		{
 			handle_exit_code(ft_atoi(av[1]));
-			free_ast_node(shell->ast_head);
-			free_shell(shell);
+			free_exit_s(shell);
 			exit(handle_exit_code(-1));
 		}
 		else
