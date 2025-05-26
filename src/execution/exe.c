@@ -324,7 +324,7 @@ static void	execute_command_child(t_command *cmd, t_mnsh *shell)
 		handle_exit_code(127);
 		free_ast_node(shell->ast_head);
 		free_shell(shell);
-		//exit (handle_exit_code(-1));
+		exit (handle_exit_code(-1));
 	}
 	execve(full_path, cmd->args, shell->envp);
 	//perror("minishell");
@@ -372,6 +372,7 @@ static char	*resolve_command_path(char *cmd, char **envp)
 	if (!path_var)
 		return (NULL);
 	paths = ft_split(path_var, ':');
+	free(path_var);
 	if (!paths)
 		return (NULL);
 	i = 0;
