@@ -6,28 +6,28 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:31:26 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/26 15:09:27 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:21:08 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-//char	*ft_strchr(const char *s, int c)
-//{
-//	int		j;
-//
-//	j = 0;
-//	while (s[j] != '\0')
-//	{
-//		if (s[j] == (char) c)
-//			return ((char *) &s[j]);
-//		j++;
-//	}
-//	if ((s[j] == '\0') && ((char) c == '\0'))
-//		return ((char *) &s[j]);
-//	else
-//		return (NULL);
-//}
+char	*gnl_strchr(const char *s, int c)
+{
+	int		j;
+
+	j = 0;
+	while (s[j] != '\0')
+	{
+		if (s[j] == (char) c)
+			return ((char *) &s[j]);
+		j++;
+	}
+	if ((s[j] == '\0') && ((char) c == '\0'))
+		return ((char *) &s[j]);
+	else
+		return (NULL);
+}
 
 // s1 freed
 char	*gnl_strjoin(char *s1, char const *s2)

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 09:20:57 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/01/28 15:51:52 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:21:29 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*write_to_mem(int fd, char *permanent_mem)
 	if (current_line == NULL)
 		return (NULL);
 	read_return = 1;
-	while (read_return > 0 && !ft_strchr(permanent_mem, '\n'))
+	while (read_return > 0 && !gnl_strchr(permanent_mem, '\n'))
 	{
 		read_return = read(fd, current_line, BUFFER_SIZE);
 		if (read_return == -1)
