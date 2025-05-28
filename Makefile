@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/05/26 13:35:22 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/05/27 13:25:44 by alde-alm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRCS		:=	\
 	src/execution/exe.c														\
 	src/execution/signal.c													\
 	src/parser/parser.c														\
+	src/parser/expander.c                                                   \
 	src/parser/lexer.c														\
 	src/parser/lexer-list.c													\
 	src/parser/lexer-tokenizer.c											\
@@ -45,6 +46,7 @@ SRCS		:=	\
 	src/parser/ast-redirect.c												\
 	src/utils/ft_isspace.c													\
 	src/utils/ft_malloc.c													\
+	src/utils/ft_strcmp.c                                                   \
 	src/builtins/cd.c														\
 	src/builtins/clear.c													\
 	src/builtins/echo.c														\

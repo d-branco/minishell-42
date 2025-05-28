@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/14 10:47:11 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/27 13:24:45 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@
 //minishell.c
 typedef struct s_mnsh
 {
+	int					last_exit_code;
 	char				*prompt;
 	char				**envp;
 	struct s_ast_node	*ast_head;
@@ -155,6 +156,8 @@ int		execute_ast(t_ast_node *node, t_mnsh *shell);
 int		ft_isspace(char chr);
 //utils/ft_malloc.c
 void	*ft_malloc(int total_size);
+//utils/ft_strcmp.c
+int		ft_strcmp(const char *s1, const char *s2);
 //execution/signal.c
 void	ft_setup_interactive_signals(void);
 void	ft_setup_fork_signals(void);

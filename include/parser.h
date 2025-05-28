@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:07 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/04/18 14:27:35 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/27 13:12:54 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ int			is_valid_token_for_argument(t_token *token);
 
 //parser/parser.c
 int			parser(char *input, t_mnsh *shell);
+//parser/expander.c
+void		expand_arguments(t_command *cmd, t_mnsh *shell);
 //parser/lexer.c
 int			parse_input_into_token_list(t_token **list, char *input);
 int			validate_syntax(char *str);

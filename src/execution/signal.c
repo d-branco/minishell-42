@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 static void	ft_prompt_handler(int signo);
 static void	ft_exec_handler(int signo);

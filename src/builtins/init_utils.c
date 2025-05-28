@@ -121,12 +121,7 @@ static int	add_var_env(char *new_var, int size, char ***envp)
 
 	if (!new_var || !envp || !*envp)
 		return (-1);
-	new_env = malloc((size + 2) * sizeof(char *));
-	if (!new_env)
-	{
-		free(new_var);
-		return (ft_putstr_fd("ERROR malloc!\n", 2), -1);
-	}
+	new_env = ft_malloc((size + 2) * sizeof(char *));
 	i = -1;
 	while ((*envp)[++i])
 		new_env[i] = (*envp)[i];

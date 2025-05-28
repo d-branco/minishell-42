@@ -26,7 +26,7 @@ void	remove_env_var(char ***envp, const char *var_name)
 	count = 0;
 	while ((*envp)[count])
 		count++;
-	new_env = malloc(sizeof(char *) * count);
+	new_env = ft_malloc(sizeof(char *) * count);
 	while (i < count)
 	{
 		if (strncmp((*envp)[i], var_name, strlen(var_name)) == 0 &&
@@ -57,20 +57,3 @@ int	ft_unset(char **av, char ***envp)
 	}
 	return (handle_exit_code(0));
 }
-/*
-int	main(int ac, char **av, char **envp)
-{
-	//return (ft_unset(av, &envp));
-
-	printf("Antes do unset:\n");
-	for (int i = 0; envp[i]; i++)
-		printf("%s -- %d\n", envp[i], i);
-	int result = ft_unset(av, &envp);
-	printf("Depois do unset:\n");
-	for (int i = 0; envp[i]; i++)
-		printf("%s -- %d\n", envp[i], i);
-	//for (int i = 0; envp[i]; i++)
-	//	free(envp[i]);
-	//free(envp);
-	return result;
-}*/

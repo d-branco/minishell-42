@@ -42,21 +42,21 @@ int	is_builtin(t_command *cmd)
 int	execute_builtin(t_command *cmd, t_mnsh *shell)
 {
 	if (strncmp(cmd->command, "cd", ft_strlen(cmd->command)) == 0)
-		ft_cd(cmd->argc, cmd->args, shell->envp);
+		return (ft_cd(cmd->argc, cmd->args, shell->envp));
 	else if (ft_strncmp(cmd->command, "echo", ft_strlen(cmd->command)) == 0)
-		ft_echo(cmd->args);
+		return (ft_echo(cmd->args));
 	else if (ft_strncmp(cmd->command, "env", ft_strlen(cmd->command)) == 0)
-		ft_env(cmd->args, shell->envp);
+		return (ft_env(cmd->args, shell->envp));
 	else if (ft_strncmp(cmd->command, "exit", ft_strlen(cmd->command)) == 0)
-		ft_exit(cmd->argc, cmd->args, shell);
+		return (ft_exit(cmd->argc, cmd->args, shell));
 	else if (ft_strncmp(cmd->command, "export", ft_strlen(cmd->command)) == 0)
-		ft_export(cmd->args, &shell->envp);
+		return (ft_export(cmd->args, &shell->envp));
 	else if (ft_strncmp(cmd->command, "pwd", ft_strlen(cmd->command)) == 0)
-		ft_pwd();
+		return (ft_pwd());
 	else if (ft_strncmp(cmd->command, "unset", ft_strlen(cmd->command)) == 0)
-		ft_unset(cmd->args, &shell->envp);
+		return (ft_unset(cmd->args, &shell->envp));
 	else if (ft_strncmp(cmd->command, "clear", ft_strlen(cmd->command)) == 0)
-		ft_clear();
+		return (ft_clear());
 	return (0);
 }
 

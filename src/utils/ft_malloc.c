@@ -20,6 +20,8 @@ void	*ft_malloc(int total_size)
 {
 	void	*ptr;
 
+	if (total_size == 0)
+		return (NULL);
 	ptr = (void *) malloc(total_size);
 	if (ptr == NULL)
 	{

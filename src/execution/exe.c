@@ -6,11 +6,12 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/26 13:34:30 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/27 13:01:54 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdlib.h>
 
 int			execute_command(t_ast_node *node, t_mnsh *shell);
 int			execute_and(t_ast_node *node, t_mnsh *shell);
@@ -294,6 +295,10 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 	cmd = (t_command *)node->content;
 	if (!cmd || !cmd->command)
 		return (1);
+	expand_arguments(cmd, shell);
+	cmd->command = cmd->args[0];
+	for (int i = 0; cmd->args[i]; i++)
+		printf("DEBUG 9: arg[%d]: [%s]\n", i, cmd->args[i]);
 	if (is_builtin(cmd))
 	{
 		if (DEBUG)
@@ -325,6 +330,8 @@ static void	execute_command_child(t_command *cmd, t_mnsh *shell)
 		free_ast_node(shell->ast_head);
 		free_shell(shell);
 		exit (handle_exit_code(-1));
+		//exit(handle_exit_code(127));
+		//exit(127);
 	}
 	execve(full_path, cmd->args, shell->envp);
 	//perror("minishell");
@@ -332,6 +339,8 @@ static void	execute_command_child(t_command *cmd, t_mnsh *shell)
 	free_ast_node(shell->ast_head);
 	free_shell(shell);
 	exit (handle_exit_code(-1));
+	//exit(handle_exit_code(126));
+	//exit(126);
 }
 
 static char	*build_full_path(char *path, char *cmd)
