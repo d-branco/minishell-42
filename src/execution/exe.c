@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/26 16:32:28 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:15:03 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,9 @@ int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
 		close(pipefd[0]);
 		read_heredoc_input(pipefd[1], delimiter);
 		close(pipefd[1]);
+		close(original_stdin);
+		free_ast_node(shell->ast_head);
 		free_shell(shell);
-		//free_ast_node(shell->ast_head);
 		exit(0);
 	}
 	else
