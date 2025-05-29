@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/05/26 16:20:19 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/05/29 12:47:49 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,6 +86,12 @@ supp_doc:
 		Memcheck:Leak\n\
 		...\n\
 		fun:readline\n\
+	}\n\
+	{\n\
+		leak add_history\n\
+		Memcheck:Leak\n\
+		...\n\
+		fun:add_history\n\
 	}\n\
 	" > .readline.txt
 

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/24 17:28:43 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/29 12:49:12 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_check_input(input))
 			add_history(input);
 		if (input[0])
-				handle_exit_code(parser(input, shell));
+			handle_exit_code(parser(input, shell));
 		free(input);
 		free(shell->prompt);
 		shell->prompt = init_prompt(handle_exit_code(-1));
