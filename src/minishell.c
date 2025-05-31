@@ -23,6 +23,7 @@ int	main(int argc, char **argv, char **envp)
 
 	shell = ft_malloc(sizeof(t_mnsh) * 1);
 	init_shell(shell, envp);
+	//export_var("OLDPWD", &shell->envp);
 	if (DEBUG)
 	{
 		loop = -1;
@@ -43,6 +44,7 @@ int	main(int argc, char **argv, char **envp)
 	loop = 42; // to be removed
 	while (loop)
 	{
+		shell->last_exit_code = handle_exit_code(-1);
 		input = readline(shell->prompt);
 		if (input == NULL)
 		{

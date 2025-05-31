@@ -61,7 +61,7 @@ static void	ft_setenv(char **envp, const char *var_name, const char *cwd)
 	}
 }
 
-int	ft_cd(int ac, char **av, char **envp)
+int	ft_cd(int ac, char **av, t_mnsh *shell)
 {
 	char	cwd[PATH_MAX];
 	char	*path;
@@ -71,9 +71,10 @@ int	ft_cd(int ac, char **av, char **envp)
 			handle_exit_code(1));
 	if (!getcwd(cwd, sizeof(cwd)))
 		return (handle_exit_code(1));
+	shell->export_status = 1;
 	if (ac == 1)
 	{
-		path = ft_getenv(envp, "HOME=");
+		path = ft_getenv(shell->envp, "HOME=");
 		if (!path)
 			return (printf("minishell: cd: HOME not set\n"),
 				handle_exit_code(1));
@@ -82,8 +83,13 @@ int	ft_cd(int ac, char **av, char **envp)
 		path = av[1];
 	if (chdir(path) != 0)
 		return (handle_exit_code(error_cd(path)));
-	ft_setenv(envp, "OLDPWD=", cwd);
+	//new = get_env_value("PWD", envp);
+	//printf("NEW: %s\n", new);
+	if (ft_getenv(shell->envp, "PWD="))
+		ft_setenv(shell->envp, "OLDPWD=", get_env_value("PWD", shell->envp));
+	else
+		ft_setenv(shell->envp, "OLDPWD", get_env_value("PWD", shell->envp));
 	if (getcwd(cwd, sizeof(cwd)))
-		ft_setenv(envp, "PWD=", cwd);
+		ft_setenv(shell->envp, "PWD=", cwd);
 	return (handle_exit_code(0));
 }

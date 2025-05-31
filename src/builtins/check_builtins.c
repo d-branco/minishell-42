@@ -42,7 +42,7 @@ int	is_builtin(t_command *cmd)
 int	execute_builtin(t_command *cmd, t_mnsh *shell)
 {
 	if (strncmp(cmd->command, "cd", ft_strlen(cmd->command)) == 0)
-		return (ft_cd(cmd->argc, cmd->args, shell->envp));
+		return (ft_cd(cmd->argc, cmd->args, shell));
 	else if (ft_strncmp(cmd->command, "echo", ft_strlen(cmd->command)) == 0)
 		return (ft_echo(cmd->args));
 	else if (ft_strncmp(cmd->command, "env", ft_strlen(cmd->command)) == 0)

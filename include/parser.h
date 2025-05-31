@@ -91,6 +91,7 @@ int			is_valid_token_for_argument(t_token *token);
 int			parser(char *input, t_mnsh *shell);
 //parser/expander.c
 void		expand_arguments(t_command *cmd, t_mnsh *shell);
+char		*get_env_value(const char *name, char **envp);
 //parser/lexer.c
 int			parse_input_into_token_list(t_token **list, char *input);
 int			validate_syntax(char *str);

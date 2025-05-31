@@ -30,7 +30,7 @@ static int	is_valid_arg(const char *av)
 	return (1);
 }
 
-static int	export_var(const char *av, char ***envp)
+int	export_var(const char *av, char ***envp)
 {
 	char	*var_name;
 	char	*value;

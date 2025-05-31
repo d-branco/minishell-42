@@ -297,8 +297,8 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 		return (1);
 	expand_arguments(cmd, shell);
 	cmd->command = cmd->args[0];
-	for (int i = 0; cmd->args[i]; i++)
-		printf("DEBUG 9: arg[%d]: [%s]\n", i, cmd->args[i]);
+	//for (int i = 0; cmd->args[i]; i++)
+	//	printf("DEBUG 9: arg[%d]: [%s]\n", i, cmd->args[i]);
 	if (is_builtin(cmd))
 	{
 		if (DEBUG)
@@ -330,8 +330,6 @@ static void	execute_command_child(t_command *cmd, t_mnsh *shell)
 		free_ast_node(shell->ast_head);
 		free_shell(shell);
 		exit (handle_exit_code(-1));
-		//exit(handle_exit_code(127));
-		//exit(127);
 	}
 	execve(full_path, cmd->args, shell->envp);
 	//perror("minishell");
@@ -339,8 +337,6 @@ static void	execute_command_child(t_command *cmd, t_mnsh *shell)
 	free_ast_node(shell->ast_head);
 	free_shell(shell);
 	exit (handle_exit_code(-1));
-	//exit(handle_exit_code(126));
-	//exit(126);
 }
 
 static char	*build_full_path(char *path, char *cmd)

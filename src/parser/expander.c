@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-static char	*get_env_value(const char *name, char **envp)
+char	*get_env_value(const char *name, char **envp)
 {
 	int		name_len;
 	char	*equal_posit;
@@ -67,24 +67,21 @@ static char	*expand_argument(const char *arg, t_mnsh *shell)
 
 	i = 0;
 	res = ft_strdup("");
-	printf("DEBUG 1: arg: %s\n", arg);
+	//printf("DEBUG 1: arg: %s\n", arg);
 	while (arg[i])
 	{
 		if (arg[i] == '\'' || arg[i] == '"')
 		{
 			quote = arg[i++];
-			printf("DEBUG 2: quote: %c\n", quote);
 			while (arg[i] && arg[i] != quote)
 			{
 				if (quote == '"' && arg[i] == '$')
 				{
 					var_name = get_var_name(&arg[i + 1], &var_len);
-					printf("DEBUG 3: var_name: %s\n", var_name);
 					if (ft_strcmp(var_name, "?") == 0)
 						var_value = ft_itoa(shell->last_exit_code);
 					else
 						var_value = ft_strdup(get_env_value(var_name, shell->envp));
-					printf("DEBUG 4: var_value: %s\n", var_value);
 					append_and_free(&res, var_value);
 					free(var_name);
 					i += var_len + 1;
@@ -101,12 +98,10 @@ static char	*expand_argument(const char *arg, t_mnsh *shell)
 		else if (arg[i] == '$')
 		{
 			var_name = get_var_name(&arg[i + 1], &var_len);
-			printf("DEBUG 5: var_name: %s\n", var_name);
 			if (ft_strcmp(var_name, "?") == 0)
 				var_value = ft_itoa(shell->last_exit_code);
 			else
 				var_value = ft_strdup(get_env_value(var_name, shell->envp));
-			printf("DEBUG 6: var_value: %s\n", var_value);
 			append_and_free(&res, var_value);
 			free(var_name);
 			i += var_len + 1;
@@ -117,7 +112,7 @@ static char	*expand_argument(const char *arg, t_mnsh *shell)
 			append_and_free(&res, ft_strdup(tmp));
 		}
 	}
-	printf("DEBUG: 7: res: %s\n", res);
+//	printf("DEBUG: 2: res: %s\n", res);
 	return (res);
 }
 
@@ -132,7 +127,7 @@ void	expand_arguments(t_command *cmd, t_mnsh *shell)
 		expanded = expand_argument(cmd->args[i], shell);
 		free(cmd->args[i]);
 		cmd->args[i] = expanded;
-		printf("DEBUG 8: cmd->arg[%d]: %s\n", i, cmd->args[i]);
+//		printf("DEBUG 3 cmd->arg[%d]: %s\n", i, cmd->args[i]);
 		i++;
 	}
 }
