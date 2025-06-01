@@ -23,7 +23,7 @@ int	ft_env(char **av, char **envp)
 		printf("env: '%s': No such file or directory\n", av[1]);
 		return (handle_exit_code(UNKNOWN_COMMAND));
 	}
-	i = -1;
+	i = -1;	
 	while (envp[++i])
 	{
 		if (!ft_strchr(envp[i], '='))

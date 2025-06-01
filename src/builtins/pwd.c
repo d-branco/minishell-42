@@ -24,8 +24,3 @@ int	ft_pwd(void)
 	else
 		return (handle_exit_code(1));
 }
-/*
-int	main(void)
-{
-	return (ft_pwd());
-}*/

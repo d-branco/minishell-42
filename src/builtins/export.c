@@ -115,23 +115,31 @@ static void	ft_sort_env_tabs(char **tabs)
 	}
 }
 
-int	ft_export(char **av, char ***envp)
+int	ft_export(char **av, t_mnsh *shell)
 {
-	int	i;
-	int	status;
+	int		i;
+	int		status;
+	char	cwd[PATH_MAX];
 
 	status = 0;
 	if (!av[1])
-		return (print_sort_env(*envp), handle_exit_code(0));
+		return (print_sort_env(shell->envp), handle_exit_code(0));
 	i = 1;
 	while (av[i])
 	{
-		if (!is_valid_arg(av[i]))
+		if (strcmp(av[i], "PWD") == 0 && shell->export_status == 1)
+		{
+			replace_add_var("PWD=", getcwd(cwd, sizeof(cwd)), &shell->envp);
+			shell->export_status = 0;
+		}
+		//if (strcmp(av[i], "OLDPWD") == 0 && shell->export_status == 1)
+		//	replace_add_var("OLDPWD=", getcwd(cwd, sizeof(cwd)), &shell->envp);
+		else if (!is_valid_arg(av[i]))
 		{
 			printf("minishell: export: '%s': not a valid identifier\n", av[i]);
 			status = 1;
 		}
-		else if (export_var(av[i], envp) == -1)
+		else if (export_var(av[i], &shell->envp) == -1)
 			status = 1;
 		i++;
 	}

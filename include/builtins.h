@@ -34,7 +34,7 @@ int		ft_pwd(void);
 int		ft_unset(char **av, char ***envp);
 int		ft_cd(int ac, char **av, t_mnsh *shell);
 int		ft_exit(int ac, char **av, t_mnsh *shell);
-int		ft_export(char **av, char ***envp);
+int		ft_export(char **av, t_mnsh *shell);
 int		export_var(const char *av, char ***envp);
 int		ft_clear(void);
 int		replace_add_var(char *var_name, char *value, char ***envp);
