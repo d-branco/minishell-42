@@ -48,7 +48,6 @@ SRCS		:=	\
 	src/utils/ft_malloc.c													\
 	src/utils/ft_strcmp.c                                                   \
 	src/builtins/cd.c														\
-	src/builtins/clear.c													\
 	src/builtins/echo.c														\
 	src/builtins/env.c														\
 	src/builtins/exit.c														\
@@ -89,6 +88,12 @@ supp_doc:
 		Memcheck:Leak\n\
 		...\n\
 		fun:readline\n\
+	}\n\
+	{\n\
+		leak add_history\n\
+		Memcheck:Leak\n\
+		...\n\
+		fun:add_history\n\
 	}\n\
 	" > .readline.txt
 

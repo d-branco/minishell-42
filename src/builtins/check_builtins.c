@@ -14,7 +14,7 @@
 
 int	is_builtin(t_command *cmd)
 {
-	const char	*builtins[9];
+	const char	*builtins[8];
 	int			i;
 
 	builtins[0] = "cd";
@@ -24,10 +24,9 @@ int	is_builtin(t_command *cmd)
 	builtins[4] = "export";
 	builtins[5] = "pwd";
 	builtins[6] = "unset";
-	builtins[7] = "clear";
-	builtins[8] = NULL;
+	builtins[7] = NULL;
 	i = -1;
-	while (++i < 8)
+	while (++i < 7)
 	{
 		if (ft_strlen(builtins[i]) == ft_strlen(cmd->command))
 		{
@@ -55,8 +54,6 @@ int	execute_builtin(t_command *cmd, t_mnsh *shell)
 		return (ft_pwd());
 	else if (ft_strncmp(cmd->command, "unset", ft_strlen(cmd->command)) == 0)
 		return (ft_unset(cmd->args, &shell->envp));
-	else if (ft_strncmp(cmd->command, "clear", ft_strlen(cmd->command)) == 0)
-		return (ft_clear());
 	return (0);
 }
 

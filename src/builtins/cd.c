@@ -46,15 +46,14 @@ char	*ft_getenv(char **envp, char *var_name)
 	return (NULL);
 }
 
-static void	ft_setenv(char **envp, const char *var_name, const char *cwd)
+static void	ft_setenv(char **envp, const char *var_name, const char *str)
 {
 	while (*envp)
 	{
 		if (ft_strncmp(*envp, var_name, ft_strlen(var_name)) == 0)
 		{
 			free(*envp);
-			*envp = ft_strjoin(var_name, cwd);
-			printf("var_name: %s / env: %s\n", var_name, *envp);
+			*envp = ft_strjoin(var_name, str);
 			if (!envp)
 				return ;
 		}
@@ -84,22 +83,11 @@ int	ft_cd(int ac, char **av, t_mnsh *shell)
 		path = av[1];
 	if (chdir(path) != 0 && ft_strcmp(path,"") != 0)
 		return (handle_exit_code(error_cd(path)));
-	//new = get_env_value("PWD", envp);
-	//printf("NEW: %s\n", new);
 	if (ft_getenv(shell->envp, "PWD="))
-	{
-		printf("Estou aqui 1\n");
-		ft_setenv(shell->envp, "OLDPWD=", get_env_value("PWD", shell->envp));
-	}
+		replace_add_var("OLDPWD=", ft_getenv(shell->envp, "PWD="), &shell->envp);
 	else
-	{
-		printf("Estou aqui 2\n");
 		ft_setenv(shell->envp, "OLDPWD", get_env_value("PWD", shell->envp));
-	}
 	if (getcwd(cwd, sizeof(cwd)))
-	{
-		printf("Estou aqui 3\n");
 		ft_setenv(shell->envp, "PWD=", cwd);
-	}
 	return (handle_exit_code(0));
 }
