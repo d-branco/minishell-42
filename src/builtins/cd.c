@@ -37,11 +37,13 @@ static int	error_cd(const char *path)
 
 char	*ft_getenv(char **envp, char *var_name)
 {
+	int	len;
+
+	len = ft_strlen(var_name);
 	while (*envp)
 	{
-		if (ft_strncmp(*envp, var_name, ft_strlen(var_name)) == 0)
-			//return (ft_strdup(*envp + ft_strlen(var_name)));
-			return (*envp + ft_strlen(var_name) + 1);
+		if (ft_strncmp(*envp, var_name, len) == 0)
+			return (ft_strdup(*envp + len));
 		envp++;
 	}
 	return (NULL);
@@ -67,13 +69,15 @@ int	ft_cd(int ac, char **av, t_mnsh *shell)
 {
 	char	cwd[PATH_MAX];
 	char	*path;
+	char	*old_pwd;
+	char	*new_pwd;
+	char	*fallback;
 
 	if (ac > 2)
 		return (printf("minishell: cd: too many arguments\n"),
 			handle_exit_code(1));
 	if (!getcwd(cwd, sizeof(cwd)))
 		return (handle_exit_code(1));
-	shell->export_status = 1;
 	if (ac == 1)
 	{
 		path = ft_getenv(shell->envp, "HOME=");
@@ -82,25 +86,28 @@ int	ft_cd(int ac, char **av, t_mnsh *shell)
 				handle_exit_code(1));
 	}
 	else
-		path = av[1];
-	if (chdir(path) != 0 && ft_strcmp(path,"") != 0)
-		return (handle_exit_code(error_cd(path)));
-	
-	if (ft_getenv(shell->envp, "PWD="))
+		path = ft_strdup(av[1]);
+	if (chdir(path) != 0 && ft_strcmp(path, "") != 0)
+		return (free(path), handle_exit_code(error_cd(path)));
+	old_pwd = ft_getenv(shell->envp, "PWD=");
+	if (old_pwd)
 	{
-		printf("AQUI 1\n");
-		replace_add_var("OLDPWD=", ft_getenv(shell->envp, "PWD="), &shell->envp);
+		replace_add_var("OLDPWD=", old_pwd, &shell->envp);
+		free(old_pwd);
 	}
 	else
 	{
-		printf("AQUI 2\n");
-		ft_setenv(shell->envp, "OLDPWD", get_env_value("PWD", shell->envp));
+		fallback = get_env_value("PWD", shell->envp);
+		ft_setenv(shell->envp, "OLDPWD", fallback);
+		free(fallback);
 	}
-	if (getcwd(cwd, sizeof(cwd)) && ft_getenv(shell->envp, "PWD"))
+	if (getcwd(cwd, sizeof(cwd)))
 	{
-		printf("AQUI 3\n");
-		//ft_setenv(shell->envp, "PWD=", cwd);
+		new_pwd = ft_getenv(shell->envp, "PWD");
+		if (new_pwd)
+			free(new_pwd);
 		replace_add_var("PWD=", cwd, &shell->envp);
 	}
-	return (handle_exit_code(0));
+	return (free(path), handle_exit_code(0));
 }
+

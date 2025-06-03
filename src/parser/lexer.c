@@ -36,8 +36,57 @@ int	parse_input_into_token_list(t_token **list, char *input)
 	return (handle_exit_code(-1));
 }
 
+int	validate_syntax(char *str)
+{
+	int	i;
+	int	n_parenthese;
+	int	in_s_quote;
+	int	in_d_quote;
+
+	i = 0;
+	in_s_quote = 0;
+	in_d_quote = 0;
+
+	while (str[i])
+	{
+		if ((i == 0) && (str[i] == '&') && (str[i + 1] != '&'))
+			return (SYNTAX_ERROR);
+		if (i >= 1)
+		{
+			if ((str[i - 1] != '&') && (str[i] == '&') && (str[i + 1] != '&'))
+				return (SYNTAX_ERROR);
+			if ((str[i - 1] == '&') && (str[i] == '&') && (str[i + 1] == '&'))
+				return (SYNTAX_ERROR);
+			if ((str[i - 1] == '|') && (str[i] == '|') && (str[i + 1] == '|'))
+				return (SYNTAX_ERROR);
+		}
+		i++;
+	}
+
+	i = 0;
+	n_parenthese = 0;
+	while (str[i])
+	{
+		if (!in_s_quote && !in_d_quote && str[i] == '(')
+			n_parenthese++;
+		else if (!in_s_quote && !in_d_quote && str[i] == ')')
+			n_parenthese--;
+		else if (!in_d_quote && str[i] == '\'')
+			in_s_quote = !in_s_quote;
+		else if (!in_s_quote && str[i] == '\"')
+			in_d_quote = !in_d_quote;
+		if (n_parenthese < 0)
+			return (SYNTAX_ERROR);
+		i++;
+	}
+	if (n_parenthese != 0 || in_s_quote || in_d_quote)
+		return (SYNTAX_ERROR);
+	return (1);
+}
+
 // Returns -1 if ok
 // Returns 2 if there's a syntax error
+/*
 int	validate_syntax(char *str)
 {
 	int	i;
@@ -83,7 +132,7 @@ int	validate_syntax(char *str)
 		return (SYNTAX_ERROR);
 	return (1);
 }
-/*
+
 void	get_token(t_token **list, char *input, int *pos)
 {
 	char		*tkn_str;
@@ -160,6 +209,34 @@ void	handle_quoted_string(char *input, int *pos, char **str, char quote_type)
 
 	start = *pos;
 	(*pos)++;
+
+	while (input[*pos])
+	{
+		if (input[*pos] == quote_type)
+		{
+			(*pos)++;
+			break ;
+		}
+		(*pos)++;
+	}
+
+	if (input[*pos - 1] != quote_type)
+	{
+		handle_exit_code(SYNTAX_ERROR);
+		return ;
+	}
+
+	// Inclui as aspas externas (desde start até pos - 1)
+	*str = ft_substr(input, start, *pos - start);
+}
+
+/*
+void	handle_quoted_string(char *input, int *pos, char **str, char quote_type)
+{
+	int	start;
+
+	start = *pos;
+	(*pos)++;
 	while (input[*pos])
 	{
 		if (input[*pos] == quote_type)
@@ -175,4 +252,4 @@ void	handle_quoted_string(char *input, int *pos, char **str, char quote_type)
 		return ;
 	}
 	*str = ft_substr(input, start, *pos - start);
-}
+}*/
