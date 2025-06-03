@@ -119,7 +119,6 @@ int	ft_export(char **av, t_mnsh *shell)
 {
 	int		i;
 	int		status;
-	char	cwd[PATH_MAX];
 
 	status = 0;
 	if (!av[1])
@@ -127,14 +126,7 @@ int	ft_export(char **av, t_mnsh *shell)
 	i = 1;
 	while (av[i])
 	{
-		if (strcmp(av[i], "PWD") == 0 && shell->export_status == 1)
-		{
-			replace_add_var("PWD=", getcwd(cwd, sizeof(cwd)), &shell->envp);
-			shell->export_status = 0;
-		}
-		//if (strcmp(av[i], "OLDPWD") == 0 && shell->export_status == 1)
-		//	replace_add_var("OLDPWD=", getcwd(cwd, sizeof(cwd)), &shell->envp);
-		else if (!is_valid_arg(av[i]))
+		if (!is_valid_arg(av[i]))
 		{
 			printf("minishell: export: '%s': not a valid identifier\n", av[i]);
 			status = 1;

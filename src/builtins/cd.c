@@ -40,7 +40,8 @@ char	*ft_getenv(char **envp, char *var_name)
 	while (*envp)
 	{
 		if (ft_strncmp(*envp, var_name, ft_strlen(var_name)) == 0)
-			return (ft_strdup(*envp + ft_strlen(var_name)));
+			//return (ft_strdup(*envp + ft_strlen(var_name)));
+			return (*envp + ft_strlen(var_name) + 1);
 		envp++;
 	}
 	return (NULL);
@@ -52,6 +53,7 @@ static void	ft_setenv(char **envp, const char *var_name, const char *str)
 	{
 		if (ft_strncmp(*envp, var_name, ft_strlen(var_name)) == 0)
 		{
+			printf("AQUI 4\n");
 			free(*envp);
 			*envp = ft_strjoin(var_name, str);
 			if (!envp)
@@ -83,11 +85,22 @@ int	ft_cd(int ac, char **av, t_mnsh *shell)
 		path = av[1];
 	if (chdir(path) != 0 && ft_strcmp(path,"") != 0)
 		return (handle_exit_code(error_cd(path)));
+	
 	if (ft_getenv(shell->envp, "PWD="))
+	{
+		printf("AQUI 1\n");
 		replace_add_var("OLDPWD=", ft_getenv(shell->envp, "PWD="), &shell->envp);
+	}
 	else
+	{
+		printf("AQUI 2\n");
 		ft_setenv(shell->envp, "OLDPWD", get_env_value("PWD", shell->envp));
-	if (getcwd(cwd, sizeof(cwd)))
-		ft_setenv(shell->envp, "PWD=", cwd);
+	}
+	if (getcwd(cwd, sizeof(cwd)) && ft_getenv(shell->envp, "PWD"))
+	{
+		printf("AQUI 3\n");
+		//ft_setenv(shell->envp, "PWD=", cwd);
+		replace_add_var("PWD=", cwd, &shell->envp);
+	}
 	return (handle_exit_code(0));
 }
