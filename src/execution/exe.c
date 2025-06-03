@@ -140,8 +140,9 @@ void	read_heredoc_input(int fd, char *delimiter)
 	delim_len = strlen(delimiter);
 	while (TRUE)
 	{
-		write(STDOUT_FILENO, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
+		//write(STDOUT_FILENO, "> ", 2);
+		//line = get_next_line(STDIN_FILENO);
+		line = readline("> ");
 		if (!line)
 			break ;
 		if (ft_strncmp(line, delimiter, delim_len) == 0
@@ -151,6 +152,7 @@ void	read_heredoc_input(int fd, char *delimiter)
 			break ;
 		}
 		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
 		//write(STDIN_FILENO, line, ft_strlen(line));
 		free(line);
 	}
