@@ -12,6 +12,15 @@
 
 #include "../../include/minishell.h"
 
+static int	is_var_to_remove(const char *env_var, const char *var_name)
+{
+	size_t	len;
+
+	len = strlen(var_name);
+	return (strncmp(env_var, var_name, len) == 0
+		&& (env_var[len] == '=' || env_var[len] == '\0'));
+}
+
 static void	remove_env_var(char ***envp, const char *var_name)
 {
 	int		count;
@@ -27,10 +36,9 @@ static void	remove_env_var(char ***envp, const char *var_name)
 	new_env = ft_malloc(sizeof(char *) * count);
 	while (i < count)
 	{
-		if (strncmp((*envp)[i], var_name, strlen(var_name)) == 0 &&
-			((*envp)[i][strlen(var_name)] == '='
-			|| (*envp)[i][strlen(var_name)] == '\0'))
+		if (is_var_to_remove((*envp)[i], var_name))
 		{
+			free((*envp)[i]);
 			i++;
 			continue ;
 		}

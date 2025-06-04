@@ -103,12 +103,13 @@ int	replace_add_var(char *var_name, char *value, char ***envp)
 	i = -1;
 	while ((*envp)[++i])
 	{
-		if (ft_strncmp((*envp)[i], key, ft_strlen(key)) == 0)
+		if (ft_strncmp((*envp)[i], key, ft_strlen(key)) == 0
+			&& ((*envp)[i][ft_strlen(key)] == '='
+				|| (*envp)[i][ft_strlen(key)] == '\0'))
 		{
 			free((*envp)[i]);
 			(*envp)[i] = new_var;
-			free(key);
-			return (SUCCESS);
+			return (free(key), SUCCESS);
 		}
 	}
 	return (free(key), add_var_env(new_var, i, envp));

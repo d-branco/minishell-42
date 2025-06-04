@@ -61,65 +61,7 @@ static void	append_and_free(char **dst, char *src)
 	*dst = tmp;
 	free(src);
 }
-/*
-static char	*expand_argument(const char *arg, t_mnsh *shell)
-{
-	int		i;
-	int		var_len;
-	char	*res;
-	char	*var_name;
-	char	*var_value;
-	char	quote;
 
-	i = 0;
-	res = ft_strdup("");
-	while (arg[i])
-	{
-		if (arg[i] == '\'' || arg[i] == '"')
-		{
-			quote = arg[i++];
-			while (arg[i] && arg[i] != quote)
-			{
-				if (quote == '"' && arg[i] == '$')
-				{
-					var_name = get_var_name(&arg[i + 1], &var_len);
-					if (ft_strcmp(var_name, "?") == 0)
-						var_value = ft_itoa(shell->last_exit_code);
-					else
-						var_value = ft_strdup(get_env_value(var_name, shell->envp));
-					append_and_free(&res, var_value);
-					free(var_name);
-					i += var_len + 1;
-				}
-				else
-				{
-					char tmp[2] = {arg[i++], 0};
-					append_and_free(&res, ft_strdup(tmp));
-				}
-			}
-			if (arg[i] == quote)
-				i++;
-		}
-		else if (arg[i] == '$')
-		{
-			var_name = get_var_name(&arg[i + 1], &var_len);
-			if (ft_strcmp(var_name, "?") == 0)
-				var_value = ft_itoa(shell->last_exit_code);
-			else
-				var_value = ft_strdup(get_env_value(var_name, shell->envp));
-			append_and_free(&res, var_value);
-			free(var_name);
-			i += var_len + 1;
-		}
-		else
-		{
-			char tmp[2] = {arg[i++], 0};
-			append_and_free(&res, ft_strdup(tmp));
-		}
-	}
-	return (res);
-}
-*/
 static char	*expand_argument(const char *arg, t_mnsh *shell)
 {
 	int		i;
