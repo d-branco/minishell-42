@@ -12,9 +12,7 @@
 
 #include "../../include/minishell.h"
 
-void	remove_env_var(char ***envp, const char *var_name);
-
-void	remove_env_var(char ***envp, const char *var_name)
+static void	remove_env_var(char ***envp, const char *var_name)
 {
 	int		count;
 	int		i;

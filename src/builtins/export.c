@@ -59,10 +59,28 @@ int	export_var(const char *av, char ***envp)
 	return (free(var_name), free(value), 0);
 }
 
+static void	print_export_format(char *env_var)
+{
+	char	*equal_posit;
+
+	ft_putstr_fd("declare -x ", 1);
+	equal_posit = ft_strchr(env_var, '=');
+	if (equal_posit)
+	{
+		*equal_posit = '\0';
+		printf("%s=\"%s\"\n", env_var, equal_posit + 1);
+		*equal_posit = '=';
+	}
+	else
+	{
+		ft_putstr_fd(env_var, 1);
+		ft_putchar_fd('\n', 1);
+	}
+}
+
 static void	print_sort_env(char **envp)
 {
 	char	**env_copy;
-	char	*equal_posit;
 	int		i;
 
 	env_copy = init_envp(envp);
@@ -71,21 +89,7 @@ static void	print_sort_env(char **envp)
 	ft_sort_env_tabs(env_copy);
 	i = -1;
 	while (env_copy[++i])
-	{
-		ft_putstr_fd("declare -x ", 1);
-		equal_posit = ft_strchr(env_copy[i], '=');
-		if (equal_posit)
-		{
-			*equal_posit = '\0';
-			printf("%s=\"%s\"\n", env_copy[i], equal_posit + 1);
-			*equal_posit = '=';
-		}
-		else
-		{
-			ft_putstr_fd(env_copy[i], 1);
-			ft_putchar_fd('\n', 1);
-		}
-	}
+		print_export_format(env_copy[i]);
 	ft_free_env(env_copy);
 }
 
