@@ -81,7 +81,36 @@ int	validate_syntax(char *str)
 	}
 	if ((n_parenthese != 0) || ((n_s_quote % 2) != 0) || ((n_d_quote % 2) != 0))
 		return (SYNTAX_ERROR);
+	if (validate_heredoc_syntax(str))
+		return (SYNTAX_ERROR);
 	return (1);
+}
+
+int	validate_heredoc_syntax(char *input)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (input[++i])
+	{
+		if ((input[i] == '<') && (input[i + 1]) && (input[i + 1] == '<'))
+		{
+			j = i + 1;
+			while (input[++j])
+			{
+				if (!(input[j])
+					|| (input[j] == '&' && input[j - 1] == '&')
+					|| (input[j] == '|' && input[j - 1] == '|'))
+					break ;
+				if ((input[j] == '<')
+					&& (input[j + 1]) && (input[j + 1] == '<'))
+					return (SYNTAX_ERROR);
+			}
+		}
+
+	}
+	return (FALSE);
 }
 
 void	get_token(t_token **list, char *input, int *pos)

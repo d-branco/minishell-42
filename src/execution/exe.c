@@ -25,7 +25,7 @@ static int	open_output_file(const char *file);
 static int	backup_fd(int fd_to_backup);
 static int	redirect_fd(int new_fd, int old_fd);
 static int	restore_fd(int backup_fd, int original_fd);
-void		fd_bug(char *location, int fd, char *action);
+void		fd_bug(char *function_name, int fd, char *action);
 static void	execute_command_child(t_command *cmd, t_mnsh *shell);
 static char	*resolve_command_path(char *cmd, char **envp);
 int			handle_append_redirection(
@@ -34,10 +34,10 @@ int			open_append_file(const char *file);
 int			handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter);
 void		read_heredoc_input(int fd, char *delimiter);
 
-void	fd_bug(char *location, int fd, char *action)
+void	fd_bug(char *function_name, int fd, char *action)
 {
 	if (DEBUG)
-		printf("--DEBUG-- FD %25s: fd %d - %s\n", location, fd, action);
+		printf("--DEBUG-- FD %25s: fd %d - %s\n", function_name, fd, action);
 }
 
 int	execute_ast(t_ast_node *node, t_mnsh *shell)

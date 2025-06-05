@@ -99,6 +99,7 @@ void		tkn_lst_printer(t_token *lst);
 void		tkn_lstclear(t_token **lst);
 t_token		*create_token(t_tkn_type token_type, char *token_string);
 void		tkn_lstadd_back(t_token **lst, t_token *new);
+int			validate_heredoc_syntax(char *input);
 //parser/lexer-tokenizer.c
 t_tkn_type	check_type_of_token(char *input, int *pos);
 void		isolate_word_token(char *input, int *pos, char **token_string);
