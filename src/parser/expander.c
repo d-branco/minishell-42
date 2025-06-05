@@ -6,7 +6,7 @@
 /*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 11:02:22 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/27 14:01:14 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:24:14 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,6 @@
 static char	*expand_argument(const char *arg, t_mnsh *shell);
 static void	handle_quoted(const char *arg, int *i, char **res, t_mnsh *shell);
 static void	handle_dollar(const char *arg, int *i, char **res, t_mnsh *shell);
-static void	append_char(char **res, char c);
-
-char	*get_env_value(const char *name, char **envp)
-{
-	int		name_len;
-	char	*equal_posit;
-
-	name_len = ft_strlen(name);
-	while (*envp)
-	{
-		equal_posit = ft_strchr(*envp, '=');
-		if (equal_posit && (equal_posit - *envp == name_len)
-			&& ft_strncmp(*envp, name, name_len) == 0)
-			return (equal_posit + 1);
-		envp++;
-	}
-	return ("");
-}
 
 static char	*get_var_name(const char *str, int *len)
 {
@@ -50,16 +32,6 @@ static char	*get_var_name(const char *str, int *len)
 	name = ft_substr(str, 0, i);
 	*len = i;
 	return (name);
-}
-
-static void	append_and_free(char **dst, char *src)
-{
-	char	*tmp;
-
-	tmp = ft_strjoin(*dst, src);
-	free(*dst);
-	*dst = tmp;
-	free(src);
 }
 
 static char	*expand_argument(const char *arg, t_mnsh *shell)
@@ -111,15 +83,6 @@ static void	handle_dollar(const char *arg, int *i, char **res, t_mnsh *shell)
 	append_and_free(res, var_value);
 	free(var_name);
 	*i += var_len + 1;
-}
-
-static void	append_char(char **res, char c)
-{
-	char	tmp[2];
-
-	tmp[0] = c;
-	tmp[1] = '\0';
-	append_and_free(res, ft_strdup(tmp));
 }
 
 void	expand_arguments(t_command *cmd, t_mnsh *shell)

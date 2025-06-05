@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 static void	free_ast_content(t_ast_node *node);
 static void	free_command(t_command *cmd);

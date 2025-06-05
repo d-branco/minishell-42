@@ -71,3 +71,46 @@ void	ft_free_env(char **envp)
 	}
 	free(envp);
 }
+
+char	*ft_getenv(char **envp, char *var_name)
+{
+	int	len;
+
+	len = ft_strlen(var_name);
+	while (*envp)
+	{
+		if (ft_strncmp(*envp, var_name, len) == 0)
+			return (ft_strdup(*envp + len));
+		envp++;
+	}
+	return (NULL);
+}
+
+int	export_var(const char *av, char ***envp)
+{
+	char	*var_name;
+	char	*value;
+	char	*equal_posit;
+
+	equal_posit = ft_strchr(av, '=');
+	if (equal_posit)
+	{
+		var_name = ft_substr(av, 0, equal_posit - av + 1);
+		value = ft_strdup(equal_posit + 1);
+	}
+	else
+	{
+		var_name = ft_strjoin(av, "=");
+		value = ft_getenv(*envp, var_name);
+		if (!value)
+		{
+			value = ft_strdup("");
+			replace_add_var((char *)av, value, envp);
+			return (free(var_name), free(value), 0);
+		}
+	}
+	if (!var_name || !value)
+		return (free(var_name), free(value), -1);
+	replace_add_var(var_name, value, envp);
+	return (free(var_name), free(value), 0);
+}

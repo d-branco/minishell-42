@@ -6,13 +6,14 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:07 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/27 13:12:54 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:11:43 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //#include "minishell.h"
 
 typedef struct s_mnsh	t_mnsh;
+typedef struct s_list	t_list;
 
 typedef enum e_token_type
 {
@@ -92,6 +93,9 @@ int			parser(char *input, t_mnsh *shell);
 //parser/expander.c
 void		expand_arguments(t_command *cmd, t_mnsh *shell);
 char		*get_env_value(const char *name, char **envp);
+//parser/expander_util.c
+void		append_and_free(char **dst, char *src);
+void		append_char(char **res, char c);
 //parser/lexer.c
 int			parse_input_into_token_list(t_token **list, char *input);
 int			validate_syntax(char *str);

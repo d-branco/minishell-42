@@ -30,35 +30,6 @@ static int	is_valid_arg(const char *av)
 	return (1);
 }
 
-int	export_var(const char *av, char ***envp)
-{
-	char	*var_name;
-	char	*value;
-	char	*equal_posit;
-
-	equal_posit = ft_strchr(av, '=');
-	if (equal_posit)
-	{
-		var_name = ft_substr(av, 0, equal_posit - av + 1);
-		value = ft_strdup(equal_posit + 1);
-	}
-	else
-	{
-		var_name = ft_strjoin(av, "=");
-		value = ft_getenv(*envp, var_name);
-		if (!value)
-		{
-			value = ft_strdup("");
-			replace_add_var((char *)av, value, envp);
-			return (free(var_name), free(value), 0);
-		}
-	}
-	if (!var_name || !value)
-		return (free(var_name), free(value), -1);
-	replace_add_var(var_name, value, envp);
-	return (free(var_name), free(value), 0);
-}
-
 static void	print_export_format(char *env_var)
 {
 	char	*equal_posit;

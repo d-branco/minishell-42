@@ -12,8 +12,6 @@
 
 #include "../../include/minishell.h"
 
-char	*ft_getenv(char **envp, char *var_name);
-
 static int	error_cd(const char *path)
 {
 	if (errno == ENOENT)
@@ -35,20 +33,6 @@ static int	error_cd(const char *path)
 	return (1);
 }
 
-char	*ft_getenv(char **envp, char *var_name)
-{
-	int	len;
-
-	len = ft_strlen(var_name);
-	while (*envp)
-	{
-		if (ft_strncmp(*envp, var_name, len) == 0)
-			return (ft_strdup(*envp + len));
-		envp++;
-	}
-	return (NULL);
-}
-
 static void	ft_setenv(char **envp, const char *var_name, const char *str)
 {
 	while (*envp)
@@ -65,34 +49,13 @@ static void	ft_setenv(char **envp, const char *var_name, const char *str)
 	}
 }
 
-int	ft_cd(int ac, char **av, t_mnsh *shell)
+static int	cd_update_env(t_mnsh *shell)
 {
 	char	cwd[PATH_MAX];
-	char	*path;
 	char	*oldpwd;
-	//char	*pwd;
-	int		error_code;
 
-	if (ac > 2)
-		return (printf("minishell: cd: too many arguments\n"),
-			handle_exit_code(1));
 	if (!getcwd(cwd, sizeof(cwd)))
 		return (handle_exit_code(1));
-	shell->export_status = 1;
-	if (ac == 1)
-	{
-		path = ft_getenv(shell->envp, "HOME=");  
-		if (!path)
-			return (printf("minishell: cd: HOME not set\n"),
-				handle_exit_code(1));
-	}
-	else
-		path = av[1];
-	if (chdir(path) != 0 && ft_strcmp(path,"") != 0)
-	{
-		error_code = error_cd(path);
-		return (free(path), handle_exit_code(error_code));
-	}
 	oldpwd = ft_getenv(shell->envp, "PWD=");
 	if (oldpwd)
 	{
@@ -103,7 +66,48 @@ int	ft_cd(int ac, char **av, t_mnsh *shell)
 		ft_setenv(shell->envp, "OLDPWD", "");
 	if (getcwd(cwd, sizeof(cwd)))
 		ft_setenv(shell->envp, "PWD=", cwd);
+	return (handle_exit_code(0));
+}
+
+static int	cd_handle_path(int ac, char **av, t_mnsh *shell, char **path_out)
+{
+	char	*path;
+
+	if (ac == 1)
+	{
+		path = ft_getenv(shell->envp, "HOME=");
+		if (!path)
+			return (printf("minishell: cd: HOME not set\n"),
+				handle_exit_code(1));
+	}
+	else
+		path = av[1];
+	*path_out = path;
+	return (0);
+}
+
+int	ft_cd(int ac, char **av, t_mnsh *shell)
+{
+	char	cwd[PATH_MAX];
+	char	*path;
+	int		error_code;
+
+	if (ac > 2)
+		return (printf("minishell: cd: too many arguments\n"),
+			handle_exit_code(1));
+	if (!getcwd(cwd, sizeof(cwd)))
+		return (handle_exit_code(1));
+	shell->export_status = 1;
+	if (cd_handle_path(ac, av, shell, &path))
+		return (1);
+	if (chdir(path) != 0 && ft_strcmp(path, "") != 0)
+	{
+		error_code = error_cd(path);
+		if (ac == 1)
+			free(path);
+		return (handle_exit_code(error_code));
+	}
 	if (ac == 1)
 		free(path);
-	return (handle_exit_code(0));
+	return (cd_update_env(shell));
 }
