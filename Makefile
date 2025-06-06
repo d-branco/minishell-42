@@ -38,6 +38,7 @@ SRCS		:=	\
 	src/parser/expander_util.c	                                            \
 	src/parser/lexer.c														\
 	src/parser/lexer-list.c													\
+	src/parser/lexer-token.c                                                \
 	src/parser/lexer-tokenizer.c											\
 	src/parser/ast.c														\
 	src/parser/ast-free.c													\

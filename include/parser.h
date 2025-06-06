@@ -99,13 +99,14 @@ void		append_char(char **res, char c);
 //parser/lexer.c
 int			parse_input_into_token_list(t_token **list, char *input);
 int			validate_syntax(char *str);
-void		get_token(t_token **list, char *input, int *pos);
 void		handle_quoted_string(char *input, int *pos, char **str, char chr);
 //parser/lexer-list.c
 void		tkn_lst_printer(t_token *lst);
 void		tkn_lstclear(t_token **lst);
 t_token		*create_token(t_tkn_type token_type, char *token_string);
 void		tkn_lstadd_back(t_token **lst, t_token *new);
+//src/parser/lexer-token.c
+void		get_token(t_token **list, char *input, int *pos);
 //parser/lexer-tokenizer.c
 t_tkn_type	check_type_of_token(char *input, int *pos);
 void		isolate_word_token(char *input, int *pos, char **token_string);
