@@ -108,7 +108,6 @@ int	validate_heredoc_syntax(char *input)
 					return (SYNTAX_ERROR);
 			}
 		}
-
 	}
 	return (FALSE);
 }
