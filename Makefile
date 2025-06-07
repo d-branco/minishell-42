@@ -17,7 +17,6 @@ LIBFT_DIR	:= libft
 CC			= cc
 CFLAGS		+= -Wall -Wextra
 CFLAGS		+= -Werror
-CFLAGS		+= -Wunused
 READFLAGS	= -lreadline
 
 CFLAGS		+= -g
@@ -97,6 +96,12 @@ supp_doc:
 		...\n\
 		fun:add_history\n\
 	}\n\
+	{\n\
+		leak add_history\n\
+		Memcheck:Leak\n\
+		...\n\
+		fun:add_history\n\
+	}\n\
 	" > .readline.txt
 
 bonus: $(NAME)
@@ -166,13 +171,14 @@ test:
 		| grep -v TOO_MANY_FUNCS										;	\
 	echo -n "$(COR)"
 
-#	\
-#	tail -n +4 log.txt													|	\
-#	awk '{																	\
-#	gsub(/^==[0-9]*== /, "")											;	\
-#	gsub(/^--[0-9]*-- /, "")											;	\
-#	gsub(/^used_suppression: /, "")										;	\
-#	if (length($0) > 0) print $0											\
-#	}'																	;	\
-
-#		--log-file=log.txt													\
+valgrind:
+	@\
+	valgrind																\
+		--track-fds=yes														\
+		--show-error-list=yes												\
+		--leak-check=full													\
+		--show-leak-kinds=all												\
+		--track-origins=yes													\
+		--suppressions=.readline.txt										\
+	\
+		./minishell

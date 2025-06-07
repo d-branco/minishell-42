@@ -82,9 +82,37 @@ static int	check_parentheses_and_quotes(char *str)
 		if (n_parenthese < 0)
 			return (SYNTAX_ERROR);
 	}
-	if (n_parenthese != 0 || in_s_quote || in_d_quote)
+	if ((n_parenthese != 0) || ((in_s_quote % 2) != 0) || ((in_d_quote % 2) != 0))
+		return (SYNTAX_ERROR);
+	if (validate_heredoc_syntax(str))
 		return (SYNTAX_ERROR);
 	return (1);
+}
+
+int	validate_heredoc_syntax(char *input)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (input[++i])
+	{
+		if ((input[i] == '<') && (input[i + 1]) && (input[i + 1] == '<'))
+		{
+			j = i + 1;
+			while (input[++j])
+			{
+				if (!(input[j])
+					|| (input[j] == '&' && input[j - 1] == '&')
+					|| (input[j] == '|' && input[j - 1] == '|'))
+					break ;
+				if ((input[j] == '<')
+					&& (input[j + 1]) && (input[j + 1] == '<'))
+					return (SYNTAX_ERROR);
+			}
+		}
+	}
+	return (FALSE);
 }
 
 int	validate_syntax(char *str)

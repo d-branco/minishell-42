@@ -26,6 +26,7 @@ void	*ft_malloc(int total_size)
 	if (ptr == NULL)
 	{
 		ft_putstr_fd("ERROR malloc failed to alloc memory!", 2);
+		//free all the memory!!!!!!!!!!!!!!!
 		exit(1);
 	}
 	return (ptr);

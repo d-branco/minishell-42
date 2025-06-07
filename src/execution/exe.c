@@ -26,7 +26,7 @@ static int	open_output_file(const char *file);
 static int	backup_fd(int fd_to_backup);
 static int	redirect_fd(int new_fd, int old_fd);
 static int	restore_fd(int backup_fd, int original_fd);
-void		fd_bug(char *location, int fd, char *action);
+void		fd_bug(char *function_name, int fd, char *action);
 static void	execute_command_child(t_command *cmd, t_mnsh *shell);
 static char	*resolve_command_path(char *cmd, char **envp);
 int			handle_append_redirection(
@@ -35,10 +35,11 @@ int			open_append_file(const char *file);
 int			handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter);
 void		read_heredoc_input(int fd, char *delimiter);
 
-void	fd_bug(char *location, int fd, char *action)
+void	fd_bug(char *function_name, int fd, char *action)
 {
-	if (DEBUG)
-		printf("--DEBUG-- FD %25s: fd %d - %s\n", location, fd, action);
+	if (DEBUG) //if (DEBUG)
+		printf("--DEBUG-- \033[1;35mFD %25s: fd %d - %s\033[0m \n",
+			function_name, fd, action);
 }
 
 int	execute_ast(t_ast_node *node, t_mnsh *shell)
@@ -98,23 +99,29 @@ int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
 	fd_bug("handle_here_doc", pipefd[0], "pipe read end created");
 	fd_bug("handle_here_doc", pipefd[1], "pipe write end created");
 	original_stdin = backup_fd(STDIN_FILENO);
+	fd_bug("handle_here_doc", original_stdin, "backup fd created");
 	if (original_stdin == -1)
 		return (close(pipefd[0]), close(pipefd[1]), 1);
 	pid = fork();
 	if (pid == -1)
-		return (perror("minishell: fork"),
-			close(pipefd[0]), close(pipefd[1]), 1);
+		return (close(pipefd[0]), close(pipefd[1]), close(original_stdin),
+			perror("minishell: fork"), 1);
 	if (pid == 0)
 	{
+		fd_bug("handle_here_doc", pipefd[0], "child closing read end");
 		close(pipefd[0]);
 		read_heredoc_input(pipefd[1], delimiter);
+		fd_bug("handle_here_doc", pipefd[1], "child closing write end");
 		close(pipefd[1]);
+		fd_bug("handle_here_doc", original_stdin, "child closing backup fd");
+		close(original_stdin);
+		free_ast_node(shell->ast_head);
 		free_shell(shell);
-		//free_ast_node(shell->ast_head);
 		exit(0);
 	}
 	else
 	{
+		fd_bug("handle_here_doc", pipefd[1], "parent closing write end");
 		close(pipefd[1]);
 		//wait(NULL);// DOING
 		waitpid(pid, &status, 0);
@@ -140,8 +147,9 @@ void	read_heredoc_input(int fd, char *delimiter)
 	delim_len = strlen(delimiter);
 	while (TRUE)
 	{
-		write(STDOUT_FILENO, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
+		//write(STDOUT_FILENO, "> ", 2);
+		//line = get_next_line(STDIN_FILENO);
+		line = readline("> ");
 		if (!line)
 			break ;
 		if (ft_strncmp(line, delimiter, delim_len) == 0
@@ -150,8 +158,9 @@ void	read_heredoc_input(int fd, char *delimiter)
 			free(line);
 			break ;
 		}
-		//write(fd, line, ft_strlen(line));
-		write(STDIN_FILENO, line, ft_strlen(line));
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		//write(STDIN_FILENO, line, ft_strlen(line));
 		free(line);
 	}
 }
@@ -498,7 +507,8 @@ int	execute_pipe(t_ast_node *node, t_mnsh *shell)
 		run_left_child(node, pipefd, shell);
 	right_pid = fork();
 	if (right_pid == -1)
-		return (perror("minishell: fork"), 1);
+		return (close(pipefd[0]), close(pipefd[1]), waitpid(left_pid, NULL, 0),
+			perror("minishell: fork"), 1);
 	if (right_pid == 0)
 		run_right_child(node, pipefd, shell);
 	fd_bug("execute_pipe", pipefd[0], "closing  read end in parent");

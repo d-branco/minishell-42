@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 08:10:20 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/26 15:08:33 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:21:55 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ char	ft_format_place_sign(char *conv_str, char **str);
 # endif
 
 char	*get_next_line(int fd);
-//char	*ft_strchr(const char *s, int c);
+char	*gnl_strchr(const char *s, int c);
 char	*gnl_strjoin(char *s1, char const *s2);
 //size_t	ft_strlen(const char *str);
 //char	*ft_strdup(const char *s);
