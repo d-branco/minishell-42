@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/29 12:49:12 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:16:33 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void	init_shell(t_mnsh *shell, char **envp);
 static char	*init_prompt(int exit_code);
+static void	handle_args(int argc, char **argv);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -21,23 +22,9 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	int		loop;
 
+	handle_args(argc, argv);
 	shell = ft_malloc(sizeof(t_mnsh) * 1);
 	init_shell(shell, envp);
-	//if (DEBUG)
-	//{
-	//	loop = -1;
-	//	while (shell->envp[++loop])
-	//		ft_printf("--DEBUG-- [envp] %s\n", shell->envp[loop]);
-	//}
-	if (argc > 1)
-	{
-		if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
-			return (handle_exit_code(parser(argv[2], shell)),
-				free_ast_node(shell->ast_head), free_shell(shell),
-				handle_exit_code(-1));
-		else
-			return (ft_putstr_fd("Too many arguments, dear ;)\n", 2), 1);
-	}
 	if (DEBUG)
 		ft_printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG--\n");
 	loop = 42; // to be removed
@@ -65,6 +52,24 @@ int	main(int argc, char **argv, char **envp)
 	free_shell(shell);
 	//free (shell);
 	return (handle_exit_code(-1));
+}
+
+static void	handle_args(int argc, char **argv)
+{
+	if (argc > 1)
+	{
+		if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
+		{
+			//single line minishell goes here
+			ft_putstr_fd("Minishell: try it with bash!\n", STDERR_FILENO);
+			exit (SYNTAX_ERROR);
+		}
+		else
+		{
+			ft_putstr_fd("Too many arguments, dear ;)\n", STDERR_FILENO);
+			exit (SYNTAX_ERROR);
+		}
+	}
 }
 
 bool	ft_check_input(const char *input)
