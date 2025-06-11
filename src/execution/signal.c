@@ -14,7 +14,6 @@
 
 static void	ft_prompt_handler(int signo);
 static void	ft_exec_handler(int signo);
-/// @brief Configura sinais para modo interativo
 
 void	ft_setup_interactive_signals(void)
 {
@@ -27,7 +26,6 @@ void	ft_setup_interactive_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTERM, SIG_IGN);
 }
-/// @brief Trata SIGINT (Ctrl+C) no prompt
 
 static void	ft_prompt_handler(int signo)
 {
@@ -40,7 +38,6 @@ static void	ft_prompt_handler(int signo)
 		handle_exit_code(130);
 	}
 }
-/// @brief Configura sinais para processo filho (execução de comando)
 
 void	ft_setup_fork_signals(void)
 {
@@ -52,7 +49,6 @@ void	ft_setup_fork_signals(void)
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
 }
-/// @brief Trata sinais durante execução de comandos (forked)
 
 static void	ft_exec_handler(int signo)
 {

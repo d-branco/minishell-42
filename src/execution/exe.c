@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdlib.h>
 
 int			execute_command(t_ast_node *node, t_mnsh *shell);
 int			execute_and(t_ast_node *node, t_mnsh *shell);
@@ -37,7 +36,7 @@ void		read_heredoc_input(int fd, char *delimiter);
 
 void	fd_bug(char *function_name, int fd, char *action)
 {
-	if (DEBUG) //if (DEBUG)
+	if (DEBUG)
 		printf("--DEBUG-- \033[1;35mFD %25s: fd %d - %s\033[0m \n",
 			function_name, fd, action);
 }
@@ -123,7 +122,6 @@ int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
 	{
 		fd_bug("handle_here_doc", pipefd[1], "parent closing write end");
 		close(pipefd[1]);
-		//wait(NULL);// DOING
 		waitpid(pid, &status, 0);
 		if (!redirect_fd(pipefd[0], STDIN_FILENO))
 			return (close(pipefd[0]), close(original_stdin), 1);
