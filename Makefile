@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/06/05 16:12:33 by alde-alm         ###   ########.fr        #
+#    Updated: 2025/06/11 08:36:28 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,14 +30,16 @@ INCLUDES	:= -I./include
 
 SRCS		:=	\
 	src/minishell.c															\
+																			\
 	src/execution/exe.c														\
 	src/execution/signal.c													\
+																			\
 	src/parser/parser.c														\
-	src/parser/expander.c                                                   \
-	src/parser/expander_util.c	                                            \
+	src/parser/expander.c													\
+	src/parser/expander_util.c												\
 	src/parser/lexer.c														\
 	src/parser/lexer-list.c													\
-	src/parser/lexer-token.c                                                \
+	src/parser/lexer-token.c												\
 	src/parser/lexer-tokenizer.c											\
 	src/parser/ast.c														\
 	src/parser/ast-free.c													\
@@ -45,9 +47,11 @@ SRCS		:=	\
 	src/parser/ast-parse-cmd2.c												\
 	src/parser/ast-print.c													\
 	src/parser/ast-redirect.c												\
+																			\
 	src/utils/ft_isspace.c													\
 	src/utils/ft_malloc.c													\
-	src/utils/ft_strcmp.c                                                   \
+	src/utils/ft_strcmp.c													\
+																			\
 	src/builtins/cd.c														\
 	src/builtins/echo.c														\
 	src/builtins/env.c														\
@@ -96,12 +100,6 @@ supp_doc:
 		...\n\
 		fun:add_history\n\
 	}\n\
-	{\n\
-		leak add_history\n\
-		Memcheck:Leak\n\
-		...\n\
-		fun:add_history\n\
-	}\n\
 	" > .readline.txt
 
 bonus: $(NAME)
@@ -139,7 +137,7 @@ PURPLE	:= \033[1;35m# purple
 GRAY	:= \033[1;90m# gray
 YELLOW	:= \033[1;93m# yellow
 ######################################################################### Test #
-test:
+test: supp_doc
 	@\
 	$(MAKE) --silent fclean												;	\
 	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1							&&	\
@@ -171,7 +169,7 @@ test:
 		| grep -v TOO_MANY_FUNCS										;	\
 	echo -n "$(COR)"
 
-valgrind:
+valgrind: supp_doc
 	@\
 	valgrind																\
 		--track-fds=yes														\
