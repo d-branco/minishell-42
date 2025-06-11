@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/11 18:16:33 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:28:12 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,33 @@
 static void	init_shell(t_mnsh *shell, char **envp);
 static char	*init_prompt(int exit_code);
 static void	handle_args(int argc, char **argv);
+static void	looping_shell(t_mnsh *shell);
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_mnsh	*shell;
-	char	*input;
-	int		loop;
 
 	handle_args(argc, argv);
 	shell = ft_malloc(sizeof(t_mnsh) * 1);
 	init_shell(shell, envp);
 	if (DEBUG)
 		ft_printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG--\n");
-	loop = 42; // to be removed
+
+	looping_shell(shell);
+
+	rl_clear_history();
+	if (DEBUG)
+		ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
+	free_shell(shell);
+	return (handle_exit_code(-1));
+}
+
+static void	looping_shell(t_mnsh *shell)
+{
+	int		loop;
+	char	*input;
+
+	loop = 42; //change to TRUE before deliverance
 	while (loop)
 	{
 		shell->last_exit_code = handle_exit_code(-1);
@@ -46,12 +60,6 @@ int	main(int argc, char **argv, char **envp)
 		shell->prompt = init_prompt(handle_exit_code(-1));
 		loop--;
 	}
-	rl_clear_history();
-	if (DEBUG)
-		ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
-	free_shell(shell);
-	//free (shell);
-	return (handle_exit_code(-1));
 }
 
 static void	handle_args(int argc, char **argv)

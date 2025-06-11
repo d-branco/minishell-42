@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/06 09:51:49 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:32:35 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,29 +62,27 @@ static int	check_parentheses_and_quotes(char *str)
 {
 	int	i;
 	int	n_parenthese;
-	int	in_s_quote;
-	int	in_d_quote;
+	int	s_quote;
+	int	d_quote;
 
 	i = -1;
 	n_parenthese = 0;
-	in_s_quote = 0;
-	in_d_quote = 0;
+	s_quote = 0;
+	d_quote = 0;
 	while (str[++i])
 	{
-		if (!in_s_quote && !in_d_quote && str[i] == '(')
+		if (!s_quote && !d_quote && str[i] == '(')
 			n_parenthese++;
-		else if (!in_s_quote && !in_d_quote && str[i] == ')')
+		else if (!s_quote && !d_quote && str[i] == ')')
 			n_parenthese--;
-		else if (!in_d_quote && str[i] == '\'')
-			in_s_quote = !in_s_quote;
-		else if (!in_s_quote && str[i] == '\"')
-			in_d_quote = !in_d_quote;
+		else if (!d_quote && str[i] == '\'')
+			s_quote = !s_quote;
+		else if (!s_quote && str[i] == '\"')
+			d_quote = !d_quote;
 		if (n_parenthese < 0)
 			return (SYNTAX_ERROR);
 	}
-	if ((n_parenthese != 0) || ((in_s_quote % 2) != 0) || ((in_d_quote % 2) != 0))
-		return (SYNTAX_ERROR);
-	if (validate_heredoc_syntax(str))
+	if ((n_parenthese != 0) || ((s_quote % 2) != 0) || ((d_quote % 2) != 0))
 		return (SYNTAX_ERROR);
 	return (1);
 }
