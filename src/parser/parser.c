@@ -6,18 +6,26 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/12 09:58:44 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/12 10:30:34 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 int		parse_n_exec_input(char *input, t_mnsh *shell);
+
 t_env	*make_ll_env(char **envp);
 void	env_add(t_env **env, char *key, char *value);
 t_env	*make_env(char *key, char *value, t_env *next);
 void	free_all_env(t_env *env);
 void	free_ll_env(t_env *env);
+
+int		make_tkn_lst(t_token **lst, char *str);
+void	tkn_free_lst(t_token *lst);
+void	tkn_free_one(t_token *tkn);
+void	next_token(t_token **list);
+
+
 
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
@@ -42,6 +50,65 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 		handle_exit_code(1);
 	tree_cleanup(ast);
 	lst_tkn_cleanup(lst_tkn_origin);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+int	make_tkn_lst(t_token **lst, char *str)
+{
+	t_token	*end;
+	t_token	*tmp;
+
+	*lst = NULL;
+	while (1)
+	{
+		if (lexer(&tmp, &str) != 0)
+		{
+			tkn_free_one(tmp);
+			tkn_free_lst(*lst);
+			return (-1);
+		}
+		if (*lst == NULL)
+		{
+			*lst = tmp;
+			end = *lst;
+		}
+		else
+		{
+			end->next = tmp;
+			end = end->next;
+		}
+		if (tmp->type == e_END)
+			return (0);
+	}
+}
+
+void	tkn_free_lst(t_token *lst)
+{
+	t_token	*previous;
+
+	previous = 0;
+	while (lst)
+	{
+		tkn_free_one(previous);
+		previous = lst;
+		lst = lst->next;
+	}
+	tkn_free_one(previous);
+}
+
+void	tkn_free_one(t_token *tkn)
+{
+	if (tkn)
+		free(tkn->str);
+	free(tkn);
+}
+
+void	next_token(t_token **list)
+{
+	*list = (*list)->next;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

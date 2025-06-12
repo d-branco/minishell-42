@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/12 09:40:35 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/12 10:22:07 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,18 +145,17 @@
 
 typedef enum e_token_type
 {
-	e_WORD,
-	e_SINGLE_QUOTE,
-	e_DOUBLE_QUOTE,
 	e_PARENTHESIS_OPEN,
 	e_PARENTHESIS_CLOSE,
-	e_PIPE,
 	e_AND,
 	e_OR,
-	e_OUTPUT_REDIRECTION,
-	e_APPEND,
+	e_HERE_DOC,
 	e_INPUT_REDIRECTION,
-	e_HERE_DOC
+	e_APPEND,
+	e_OUTPUT_REDIRECTION,
+	e_PIPE,
+	e_END,
+	e_WORD
 }	t_tkn_type;
 
 typedef enum e_ast_type
