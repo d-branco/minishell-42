@@ -12,7 +12,6 @@
 
 #include "../../include/minishell.h"
 
-static char	*expand_argument(const char *arg, t_mnsh *shell);
 static void	handle_quoted(const char *arg, int *i, char **res, t_mnsh *shell);
 static void	handle_dollar(const char *arg, int *i, char **res, t_mnsh *shell);
 
@@ -34,11 +33,12 @@ static char	*get_var_name(const char *str, int *len)
 	return (name);
 }
 
-static char	*expand_argument(const char *arg, t_mnsh *shell)
+char	*expand_argument(const char *arg, t_mnsh *shell)
 {
 	int		i;
 	char	*res;
 
+	res = NULL;
 	i = 0;
 	res = ft_strdup("");
 	while (arg[i])
@@ -88,14 +88,18 @@ static void	handle_dollar(const char *arg, int *i, char **res, t_mnsh *shell)
 void	expand_arguments(t_command *cmd, t_mnsh *shell)
 {
 	int		i;
-	char	*expanded;
+	char	**new_args;
+	char	**expanded;
 
+	new_args = NULL;
 	i = 0;
-	while (cmd->args[i])
+	while (cmd->args && cmd->args[i])
 	{
-		expanded = expand_argument(cmd->args[i], shell);
-		free(cmd->args[i]);
-		cmd->args[i] = expanded;
+		expanded = expand_argument_and_wildcard(cmd->args[i], shell);
+		ft_strarr_extend(&new_args, expanded);
+		ft_strarr_free(expanded);
 		i++;
 	}
+	ft_strarr_free(cmd->args);
+	cmd->args = new_args;
 }

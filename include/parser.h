@@ -92,6 +92,7 @@ int			is_valid_token_for_argument(t_token *token);
 int			parser(char *input, t_mnsh *shell);
 //parser/expander.c
 void		expand_arguments(t_command *cmd, t_mnsh *shell);
+char		*expand_argument(const char *arg, t_mnsh *shell);
 char		*get_env_value(const char *name, char **envp);
 //parser/expander_util.c
 void		append_and_free(char **dst, char *src);
@@ -107,8 +108,16 @@ t_token		*create_token(t_tkn_type token_type, char *token_string);
 void		tkn_lstadd_back(t_token **lst, t_token *new);
 int			validate_heredoc_syntax(char *input);
 //parser/lexer-token.c
-void	get_token(t_token **list, char *input, int *pos);
+void		get_token(t_token **list, char *input, int *pos);
 //parser/lexer-tokenizer.c
 t_tkn_type	check_type_of_token(char *input, int *pos);
 void		isolate_word_token(char *input, int *pos, char **token_string);
 void		isolate_operator_token(char *input, int *pos, char **token_string);
+//parser/wildcard_bonus.c
+char		**expand_argument_and_wildcard(const char *arg, t_mnsh *shell);
+//int			is_wildcard_token(const char *str);
+//parser/wildcard_utils_bonus.c
+void		ft_strarr_add_back(char ***arr, char *new_str);
+void		ft_strarr_extend(char ***dest, char **src);
+void		ft_strarr_free(char **arr);
+void		ft_strarr_sort(char **arr);

@@ -45,6 +45,8 @@ SRCS		:=	\
 	src/parser/ast-parse-cmd2.c												\
 	src/parser/ast-print.c													\
 	src/parser/ast-redirect.c												\
+	src/parser/wildcard_bonus.c                                             \
+	src/parser/wildcard_utils_bonus.c                                       \
 	src/utils/ft_isspace.c													\
 	src/utils/ft_malloc.c													\
 	src/utils/ft_strcmp.c                                                   \
