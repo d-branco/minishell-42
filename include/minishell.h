@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/11 09:35:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/12 09:40:35 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,16 +143,6 @@
 //	char			*tgoto(const char *cap, int col, int row);
 //	int				tputs(const char *str, int affcnt, int (*putc)(int));
 
-//minishell.c
-typedef struct s_mnsh
-{
-	int					last_exit_code;
-	int					export_status;
-	char				*prompt;
-	char				**envp;
-	struct s_ast_node	*ast_head;
-}	t_mnsh;
-
 typedef enum e_token_type
 {
 	e_WORD,
@@ -169,13 +159,6 @@ typedef enum e_token_type
 	e_HERE_DOC
 }	t_tkn_type;
 
-typedef struct s_token
-{
-	t_tkn_type		type;
-	char			*token_string;
-	struct s_token	*next;
-}	t_token;
-
 typedef enum e_ast_type
 {
 	AST_COMMAND,
@@ -184,6 +167,37 @@ typedef enum e_ast_type
 	AST_AND,
 	AST_OR
 }	t_ast_type;
+
+typedef struct s_mnsh
+{
+	int					last_exit_code;
+	int					export_status;
+	char				*prompt;
+	char				**envp;
+	struct s_ast_node	*ast_head;
+}	t_mnsh;
+
+typedef struct s_token
+{
+	t_tkn_type		type;
+	char			*str;
+	struct s_token	*next;
+}	t_token;
+
+typedef struct s_ast
+{
+	enum e_token_type	type;
+	t_list				*pipeline;
+	struct s_ast		*left;
+	struct s_ast		*right;
+}	t_ast;
+
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
 
 typedef struct s_ast_node
 {
