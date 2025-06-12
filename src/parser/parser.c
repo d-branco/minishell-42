@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/12 10:30:34 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/12 11:27:08 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 
 	if (make_lst_tkn(&lst_tkn, input) != 0)
 	{
-		handle_exit_code(1);
+		handle_exit_code(SYNTAX_ERROR);
 		return (handle_exit_code(-1));
 	}
 	lst_tkn_origin = lst_tkn;
@@ -53,7 +53,95 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+int	lexer(t_token **tkn, char **str)
+{
+	int		error_code;
+	char	*word;
+	int		tkn_type;
 
+	error_code = 0;
+	while (ft_isspace(**str))
+		(*str)++;
+	tkn_type = get_tkn_type(*str);
+	if (tkn_type != e_WORD)
+	{
+		*tkn = make_one_tkn(NULL, NULL, tkn_type);
+		if (tkn_type != e_END)
+			*str += ft_strlen(get_tkn_as_str(tkn_type));
+	}
+	else
+	{
+		error_code = get_str_token(&word, str);
+		*tkn = make_one_tkn(NULL, word, e_WORD);
+	}
+	return (error_code);
+}
+static int	get_tkn_type(char *str)
+{
+	int			i;
+	const char	*tkn_str;
+
+	if (*str == '\0' || *str == '\n')
+		return (e_END);
+	i = 0;
+	while (i < 9)
+	{
+		tkn_str = get_tkn_as_str(i);
+		if (!ft_strncmp(str, tkn_str, ft_strlen(tkn_str)))
+			return (i);
+		i++;
+	}
+	return (e_WORD);
+}
+t_token	*make_one_tkn(t_token *next, char *str, enum e_token_type type)
+{
+	t_token	*new;
+
+	new = (t_token *)ft_malloc(sizeof(t_token) * 1);
+	new->next = next;
+	new->str = str;
+	new->type = type;
+	return (new);
+}
+
+//	in_s_qts means: in single quotes
+//	in_d_qts means: in double quotes
+int	get_str_token(char **word, char **str)
+{
+	int	i;
+	int	in_s_qts;
+	int	in_d_qts;
+
+	in_s_qts = 0;
+	in_d_qts = 0;
+	i = 0;
+	while ((*str)[i] && (!ft_isspace((*str)[i]) || (in_s_qts + in_d_qts)))
+	{
+		handle_quote(*str + i, &in_s_qts, &in_d_qts);
+		if (!(in_s_qts + in_d_qts) && get_tkn_type(*str + i) != e_WORD)
+			break ;
+		i++;
+	}
+	*word = ft_substr(*str, 0, i);
+	*str += i;
+	if (in_s_qts || in_d_qts)
+	{
+		ft_putstr_fd("Minishell: syntax error\n", STDERR_FILENO);
+		return (handle_exit_code(2));
+	}
+	return (0);
+}
+
+int	handle_quote(char *c, int *in_s_qts, int *in_d_qts)
+{
+	if (*c == '\'' && !(*in_d_qts))
+		*in_s_qts = !(*in_s_qts);
+	else if (*c == '"' && !(*in_s_qts))
+		*in_d_qts = !(*in_d_qts);
+	else
+		return (0);
+	return (1);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 int	make_tkn_lst(t_token **lst, char *str)
