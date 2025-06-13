@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/12 10:22:07 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/13 08:56:36 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,30 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_cmd
+{
+	int		in_fd;
+	int		out_fd;
+	char	*full_path;
+	int		status;
+	char	*hd_buffer;
+	int		builtin;
+	char	**args;
+	int		i;
+	int		n;
+}	t_cmd;
+typedef struct s_exec
+{
+	int		n;
+	int		**hd_pipes;
+	int		**pipes;
+	int		fd_count;
+	char	**path;
+	int		prev;
+	t_env	**env;
+	t_cmd	*cmds;
+}	t_exec;
+
 typedef struct s_ast_node
 {
 	t_ast_type			type;
@@ -221,6 +245,7 @@ typedef struct s_redirect
 	char				*file;
 }	t_redirect;
 
+//minishell.c
 //int			main(int argc, char **argv, char **envp);
 void		free_shell(t_mnsh *shell);
 int			handle_exit_code(int newcode);
@@ -256,7 +281,19 @@ t_ast_node	*handle_tokens_inside_parenthesis(t_token **tokens);
 int			is_valid_token_for_argument(t_token *token);
 
 //parser/parser.c
-int			parser(char *input, t_mnsh *shell);
+int			parse_n_exec_input(char *input, t_mnsh *shell);
+t_env	*make_ll_env(char **envp);
+void	env_add(t_env **env, char *key, char *value);
+t_env	*make_env(char *key, char *value, t_env *next);
+void	free_all_env(t_env *env);
+void	free_ll_env(t_env *env);
+
+int		make_tkn_lst(t_token **lst, char *str);
+void	tkn_free_lst(t_token *lst);
+void	tkn_free_one(t_token *tkn);
+void	next_token(t_token **list);
+
+//int			parser(char *input, t_mnsh *shell);
 //parser/expander.c
 void		expand_arguments(t_command *cmd, t_mnsh *shell);
 char		*get_env_value(const char *name, char **envp);

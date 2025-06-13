@@ -6,50 +6,173 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/12 11:27:08 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/13 09:05:22 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int		parse_n_exec_input(char *input, t_mnsh *shell);
+int			parse_n_exec_input(char *input, t_mnsh *shell);
 
-t_env	*make_ll_env(char **envp);
-void	env_add(t_env **env, char *key, char *value);
-t_env	*make_env(char *key, char *value, t_env *next);
-void	free_all_env(t_env *env);
-void	free_ll_env(t_env *env);
+t_env		*make_ll_env(char **envp);
+void		env_add(t_env **env, char *key, char *value);
+t_env		*make_env(char *key, char *value, t_env *next);
+void		free_all_env(t_env *env);
+void		free_ll_env(t_env *env);
 
-int		make_tkn_lst(t_token **lst, char *str);
-void	tkn_free_lst(t_token *lst);
-void	tkn_free_one(t_token *tkn);
-void	next_token(t_token **list);
+int			make_tkn_lst(t_token **lst, char *str);
+void		tkn_free_lst(t_token *lst);
+void		tkn_free_one(t_token *tkn);
+void		next_token(t_token **list);
 
+int			lexer(t_token **tkn, char **str);
+static int	get_tkn_type(char *str);
+const char	*get_tkn_as_str(enum e_token_type n);
+t_token		*make_one_tkn(t_token *next, char *str, enum e_token_type type);
+int			get_str_token(char **word, char **str);
+int			handle_quote(char *c, int *in_s_qts, int *in_d_qts);
 
+int			parse_ast(t_ast **ast, t_token **tkn);
+int			parse_tokens(t_ast **ast, t_token **tkn);
+static int	parse_conditionnal(t_ast **ast, t_token **tkn);
+
+int			exec_ast(t_ast *ast, t_env **env, int previous);
+int			exec_pipeline(t_list *pipeline, t_env **env, int previous);
 
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
 	t_token			*lst_tkn_origin;
-	t_ast_node		*ast;
+	t_ast			*ast;
 	static t_env	*ll_env[1];
 
-	if (make_lst_tkn(&lst_tkn, input) != 0)
+	if (make_tkn_lst(&lst_tkn, input) != 0)
 	{
 		handle_exit_code(SYNTAX_ERROR);
 		return (handle_exit_code(-1));
 	}
 	lst_tkn_origin = lst_tkn;
-	if (parse_tree(&ast, &lst_tkn) != SYNTAX_ERROR)
+	if (parse_ast(&ast, &lst_tkn) != SYNTAX_ERROR)
 	{
 		*ll_env = make_ll_env(shell->envp);
-		handle_exit_code(exec_tree(ast, ll_env));
+		handle_exit_code(exec_ast(ast, ll_env, handle_exit_code(-1)));
 		free_all_env(*ll_env);
 	}
 	else
-		handle_exit_code(1);
-	tree_cleanup(ast);
+		handle_exit_code(SYNTAX_ERROR);
+	free_ast(ast);
 	lst_tkn_cleanup(lst_tkn_origin);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//lst_tkn_cleanup(
+////////////////////////////////////////////////////////////////////////////////
+//free_ast(
+////////////////////////////////////////////////////////////////////////////////
+int	exec_ast(t_ast *ast, t_env **env, int previous)
+{
+	int	error_code;
+
+	if (!ast)
+		return (0);
+	if (!ast->left && !ast->right)
+	{
+		if (expand_pipeline(&ast->pipeline, *env, previous) != 0)
+			return (1);
+		return (exec_pipeline(ast->pipeline, env, previous));
+	}
+	error_code = exec_ast(ast->left, env, previous);
+	if (!(!error_code == (ast->type == e_OR)))
+		error_code = exec_ast(ast->right, env, previous);
+	return (error_code);
+}
+
+int	exec_pipeline(t_list *pipeline, t_env **env, int previous)
+{
+	t_exec	*exec;
+	int		error_code;
+
+	exec = init_pipeline(pipeline, env, previous);
+	error_code = 0;
+	if (exec->n == 1 && exec->cmds[0].builtin != -1)
+		error_code = launch_builtin(exec, 0);
+	else if (exec->n >= 1)
+		error_code = cmds_with_forks(exec);
+	free_exec(exec);
+	free(exec);
+	return (error_code);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+int	parse_ast(t_ast **ast, t_token **tkn)
+{
+	*ast = NULL;
+	if ((*tkn)->type == e_END)
+		return (SUCCESS);
+	if (parse_tokens(ast, tkn) != SUCCESS)
+		return (SYNTAX_ERROR);
+	if ((*tkn)->type != e_END)
+	{
+		ft_putstr_fd("Minishell: syntax error\n", STDERR_FILENO);
+		return (SYNTAX_ERROR);
+	}
+	return (SUCCESS);
+}
+
+int	parse_tokens(t_ast **ast, t_token **tkn)
+{
+	t_ast	*ptr;
+	int		tkn_type;
+
+	*ast = NULL;
+	if (parse_conditionnal(ast, tkn) != SUCCESS)
+		return (SYNTAX_ERROR);
+	while (1)
+	{
+		if ((*tkn)->type == e_END || (*tkn)->type == e_PARENTHESIS_CLOSE)
+			break ;
+		if ((*tkn)->type != e_AND && (*tkn)->type != e_OR)
+		{
+			ft_putstr_fd("Minishell: syntax error\n", STDERR_FILENO);
+			return (SYNTAX_ERROR);
+		}
+		tkn_type = (*tkn)->type;
+		next_token(tkn);
+		if (parse_conditionnal(&ptr, tkn) != SUCCESS)
+		{
+			free_ast(ptr);
+			return (SYNTAX_ERROR);
+		}
+		*ast = make_ast_node(tkn_type, *ast, ptr, NULL);
+	}
+	return (SUCCESS);
+}
+
+static int	parse_conditionnal(t_ast **ast, t_token **tkn)
+{
+	t_list	*pipeline;
+
+	*ast = NULL;
+	if ((*tkn)->type == e_PARENTHESIS_OPEN)
+	{
+		next_token(tkn);
+		if (parse_tokens(ast, tkn) != SUCCESS)
+			return (SYNTAX_ERROR);
+		if (assert_token(*tkn, e_PARENTHESIS_CLOSE) != SUCCESS)
+			return (SYNTAX_ERROR);
+		next_token(tkn);
+	}
+	else
+	{
+		if (parse_pipeline(&pipeline, tkn) != SUCCESS)
+		{
+			pipeline_cleanup(pipeline);
+			return (SYNTAX_ERROR);
+		}
+		*ast = make_ast_node(e_PIPE, NULL, NULL, pipeline);
+	}
+	return (SUCCESS);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +199,7 @@ int	lexer(t_token **tkn, char **str)
 	}
 	return (error_code);
 }
+
 static int	get_tkn_type(char *str)
 {
 	int			i;
@@ -93,6 +217,19 @@ static int	get_tkn_type(char *str)
 	}
 	return (e_WORD);
 }
+
+const char	*get_tkn_as_str(enum e_token_type n)
+{
+	static const char	*tok_strings[9] = {"(", ")", "&&", "||",
+		"<<", "<", ">>", ">", "|"};
+
+	if (n == e_END)
+		return ("EOL");
+	if (n > 9 || n < 0)
+		return (NULL);
+	return (tok_strings[n]);
+}
+
 t_token	*make_one_tkn(t_token *next, char *str, enum e_token_type type)
 {
 	t_token	*new;
