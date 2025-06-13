@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/13 15:40:06 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/13 17:19:46 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,10 @@ char		*expand_variable(char **str, t_env *env, int state);
 char		*ret_env_key(t_env *env, char *key);
 void		insert_value(char **buf, char *val, int pos, int extra_space);
 
+t_tube		*make_tube(t_tube *new);
+t_tube		*separate_tube(t_tube *tube);
+char		*get_word(char **str);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -81,6 +85,76 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+t_tube	*make_tube(t_tube *new)
+{
+	t_tube	*tube;
+
+	tube = ft_malloc(sizeof(*tube) * 1);
+	if (new)
+	{
+		tube->modifier = new->modifier;
+		tube->word = new->word;
+		tube->next = new->next;
+	}
+	else
+	{
+		tube->modifier = -1;
+		tube->word = NULL;
+		tube->next = NULL;
+	}
+	return (tube);
+}
+
+t_tube	*separate_tube(t_tube *tube)
+{
+	t_tube	*section;
+	t_tube	**current;
+	char	*str;
+	char	*word;
+
+	section = NULL;
+	current = &section;
+	str = tube->word;
+	while (TRUE)
+	{
+		word = get_word(&str);
+		if (!*word)
+		{
+			free(word);
+			break ;
+		}
+		*current = make_tube(&(t_tube){word, tube->modifier, NULL});
+		current = &(*current)->next;
+	}
+	return (section);
+}
+
+char	*get_word(char **str)
+{
+	char	*word;
+	int		i;
+	int		in_s_qts;
+	int		in_d_qts;
+
+	in_s_qts = 0;
+	in_d_qts = 0;
+	while (**str && ft_strchr("\n", **str))
+		(*str)++;
+	i = 0;
+	while ((*str)[i])
+	{
+		handle_quote(*str + i, &in_s_qts, &in_d_qts);
+		if (!(in_d_qts || in_s_qts)
+			&& ft_strchr("\n", (*str)[i]))
+			break ;
+		i++;
+	}
+	word = ft_substr((*str), 0, i);
+	*str += i;
+	return (word);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 char	*param_expansion(char *str, t_env *env, int retn)
 {
 	char	*val;
@@ -98,7 +172,7 @@ char	*param_expansion(char *str, t_env *env, int retn)
 		if (*str == '$' && !in_s_qts)
 		{
 			val = dollar_expansion(&str, env, retn, in_d_qts);
-			insert_value(&res, val, i, ft_strlen(str) + 1);////////////////
+			insert_value(&res, val, i, ft_strlen(str) + 1);
 			i += ft_strlen(val);
 			free(val);
 		}
