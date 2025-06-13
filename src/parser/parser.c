@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/13 09:05:22 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/13 09:33:51 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ static int	parse_conditionnal(t_ast **ast, t_token **tkn);
 int			exec_ast(t_ast *ast, t_env **env, int previous);
 int			exec_pipeline(t_list *pipeline, t_env **env, int previous);
 
+void		free_ast(t_ast *ast);
+void		free_pipeline(t_list *pipeline);
+void		free_tube_lst(t_tube *lst);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -67,7 +71,44 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 ////////////////////////////////////////////////////////////////////////////////
 //lst_tkn_cleanup(
 ////////////////////////////////////////////////////////////////////////////////
-//free_ast(
+void	free_ast(t_ast *ast)
+{
+	if (!ast)
+		return ;
+	if (!ast->right && !ast->left)
+	{
+		free_pipeline(ast->pipeline);
+		free(ast);
+		return ;
+	}
+	free_ast(ast->left);
+	free_ast(ast->right);
+	free(ast);
+}
+
+void	free_pipeline(t_list *pipeline)
+{
+	ft_lstclear(&pipeline, (void (*)(void *))free_tube_lst);
+}
+
+void	free_tube_lst(t_tube *lst)
+{
+	t_tube	*previous;
+
+	previous = 0;
+	while (lst)
+	{
+		if (previous)
+			free(previous->word);
+		free(previous);
+		previous = lst;
+		lst = lst->next;
+	}
+	if (previous)
+		free(previous->word);
+	free(previous);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 int	exec_ast(t_ast *ast, t_env **env, int previous)
 {
@@ -102,7 +143,6 @@ int	exec_pipeline(t_list *pipeline, t_env **env, int previous)
 	free(exec);
 	return (error_code);
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 int	parse_ast(t_ast **ast, t_token **tkn)

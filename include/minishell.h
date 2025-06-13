@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/13 08:56:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/13 09:31:22 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,6 +221,13 @@ typedef struct s_exec
 	t_env	**env;
 	t_cmd	*cmds;
 }	t_exec;
+
+typedef struct s_tube
+{
+	char			*word;
+	int				modifier;
+	struct s_tube	*next;
+}	t_tube;
 
 typedef struct s_ast_node
 {
