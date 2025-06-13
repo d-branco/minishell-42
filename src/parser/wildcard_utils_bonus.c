@@ -61,7 +61,7 @@ void	ft_strarr_free(char **arr)
 
 void	ft_strarr_sort(char **arr)
 {
-	char	*tmp;
+	char	*temp;
 	int		i;
 	int		j;
 
@@ -75,9 +75,9 @@ void	ft_strarr_sort(char **arr)
 		{
 			if (strcmp(arr[i], arr[j]) > 0)
 			{
-				tmp = arr[i];
+				temp = arr[i];
 				arr[i] = arr[j];
-				arr[j] = tmp;
+				arr[j] = temp;
 			}
 			j++;
 		}
