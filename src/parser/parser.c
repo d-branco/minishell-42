@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/13 09:33:51 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/13 14:52:19 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		free_all_env(t_env *env);
 void		free_ll_env(t_env *env);
 
 int			make_tkn_lst(t_token **lst, char *str);
-void		tkn_free_lst(t_token *lst);
+void		free_lst_tkn(t_token *lst);
 void		tkn_free_one(t_token *tkn);
 void		next_token(t_token **list);
 
@@ -42,6 +42,12 @@ int			exec_pipeline(t_list *pipeline, t_env **env, int previous);
 void		free_ast(t_ast *ast);
 void		free_pipeline(t_list *pipeline);
 void		free_tube_lst(t_tube *lst);
+
+int			pipeline_expansion(t_list **pipeline, t_env *env, int error_code);
+int			cmd_expansion(t_tube **cmd, t_env *env, int error_code);
+int			expand_tube(t_tube *tube, t_tube **res, t_env *env, int error_code);
+void		lst_quote_remove(t_tube *lst);
+char		*quote_remove(char *str);
 
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
@@ -65,11 +71,115 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 	else
 		handle_exit_code(SYNTAX_ERROR);
 	free_ast(ast);
-	lst_tkn_cleanup(lst_tkn_origin);
+	free_lst_tkn(lst_tkn_origin);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//lst_tkn_cleanup(
+int	pipeline_expansion(t_list **pipeline, t_env *env, int error_code)
+{
+	t_list	*current;
+	t_tube	**cmd;
+
+	current = *pipeline;
+	while (current)
+	{
+		cmd = (t_tube **)&current->content;
+		if (cmd_expansion(cmd, env, error_code) != 0)
+			return (-1);
+		current = current->next;
+	}
+	return (0);
+}
+
+int	cmd_expansion(t_tube **cmd, t_env *env, int error_code)
+{
+	t_tube	*current;
+	t_tube	*new_chunk;
+	t_tube	*res;
+	t_tube	**ptr;
+	int		exp;
+
+	exp = 0;
+	res = NULL;
+	ptr = &res;
+	current = *cmd;
+	while (current)
+	{
+		if (expand_tube(current, &new_chunk, env, error_code) != 0)
+			exp = -1;
+		*ptr = new_chunk;
+		while (*ptr)
+			ptr = &(*ptr)->next;
+		current = current->next;
+	}
+	free_tube_lst(*cmd);
+	*cmd = res;
+	return (exp);
+}
+
+int	expand_tube(t_tube *tube, t_tube **res, t_env *env, int error_code)
+{
+	char	*tmp;
+	char	*word;
+	int		code;
+	t_tube	*tubo;
+
+	code = 0;
+	word = ft_strdup(tube->word);
+	if (tube->modifier != e_HERE_DOC)
+	{
+		tmp = param_expansion(tube->word, env, error_code);
+		free(tube->word);
+		tube->word = tmp;
+		tubo = separate_tube(tube);
+		expand_wildcards(res, tubo);
+		if (tube->modifier != -1 && (!*res || (*res)->next))
+			code = -1;
+	}
+	else
+		*res = make_tube(&(t_tube){ft_strdup(word), e_HERE_DOC, NULL});
+	lst_quote_remove(*res);
+	free(word);
+	return (code);
+}
+
+void	lst_quote_remove(t_tube *lst)
+{
+	char	*tmp;
+
+	while (lst)
+	{
+		tmp = quote_remove(lst->word);
+		free(lst->word);
+		lst->word = tmp;
+		lst = lst->next;
+	}
+}
+
+char	*quote_remove(char *str)
+{
+	int		i;
+	char	*res;
+	int		in_s_qts;
+	int		in_d_qts;
+
+	res = ft_malloc(1 * (ft_strlen(str) + 1));
+	in_s_qts = 0;
+	in_d_qts = 0;
+	i = 0;
+	while (*str)
+	{
+		if (!handle_quote(str, &in_s_qts, &in_d_qts))
+		{
+			res[i] = *str;
+			i++;
+		}
+		str++;
+	}
+	res[i] = 0;
+	return (res);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 void	free_ast(t_ast *ast)
 {
@@ -118,7 +228,7 @@ int	exec_ast(t_ast *ast, t_env **env, int previous)
 		return (0);
 	if (!ast->left && !ast->right)
 	{
-		if (expand_pipeline(&ast->pipeline, *env, previous) != 0)
+		if (pipeline_expansion(&ast->pipeline, *env, previous) != 0)
 			return (1);
 		return (exec_pipeline(ast->pipeline, env, previous));
 	}
@@ -207,7 +317,7 @@ static int	parse_conditionnal(t_ast **ast, t_token **tkn)
 	{
 		if (parse_pipeline(&pipeline, tkn) != SUCCESS)
 		{
-			pipeline_cleanup(pipeline);
+			free_pipeline(pipeline);
 			return (SYNTAX_ERROR);
 		}
 		*ast = make_ast_node(e_PIPE, NULL, NULL, pipeline);
@@ -332,7 +442,7 @@ int	make_tkn_lst(t_token **lst, char *str)
 		if (lexer(&tmp, &str) != 0)
 		{
 			tkn_free_one(tmp);
-			tkn_free_lst(*lst);
+			free_lst_tkn(*lst);
 			return (-1);
 		}
 		if (*lst == NULL)
@@ -350,7 +460,7 @@ int	make_tkn_lst(t_token **lst, char *str)
 	}
 }
 
-void	tkn_free_lst(t_token *lst)
+void	free_lst_tkn(t_token *lst)
 {
 	t_token	*previous;
 
