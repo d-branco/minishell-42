@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/13 14:52:19 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/13 15:40:06 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ int			expand_tube(t_tube *tube, t_tube **res, t_env *env, int error_code);
 void		lst_quote_remove(t_tube *lst);
 char		*quote_remove(char *str);
 
+char		*param_expansion(char *str, t_env *env, int retn);
+char		*dollar_expansion(char **str, t_env *env, int retn, int state);
+char		*expand_variable(char **str, t_env *env, int state);
+char		*ret_env_key(t_env *env, char *key);
+void		insert_value(char **buf, char *val, int pos, int extra_space);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -72,6 +78,105 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 		handle_exit_code(SYNTAX_ERROR);
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+char	*param_expansion(char *str, t_env *env, int retn)
+{
+	char	*val;
+	char	*res;
+	int		i;
+	int		in_s_qts;
+	int		in_d_qts;
+
+	res = ft_malloc(1 * (ft_strlen(str) + 1));
+	in_s_qts = 0;
+	in_d_qts = 0;
+	i = 0;
+	while (*str)
+	{
+		if (*str == '$' && !in_s_qts)
+		{
+			val = dollar_expansion(&str, env, retn, in_d_qts);
+			insert_value(&res, val, i, ft_strlen(str) + 1);////////////////
+			i += ft_strlen(val);
+			free(val);
+		}
+		else
+		{
+			handle_quote(str, &in_s_qts, &in_d_qts);
+			res[i++] = *(str++);
+		}
+	}
+	res[i] = 0;
+	return (res);
+}
+
+char	*dollar_expansion(char **str, t_env *env, int retn, int state)
+{
+	char	*ret;
+
+	if ((*str)[1] && ((*str)[1] == '?'))
+		ret = ft_itoa(retn);
+	else if ((*str)[1] && ((*str)[1] == '?'))
+		ret = ft_strdup("Minishell: Shell-A");
+	else
+		ret = expand_variable(str, env, state);
+	return (ret);
+}
+
+char	*expand_variable(char **str, t_env *env, int state)
+{
+	char	*ret;
+	char	*key;
+	char	*value;
+	int		i;
+
+	i = 1;
+	while (ft_isalnum((*str)[i]) || (*str)[i] == '_')
+		i++;
+	if (i == 1)
+	{
+		ret = ft_strdup("$");
+		*str += i;
+		return (ret);
+	}
+	key = ft_substr(*str, 1, i - 1);
+	value = ret_env_key(env, key);
+	free(key);
+	*str += i;
+	if (state)
+		ret = value;
+	return (ret);
+}
+
+char	*ret_env_key(t_env *env, char *key)
+{
+	static char	empty[1] = "";
+
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) == 0)
+		{
+			return (env->value);
+		}
+		env = env->next;
+	}
+	return (empty);
+}
+
+void	insert_value(char **buf, char *val, int pos, int extra_space)
+{
+	int		len;
+	char	*tmp;
+
+	(*buf)[pos] = 0;
+	len = ft_strlen(*buf) + ft_strlen(val) + extra_space;
+	tmp = ft_malloc(1 * len);
+	ft_strlcpy(tmp, *buf, len);
+	ft_strlcat(tmp, val, len);
+	free(*buf);
+	*buf = tmp;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
