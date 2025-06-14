@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/14 15:09:29 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/14 15:12:19 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,9 @@ void		next_tkn(t_token **list);
 int			parse_cmd(t_tube **cmd, t_token **tok);
 int			parse_tube(t_tube **tube, t_token **tok);
 
+int			is_redirection(t_token *tkn);
+int			get_modifier(t_token *tkn);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -144,6 +147,23 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
 	return(handle_exit_code(-1));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int	is_redirection(t_token *tkn)
+{
+	return (tkn->type == e_HERE_DOC
+		|| tkn->type == e_INPUT_REDIRECTION
+		|| tkn->type == e_APPEND
+		|| tkn->type == e_OUTPUT_REDIRECTION);
+}
+
+int	get_modifier(t_token *tkn)
+{
+	if (is_redirection(tkn))
+		return (tkn->type);
+	else
+		return (-1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
