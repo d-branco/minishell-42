@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/14 12:27:25 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/14 12:34:36 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,12 @@ char		*concat_slash(const char *str1, const char *str2);
 void		print_error(char *program, char *arg, char *msg);
 int			calc_len(char *prefix, char *program, char *arg, char *msg);
 
+int			update_fd_in(t_cmd *cmd, t_tube *redir, t_exec *exec);
+void		read_single_heredoc(char **buffer, char *delim);
+void		add_line(char **buffer, char *line);
+char		*get_input_line(char *prompt);
+void		remove_endl(char *line);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -111,7 +117,118 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+int	update_fd_out(t_cmd *cmd, t_tube *redir, t_exec *exec)
+{
+	int	flags;
 
+	if (redir->modifier != e_OUTPUT_REDIRECTION && redir->modifier != e_APPEND)
+		return (0);
+	flags = O_WRONLY | O_TRUNC | O_CREAT;
+	if (redir->modifier == e_APPEND)
+		flags = O_WRONLY | O_CREAT | O_APPEND;
+	cmd->out_fd = open(redir->word, flags, 0644);
+	if (cmd->out_fd < 0)
+	{
+		print_error(0, redir->word, strerror(errno));
+		cmd->status = 1;
+		return (-1);
+	}
+	exec->fd_count++;
+	return (0);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int	update_fd_in(t_cmd *cmd, t_tube *redir, t_exec *exec)
+{
+	if (redir->modifier == e_INPUT_REDIRECTION)
+	{
+		cmd->in_fd = open(redir->word, O_RDONLY);
+		if (cmd->in_fd < 0)
+		{
+			print_error(0, redir->word, strerror(errno));
+			cmd->status = 1;
+			return (-1);
+		}
+		exec->fd_count++;
+	}
+	else if (redir->modifier == e_HERE_DOC)
+	{
+		read_single_heredoc(&cmd->hd_buffer, redir->word);
+		cmd->in_fd = exec->hd_pipes[cmd->i][0];
+	}
+	return (0);
+}
+
+void	read_single_heredoc(char **buffer, char *delim)
+{
+	char	*line;
+
+	free(*buffer);
+	*buffer = ft_strdup("");
+	while (1)
+	{
+		line = get_input_line("> ");
+		if (line == NULL || ft_strcmp(line, delim) == 0)
+		{
+			free(line);
+			break ;
+		}
+		add_line(buffer, line);
+	}
+}
+
+void	add_line(char **buffer, char *line)
+{
+	char	*tmp;
+	int		size;
+
+	size = ft_strlen(line) + 2;
+	if (*buffer)
+		size += ft_strlen(*buffer);
+	tmp = ft_malloc(sizeof(*tmp) * size);
+	if (*buffer)
+	{
+		ft_strlcpy(tmp, *buffer, size);
+		ft_strlcat(tmp, line, size);
+	}
+	else
+		ft_strlcpy(tmp, line, size);
+	tmp[size - 2] = '\n';
+	tmp[size - 1] = '\0';
+	free(*buffer);
+	free(line);
+	*buffer = tmp;
+}
+
+char	*get_input_line(char *prompt)
+{
+	char	*line;
+
+	if (isatty(0) && isatty(2))
+		line = readline(prompt);
+	else
+	{
+		line = get_next_line(0);
+		remove_endl(line);
+	}
+	return (line);
+}
+
+void	remove_endl(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '\n')
+		{
+			line[i] = '\0';
+			break ;
+		}
+		i++;
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 void	print_error(char *program, char *arg, char *msg)
