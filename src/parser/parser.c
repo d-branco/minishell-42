@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/14 12:46:30 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/14 13:47:42 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,10 @@ int			fd_builtin(t_exec *exec, int i);
 void		close_fds(t_exec *exec);
 int			exec_builtin(int n, char **args, t_env **env, int prev);
 
+void		free_exec(t_exec *exec);
+int			**free_pipes(int **pipes, int n);
+void		free_cmd(t_cmd *cmd);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -118,6 +122,48 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 		handle_exit_code(SYNTAX_ERROR);
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
+	return(handle_exit_code(-1));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+void	free_exec(t_exec *exec)
+{
+	int	i;
+
+	free_pipes(exec->pipes, exec->n - 1);
+	free_pipes(exec->hd_pipes, exec->n);
+	free_strarr(exec->path);
+	i = 0;
+	while (i < exec->n)
+	{
+		free_cmd(&exec->cmds[i]);
+		i++;
+	}
+	free(exec->cmds);
+}
+
+int	**free_pipes(int **pipes, int n)
+{
+	int	i;
+
+	i = 0;
+	while (i < n)
+	{
+		free(pipes[i]);
+		i++;
+	}
+	free(pipes);
+	return (0);
+}
+
+void	free_cmd(t_cmd *cmd)
+{
+	free(cmd->full_path);
+	free(cmd->hd_buffer);
+	free_strarr(cmd->args);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -154,12 +200,15 @@ void	close_fds(t_exec *exec)
 
 int	exec_builtin(int n, char **args, t_env **env, int prev)
 {
-	static int	(*builtin_arr[7])(char **, t_env **, int) = { exec_echo,
-		exec_cd, exec_pwd, exec_export, exec_unset, exec_env, exec_exit };
-
-	if (n > 7 || n < 0)
+	//static int	(*builtin_arr[7])(char **, t_env **, int) = { exec_echo,
+	//	exec_cd, exec_pwd, exec_export, exec_unset, exec_env, exec_exit };
+	(void) n;//to be removed
+	(void) args;//to be removed
+	(void) env;//to be removed
+	(void) prev;//to be removed
+	//if (n > 7 || n < 0)
 		return (0);
-	return ((builtin_arr)[n](args, env, prev));
+	//return ((builtin_arr)[n](args, env, prev));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
