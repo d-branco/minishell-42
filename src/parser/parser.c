@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/14 13:47:42 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/14 14:54:46 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,21 @@ void		remove_endl(char *line);
 int			fd_builtin(t_exec *exec, int i);
 void		close_fds(t_exec *exec);
 int			exec_builtin(int n, char **args, t_env **env, int prev);
+int			update_fd_out(t_cmd *cmd, t_tube *redir, t_exec *exec);
 
 void		free_exec(t_exec *exec);
 int			**free_pipes(int **pipes, int n);
 void		free_cmd(t_cmd *cmd);
+
+int			cmds_with_forks(t_exec *exec);
+int			*start_children(t_exec *exec);
+int			start_child(t_exec *exec, int i);
+int			fd_redirect(int input_fd, int output_fd);
+void		exec_cmd(t_exec *exec, int i);
+
+void		write_all_heredocs(t_exec *exec);
+int			wait_all(int n, int *pids);
+int			get_return_value(int status);
 
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
@@ -126,7 +137,139 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void	write_all_heredocs(t_exec *exec)
+{
+	int	i;
 
+	i = 0;
+	while (i < exec->n)
+	{
+		if (exec->cmds[i].hd_buffer)
+		{
+			write(exec->hd_pipes[i][1],
+				exec->cmds[i].hd_buffer,
+				ft_strlen(exec->cmds[i].hd_buffer));
+			close(exec->hd_pipes[i][1]);
+		}
+		i++;
+	}
+}
+
+int	wait_all(int n, int *pids)
+{
+	int	status;
+	int	i;
+
+	i = 0;
+	while (i < n)
+	{
+		waitpid(pids[i], &status, WUNTRACED);
+		i++;
+	}
+	return (status);
+}
+
+int	get_return_value(int status)
+{
+	int	exit_code;
+	int	sig_num;
+
+	if (WIFEXITED(status))
+	{
+		exit_code = WEXITSTATUS(status);
+		return (exit_code);
+	}
+	else if (WIFSIGNALED(status))
+	{
+		sig_num = WTERMSIG(status);
+		return (128 + sig_num);
+	}
+	else
+	{
+		sig_num = WSTOPSIG(status);
+		return (128 + sig_num);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int	cmds_with_forks(t_exec *exec)
+{
+	int			*pids;
+	int			ret;
+
+	pids = start_children(exec);
+	write_all_heredocs(exec);
+	close_fds(exec);
+	ret = wait_all(exec->n, pids);
+	free(pids);
+	return (get_return_value(ret));
+}
+
+int	*start_children(t_exec *exec)
+{
+	int	*pids;
+	int	i;
+
+	pids = ft_malloc(sizeof(*pids) * (exec->n));
+	i = 0;
+	while (i < exec->n)
+	{
+		pids[i] = start_child(exec, i);
+		i++;
+	}
+	return (pids);
+}
+
+int	start_child(t_exec *exec, int i)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("forking failed");
+		exit(4);
+	}
+	if (pid == 0)
+	{
+		fd_redirect(exec->cmds[i].in_fd, exec->cmds[i].out_fd);
+		close_fds(exec);
+		exec_cmd(exec, i);
+		close(0);
+		close(1);
+		exit(exec->cmds[i].status);
+	}
+	return (pid);
+}
+
+int	fd_redirect(int input_fd, int output_fd)
+{
+	dup2(input_fd, STDIN_FILENO);
+	dup2(output_fd, STDOUT_FILENO);
+	return (0);
+}
+
+void	exec_cmd(t_exec *exec, int i)
+{
+	char	**env_array;
+
+	if (exec->cmds[i].status != 0)
+	{
+		return ;
+	}
+	if (exec->cmds[i].builtin != -1)
+	{
+		exec->cmds[i].status = fd_builtin(exec, i);
+	}
+	else if (exec->cmds[i].full_path)
+	{
+		env_array = env_to_strarr(*exec->env);
+		execve(exec->cmds[i].full_path, exec->cmds[i].args, env_array);
+		print_error(0, exec->cmds[i].full_path, strerror(errno));
+		free_strarr(env_array);
+		exec->cmds[i].status = 1;
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 void	free_exec(t_exec *exec)
@@ -210,8 +353,6 @@ int	exec_builtin(int n, char **args, t_env **env, int prev)
 		return (0);
 	//return ((builtin_arr)[n](args, env, prev));
 }
-
-////////////////////////////////////////////////////////////////////////////////
 int	update_fd_out(t_cmd *cmd, t_tube *redir, t_exec *exec)
 {
 	int	flags;
