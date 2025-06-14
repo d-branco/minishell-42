@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/14 11:24:26 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/14 11:27:11 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ void		init_exec(t_list *pipeline, t_exec *exec, t_env **env, int prev);
 int			**get_pipes(int n);
 char		**extract_path(t_env *env);
 
+char		**extract_args(t_tube *lst);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -94,6 +96,34 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 		handle_exit_code(SYNTAX_ERROR);
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+char	**extract_args(t_tube *lst)
+{
+	t_tube	*current;
+	char	**args;
+	int		i;
+
+	i = 0;
+	current = lst;
+	while (current)
+	{
+		if (current->modifier == -1)
+			i++;
+		current = current->next;
+	}
+	args = ft_malloc(sizeof(*args) * (i + 1));
+	current = lst;
+	i = 0;
+	while (current)
+	{
+		if (current->modifier == -1)
+			args[i++] = ft_strdup(current->word);
+		current = current->next;
+	}
+	args[i] = NULL;
+	return (args);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
