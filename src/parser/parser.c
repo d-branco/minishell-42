@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/13 17:19:46 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/14 11:24:26 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,18 @@ t_tube		*make_tube(t_tube *new);
 t_tube		*separate_tube(t_tube *tube);
 char		*get_word(char **str);
 
+t_exec		*init_pipeline(t_list *pipeline, t_env **env, int prev);
+void		init_cmd(t_tube *lst, t_exec *exec, int i);
+void		init_redirs(t_tube *lst, t_cmd *cmd, t_exec *exec);
+
+char		**env_to_strarr(t_env *env);
+size_t		size_env(t_env *env);
+void		free_strarr(char **s);
+
+void		init_exec(t_list *pipeline, t_exec *exec, t_env **env, int prev);
+int			**get_pipes(int n);
+char		**extract_path(t_env *env);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -82,6 +94,182 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 		handle_exit_code(SYNTAX_ERROR);
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void	init_exec(t_list *pipeline, t_exec *exec, t_env **env, int prev)
+{
+	int		n_pipes;
+
+	exec->n = ft_lstsize(pipeline);
+	if (exec->n != 0)
+		n_pipes = exec->n - 1;
+	else
+		n_pipes = 0;
+	exec->pipes = get_pipes(n_pipes);
+	exec->hd_pipes = get_pipes(exec->n);
+	exec->fd_count = n_pipes * 2 + exec->n * 2;
+	exec->env = env;
+	exec->prev = prev;
+	exec->path = extract_path(*env);
+	exec->cmds = ft_malloc(sizeof(*(exec->cmds)) * (exec->n));
+}
+
+int	**get_pipes(int n)
+{
+	int	**pipes;
+	int	i;
+
+	pipes = ft_malloc(sizeof(*pipes) * n);
+	i = 0;
+	while (i < n)
+	{
+		pipes[i] = ft_malloc(sizeof(int) * 2);
+		if (pipe(pipes[i]) != 0)
+		{
+			perror("failed to open pipe");//////////////////////////////////////
+			exit(3);
+		}
+		i++;
+	}
+	return (pipes);
+}
+
+char	**extract_path(t_env *env)
+{
+	int		i;
+	char	**env_array;
+	char	**ret;
+
+	ret = NULL;
+	env_array = env_to_strarr(env);
+	if (env_array)
+	{
+		i = 0;
+		while (env_array[i])
+		{
+			if (ft_strncmp("PATH=", env_array[i], 5) == 0)
+			{
+				ret = ft_split(env_array[i] + 5, ':');
+				break ;
+			}
+			i++;
+		}
+	}
+	free_strarr(env_array);
+	if (ret)
+		return (ret);
+	return (ft_split("", ':'));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+char	**env_to_strarr(t_env *env)
+{
+	char	**ret;
+	char	*tmp;
+	int		size;
+	int		i;
+
+	size = size_env(env);
+	ret = ft_malloc(sizeof(*ret) * (size + 1));
+	i = 0;
+	while (i < size)
+	{
+		tmp = ft_strjoin(env->key, "=");
+		ret[i] = ft_strjoin(tmp, env->value);
+		free(tmp);
+		env = env->next;
+		i++;
+	}
+	ret[i] = 0;
+	return (ret);
+}
+
+size_t	size_env(t_env *env)
+{
+	size_t	len;
+
+	len = 0;
+	while (env != NULL)
+	{
+		env = env->next;
+		len++;
+	}
+	return (len);
+}
+
+void	free_strarr(char **s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	while (i >= 0)
+	{
+		free(s[i]);
+		i--;
+	}
+	free(s);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+t_exec	*init_pipeline(t_list *pipeline, t_env **env, int prev)
+{
+	t_exec	*exec;
+	int		i;
+
+	exec = ft_malloc(sizeof(*exec) * 1);
+	init_exec(pipeline, exec, env, prev);
+	i = 0;
+	while (pipeline)
+	{
+		init_cmd(pipeline->content, exec, i);
+		pipeline = pipeline->next;
+		i++;
+	}
+	return (exec);
+}
+
+void	init_cmd(t_tube *lst, t_exec *exec, int i)
+{
+	t_cmd	*cmd;
+
+	cmd = &exec->cmds[i];
+	cmd->status = 0;
+	cmd->full_path = NULL;
+	cmd->hd_buffer = NULL;
+	cmd->builtin = -1;
+	cmd->args = NULL;
+	cmd->i = i;
+	cmd->n = exec->n;
+	cmd->args = extract_args(lst);
+	init_redirs(lst, cmd, exec);
+	if (cmd->status == 0)
+		prepare_cmd_path(cmd, exec);
+}
+
+void	init_redirs(t_tube *lst, t_cmd *cmd, t_exec *exec)
+{
+	t_tube	*current;
+
+	if (cmd->i == 0)
+		cmd->in_fd = STDIN_FILENO;
+	else
+		cmd->in_fd = exec->pipes[cmd->i - 1][0];
+	if (cmd->i == cmd->n - 1)
+		cmd->out_fd = STDOUT_FILENO;
+	else
+		cmd->out_fd = exec->pipes[cmd->i][1];
+	current = lst;
+	while (current)
+	{
+		if (update_fd_in(cmd, current, exec) == -1)
+			break ;
+		if (update_fd_out(cmd, current, exec) == -1)
+			break ;
+		current = current->next;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -311,7 +499,8 @@ int	expand_tube(t_tube *tube, t_tube **res, t_env *env, int error_code)
 		free(tube->word);
 		tube->word = tmp;
 		tubo = separate_tube(tube);
-		expand_wildcards(res, tubo);
+		//expand_wildcards(res, tubo); TODO
+		(void) tubo;//remove line when removing line above
 		if (tube->modifier != -1 && (!*res || (*res)->next))
 			code = -1;
 	}
