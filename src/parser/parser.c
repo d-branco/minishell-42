@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/14 15:00:52 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/14 15:09:29 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,12 @@ t_ast		*make_ast_node(int type, t_ast *lhs, t_ast *rhs, t_list *pipeline);
 int			check_tkn(t_token *tok, enum e_token_type expected);
 int			tkn_error(t_token *tok);
 
+int			parse_pipeline(t_list **pipeline, t_token **tok);
+int			make_pipeline(t_list **pipeline, t_token **tok);
+void		next_tkn(t_token **list);
+int			parse_cmd(t_tube **cmd, t_token **tok);
+int			parse_tube(t_tube **tube, t_token **tok);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -138,6 +144,106 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
 	return(handle_exit_code(-1));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int	parse_pipeline(t_list **pipeline, t_token **tok)
+{
+	*pipeline = NULL;
+	if ((*tok)->type == e_END)
+	{
+		tkn_error(*tok);
+		return (SYNTAX_ERROR);
+	}
+	if (make_pipeline(pipeline, tok) == SYNTAX_ERROR)
+		return (SYNTAX_ERROR);
+	return (SUCCESS);
+}
+
+int	make_pipeline(t_list **pipeline, t_token **tok)
+{
+	t_tube	*cmd;
+	int		ret;
+
+	ret = parse_cmd(&cmd, tok);
+	while (ret == 0)
+	{
+		ft_lstadd_back(pipeline, ft_lstnew(cmd));
+		if ((*tok)->type == e_END || (*tok)->type == e_AND
+			|| (*tok)->type == e_OR || (*tok)->type == e_PARENTHESIS_CLOSE)
+			break ;
+		if (check_tkn(*tok, e_PIPE) != SUCCESS)
+		{
+			ret = SYNTAX_ERROR;
+			break ;
+		}
+		next_tkn(tok);
+		ret = parse_cmd(&cmd, tok);
+	}
+	if (ret == SYNTAX_ERROR)
+		return (SYNTAX_ERROR);
+	if (!*pipeline)
+		return (tkn_error(*tok));
+	return (SUCCESS);
+}
+
+void	next_tkn(t_token **list)
+{
+	*list = (*list)->next;
+}
+
+int	parse_cmd(t_tube **cmd, t_token **tok)
+{
+	t_tube	**current;
+	int		i;
+	int		ret;
+
+	*cmd = NULL;
+	current = cmd;
+	i = 0;
+	ret = parse_tube(current, tok);
+	while (ret == 0)
+	{
+		current = &(*current)->next;
+		ret = parse_tube(current, tok);
+		i++;
+	}
+	if (ret == SYNTAX_ERROR)
+	{
+		return (ret);
+	}
+	if (i == 0)
+	{
+		return (tkn_error(*tok));
+	}
+	return (0);
+}
+
+int	parse_tube(t_tube **tube, t_token **tok)
+{
+	int		modifier;
+
+	*tube = NULL;
+	if ((*tok)->type == e_END)
+		return (-1);
+	if (is_redirection(*tok))
+	{
+		modifier = get_modifier(*tok);
+		next_tkn(tok);
+		if (check_tkn(*tok, e_WORD) != 0)
+			return (SYNTAX_ERROR);
+		*tube = make_tube(&(t_tube){ft_strdup((*tok)->str), modifier, NULL});
+		next_tkn(tok);
+	}
+	else if ((*tok)->type == e_WORD)
+	{
+		*tube = make_tube(
+				&(t_tube){ft_strdup((*tok)->str), -1, NULL});
+		next_tkn(tok);
+	}
+	else
+		return (-1);
+	return (SUCCESS);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
