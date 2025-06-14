@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/14 11:45:50 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/14 12:27:25 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ char		**extract_path(t_env *env);
 char		**extract_args(t_tube *lst);
 void		init_cmd_path(t_cmd *cmd, t_exec *exec);
 int			ret_builtin_enum(char *str);
+const char	*ret_builtin_literal(int n);
 
 int			find_cmd(char **path, char *filename, char **res);
 int			find_cmd_cnt(int errno_value);
@@ -108,6 +109,9 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
 
 ////////////////////////////////////////////////////////////////////////////////
 void	print_error(char *program, char *arg, char *msg)
@@ -297,6 +301,16 @@ int	ret_builtin_enum(char *str)
 			return (i);
 	}
 	return (-1);
+}
+
+const char	*ret_builtin_literal(int n)
+{
+	static const char	*tkn_str[7] = {"echo", "cd", "pwd", "export", "unset",
+		"env", "exit"};
+
+	if (n > 7 || n < 0)
+		return (NULL);
+	return (tkn_str[n]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
