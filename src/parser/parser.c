@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/14 14:54:46 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/14 15:00:52 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,10 @@ void		write_all_heredocs(t_exec *exec);
 int			wait_all(int n, int *pids);
 int			get_return_value(int status);
 
+t_ast		*make_ast_node(int type, t_ast *lhs, t_ast *rhs, t_list *pipeline);
+int			check_tkn(t_token *tok, enum e_token_type expected);
+int			tkn_error(t_token *tok);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -134,6 +138,49 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
 	return(handle_exit_code(-1));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+t_ast	*make_ast_node(int type, t_ast *lhs, t_ast *rhs, t_list *pipeline)
+{
+	t_ast	*ret;
+
+	ret = ft_malloc(sizeof(*ret) * 1);
+	ret->type = type;
+	ret->left = lhs;
+	ret->right = rhs;
+	ret->pipeline = pipeline;
+	return (ret);
+}
+
+int	check_tkn(t_token *tok, enum e_token_type expected)
+{
+	if (tok->type != expected)
+	{
+		return (tkn_error(tok));
+	}
+	return (SUCCESS);
+}
+
+int	tkn_error(t_token *tok)
+{
+	const char	*tok_str;
+	char		*prefix;
+	char		*suffix;
+	char		*buffer;
+	int			len;
+
+	tok_str = get_tkn_as_str(tok->type);
+	prefix = "Minishell: syntax error";
+	suffix = "'\n";
+	len = ft_strlen(tok_str) + ft_strlen(prefix) + ft_strlen(suffix) + 1;
+	buffer = ft_malloc(sizeof(*buffer) * len);
+	ft_strlcpy(buffer, prefix, len);
+	ft_strlcat(buffer, tok_str, len);
+	ft_strlcat(buffer, suffix, len);
+	write(2, buffer, len - 1);
+	free(buffer);
+	return (SYNTAX_ERROR);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1247,7 +1294,7 @@ static int	parse_conditionnal(t_ast **ast, t_token **tkn)
 		next_token(tkn);
 		if (parse_tokens(ast, tkn) != SUCCESS)
 			return (SYNTAX_ERROR);
-		if (assert_token(*tkn, e_PARENTHESIS_CLOSE) != SUCCESS)
+		if (check_tkn(*tkn, e_PARENTHESIS_CLOSE) != SUCCESS)
 			return (SYNTAX_ERROR);
 		next_token(tkn);
 	}
