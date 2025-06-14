@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/14 11:27:11 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/14 11:45:50 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,17 @@ int			**get_pipes(int n);
 char		**extract_path(t_env *env);
 
 char		**extract_args(t_tube *lst);
+void		init_cmd_path(t_cmd *cmd, t_exec *exec);
+int			ret_builtin_enum(char *str);
+
+int			find_cmd(char **path, char *filename, char **res);
+int			find_cmd_cnt(int errno_value);
+int			check_file(char *filename, char **res);
+int			search_path(char **path, const char *filename, char **res);
+char		*concat_slash(const char *str1, const char *str2);
+
+void		print_error(char *program, char *arg, char *msg);
+int			calc_len(char *prefix, char *program, char *arg, char *msg);
 
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
@@ -96,6 +107,145 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 		handle_exit_code(SYNTAX_ERROR);
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void	print_error(char *program, char *arg, char *msg)
+{
+	int		len;
+	char	*prefix;
+	char	*buffer;
+
+	prefix = "minishell";
+	len = calc_len(prefix, program, arg, msg);
+	buffer = ft_malloc(1 * len);
+	ft_strlcpy(buffer, prefix, len);
+	ft_strlcat(buffer, ": ", len);
+	if (program)
+	{
+		ft_strlcat(buffer, program, len);
+		ft_strlcat(buffer, ": ", len);
+	}
+	if (arg)
+	{
+		ft_strlcat(buffer, arg, len);
+		ft_strlcat(buffer, ": ", len);
+	}
+	ft_strlcat(buffer, msg, len);
+	ft_strlcat(buffer, "\n", len);
+	write(2, buffer, len - 1);
+	free(buffer);
+}
+
+int	calc_len(char *prefix, char *program, char *arg, char *msg)
+{
+	int	len;
+
+	len = ft_strlen(prefix) + 2 + ft_strlen(msg) + 2;
+	if (program)
+		len += ft_strlen(program) + 2;
+	if (arg)
+		len += ft_strlen(arg) + 2;
+	return (len);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int	find_cmd(char **path, char *filename, char **res)
+{
+	int			errno_value;
+
+	errno_value = ENOENT;
+	*res = 0;
+	if (ft_strchr(filename, '/') != NULL)
+	{
+		errno_value = check_file(filename, res);
+		if (errno_value != 0)
+			print_error(0, filename, strerror(errno_value));
+	}
+	else
+	{
+		if (filename[0] == '\0')
+			errno_value = ENOENT;
+		else
+			errno_value = search_path(path, filename, res);
+		if (errno_value != 0)
+		{
+			if (errno_value == ENOENT)
+				print_error(0, filename, "command not found");
+			else
+				print_error(0, filename, strerror(errno_value));
+		}
+	}
+	return (find_cmd_cnt(errno_value));
+}
+
+int	find_cmd_cnt(int errno_value)
+{
+	if (errno_value == 0)
+		return (0);
+	if (errno_value == ENOENT)
+		return (127);
+	return (126);
+}
+
+int	check_file(char *filename, char **res)
+{
+	struct stat	path_info;
+
+	*res = 0;
+	if (access(filename, F_OK) == -1)
+		return (errno);
+	if (lstat(filename, &path_info) != 0)
+	{
+		print_error(0, 0, strerror(errno));
+		exit(5);
+	}
+	if (S_ISDIR(path_info.st_mode))
+		return (EISDIR);
+	if (access(filename, X_OK) == -1)
+		return (errno);
+	*res = ft_strdup(filename);
+	return (0);
+}
+
+int	search_path(char **path, const char *filename, char **res)
+{
+	int		i;
+	int		status;
+	int		ret;
+	char	*concat;
+
+	ret = ENOENT;
+	if (path)
+	{
+		i = 0;
+		while (path[i])
+		{
+			concat = concat_slash(path[i], filename);
+			status = check_file(concat, res);
+			free(concat);
+			if (status == 0)
+				return (0);
+			else if (status != ENOENT)
+				ret = status;
+			i++;
+		}
+	}
+	*res = 0;
+	return (ret);
+}
+
+char	*concat_slash(const char *str1, const char *str2)
+{
+	char	*res;
+	size_t	buffer_size;
+
+	buffer_size = ft_strlen(str1) + ft_strlen(str2) + 2;
+	res = ft_malloc(buffer_size * 1);
+	ft_strlcpy(res, str1, buffer_size);
+	ft_strlcat(res, "/", buffer_size);
+	ft_strlcat(res, str2, buffer_size);
+	return (res);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -124,6 +274,29 @@ char	**extract_args(t_tube *lst)
 	}
 	args[i] = NULL;
 	return (args);
+}
+
+void	init_cmd_path(t_cmd *cmd, t_exec *exec)
+{
+	if (!cmd->args[0])
+		return ;
+	if (ret_builtin_enum(cmd->args[0]) != -1)
+		cmd->builtin = ret_builtin_enum(cmd->args[0]);
+	else
+		cmd->status = find_cmd(exec->path, cmd->args[0], &(cmd->full_path));
+}
+
+int	ret_builtin_enum(char *str)
+{
+	int		i;
+
+	i = -1;
+	while (++i < 7)
+	{
+		if (!ft_strcmp(str, ret_builtin_literal(i)))
+			return (i);
+	}
+	return (-1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -276,7 +449,7 @@ void	init_cmd(t_tube *lst, t_exec *exec, int i)
 	cmd->args = extract_args(lst);
 	init_redirs(lst, cmd, exec);
 	if (cmd->status == 0)
-		prepare_cmd_path(cmd, exec);
+		init_cmd_path(cmd, exec);
 }
 
 void	init_redirs(t_tube *lst, t_cmd *cmd, t_exec *exec)
@@ -756,7 +929,7 @@ static int	get_tkn_type(char *str)
 	if (*str == '\0' || *str == '\n')
 		return (e_END);
 	i = 0;
-	while (i < 9)
+	while (i < 7)
 	{
 		tkn_str = get_tkn_as_str(i);
 		if (!ft_strncmp(str, tkn_str, ft_strlen(tkn_str)))
