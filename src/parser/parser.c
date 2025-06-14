@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/14 12:34:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/14 12:46:30 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,10 @@ void		add_line(char **buffer, char *line);
 char		*get_input_line(char *prompt);
 void		remove_endl(char *line);
 
+int			fd_builtin(t_exec *exec, int i);
+void		close_fds(t_exec *exec);
+int			exec_builtin(int n, char **args, t_env **env, int prev);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -114,6 +118,48 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 		handle_exit_code(SYNTAX_ERROR);
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int	fd_builtin(t_exec *exec, int i)
+{
+	int	stdin_clone;
+	int	stdout_clone;
+
+	stdin_clone = dup(STDIN_FILENO);
+	stdout_clone = dup(STDOUT_FILENO);
+	dup2(exec->cmds[i].in_fd, STDIN_FILENO);
+	dup2(exec->cmds[i].out_fd, STDOUT_FILENO);
+	close_fds(exec);
+	exec->cmds[i].status = exec_builtin(exec->cmds[i].builtin,
+			exec->cmds[i].args + 1, exec->env, exec->prev);
+	dup2(stdin_clone, STDIN_FILENO);
+	dup2(stdout_clone, STDOUT_FILENO);
+	close(stdin_clone);
+	close(stdout_clone);
+	return (exec->cmds[i].status);
+}
+
+void	close_fds(t_exec *exec)
+{
+	int	i;
+
+	i = 3;
+	while (i < exec->fd_count + 3)
+	{
+		close(i);
+		i++;
+	}
+}
+
+int	exec_builtin(int n, char **args, t_env **env, int prev)
+{
+	static int	(*builtin_arr[7])(char **, t_env **, int) = { exec_echo,
+		exec_cd, exec_pwd, exec_export, exec_unset, exec_env, exec_exit };
+
+	if (n > 7 || n < 0)
+		return (0);
+	return ((builtin_arr)[n](args, env, prev));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -948,7 +994,7 @@ int	exec_pipeline(t_list *pipeline, t_env **env, int previous)
 	exec = init_pipeline(pipeline, env, previous);
 	error_code = 0;
 	if (exec->n == 1 && exec->cmds[0].builtin != -1)
-		error_code = launch_builtin(exec, 0);
+		error_code = fd_builtin(exec, 0);
 	else if (exec->n >= 1)
 		error_code = cmds_with_forks(exec);
 	free_exec(exec);
