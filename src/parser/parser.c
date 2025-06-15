@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/14 15:12:19 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/15 13:05:18 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1258,9 +1258,12 @@ void	lst_quote_remove(t_tube *lst)
 {
 	char	*tmp;
 
+	printf("TESTE while (lst)\n");
 	while (lst)
 	{
+		printf("TESTE tmp = quote_remove(lst->word);\n");
 		tmp = quote_remove(lst->word);
+		printf("TESTE free(lst->word);\n");
 		free(lst->word);
 		lst->word = tmp;
 		lst = lst->next;
@@ -1280,8 +1283,10 @@ char	*quote_remove(char *str)
 	i = 0;
 	while (*str)
 	{
+		printf("TESTE 1\n");
 		if (!handle_quote(str, &in_s_qts, &in_d_qts))
 		{
+			printf("TESTE 2\n");
 			res[i] = *str;
 			i++;
 		}

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:02 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/17 15:32:19 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/15 08:53:51 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	free_exit_s(t_mnsh *shell)
 {
-	free_ast_node(shell->ast_head);
+	//free_ast_node(shell->ast_head);
 	free_shell(shell);
 }
 

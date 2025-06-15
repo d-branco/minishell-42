@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/06/11 08:36:28 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/06/15 12:56:56 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBFT_DIR	:= libft
 ##################################################################### Compiler #
 CC			= cc
 CFLAGS		+= -Wall -Wextra
-CFLAGS		+= -Werror
+CFLAGS		+= -Werror -g -g3
 READFLAGS	= -lreadline
 
 CFLAGS		+= -g
@@ -31,23 +31,6 @@ INCLUDES	:= -I./include
 SRCS		:=	\
 	src/minishell.c															\
 																			\
-	src/execution/exe.c														\
-	src/execution/signal.c													\
-																			\
-	src/parser/parser.c														\
-	src/parser/expander.c													\
-	src/parser/expander_util.c												\
-	src/parser/lexer.c														\
-	src/parser/lexer-list.c													\
-	src/parser/lexer-token.c												\
-	src/parser/lexer-tokenizer.c											\
-	src/parser/ast.c														\
-	src/parser/ast-free.c													\
-	src/parser/ast-parse-cmd.c												\
-	src/parser/ast-parse-cmd2.c												\
-	src/parser/ast-print.c													\
-	src/parser/ast-redirect.c												\
-																			\
 	src/utils/ft_isspace.c													\
 	src/utils/ft_malloc.c													\
 	src/utils/ft_strcmp.c													\
@@ -60,7 +43,25 @@ SRCS		:=	\
 	src/builtins/pwd.c														\
 	src/builtins/unset.c													\
 	src/builtins/check_builtins.c											\
-	src/builtins/init_utils.c
+	src/builtins/init_utils.c												\
+																			\
+	src/parser/parser.c
+
+#	src/parser/expander.c													\
+#	src/parser/expander_util.c												\
+#	src/parser/lexer.c														\
+#	src/parser/lexer-list.c													\
+#	src/parser/lexer-token.c												\
+#	src/parser/lexer-tokenizer.c											\
+#	src/parser/ast.c														\
+#	src/parser/ast-free.c													\
+#	src/parser/ast-parse-cmd.c												\
+#	src/parser/ast-parse-cmd2.c												\
+#	src/parser/ast-print.c													\
+#	src/parser/ast-redirect.c												\
+#																			\
+#	src/execution/exe.c														\
+#	src/execution/signal.c													\
 
 OBJS		:= $(SRCS:.c=.o)
 

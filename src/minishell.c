@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/12 08:50:24 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/15 08:53:21 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ static void	init_shell(t_mnsh *shell, char **envp)
 	shell->envp = init_envp(envp);
 	handle_shlvl(shell);
 	shell->ast_head = NULL;
-	ft_setup_interactive_signals();
+	//ft_setup_interactive_signals();
 }
 
 static char	*init_prompt(int exit_code)

@@ -99,3 +99,4 @@ void	expand_arguments(t_command *cmd, t_mnsh *shell)
 		i++;
 	}
 }
+        

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:22:15 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/15 08:49:45 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	tkn_lst_printer(t_token *lst)
 	{
 		ft_printf("--DEBUG-- TKN_LIST ======== token at %p\n", lst);
 		ft_printf("--DEBUG-- TKN_LIST type: %s\n", token_string[lst->type]);
-		ft_printf("--DEBUG-- TKN_LIST token_string: %s\n", lst->token_string);
+		ft_printf("--DEBUG-- TKN_LIST token_string: %s\n", lst->str);
 		ft_printf("--DEBUG-- TKN_LIST next tkn address: %p\n", lst->next);
 		lst = lst->next;
 	}
@@ -44,8 +44,8 @@ void	tkn_lstclear(t_token **lst)
 	while (current)
 	{
 		ahead = (current)->next;
-		if ((current)->token_string)
-			free((current)->token_string);
+		if ((current)->str)
+			free((current)->str);
 		free(current);
 		current = ahead;
 	}
@@ -60,7 +60,7 @@ t_token	*create_token(t_tkn_type token_type, char *str)
 
 	tkn = (t_token *)ft_malloc(sizeof(t_token) * 1);
 	tkn->type = token_type;
-	tkn->token_string = str;
+	tkn->str = str;
 	tkn->next = NULL;
 	return (tkn);
 }
