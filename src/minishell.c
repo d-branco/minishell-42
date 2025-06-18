@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/15 08:53:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/15 13:14:29 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static char	*init_prompt(int exit_code);
 static void	handle_args(int argc, char **argv);
 static void	looping_shell(t_mnsh *shell);
 
+void		check_args(int argc, char **argv);
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_mnsh	*shell;
@@ -24,16 +26,37 @@ int	main(int argc, char **argv, char **envp)
 	handle_args(argc, argv);
 	shell = ft_malloc(sizeof(t_mnsh) * 1);
 	init_shell(shell, envp);
-	if (DEBUG)
-		ft_printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG--\n");
+	//if (DEBUG)
+	//	ft_printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG--\n");
 
+	check_args(argc, argv);
 	looping_shell(shell);
 
 	rl_clear_history();
-	if (DEBUG)
-		ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
+	//if (DEBUG)
+	//	ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
 	free_shell(shell);
 	return (handle_exit_code(-1));
+}
+
+void	check_args(int argc, char **argv)
+{
+	int	fd;
+
+	if (argc > 1)
+	{
+		fd = open(argv[1], O_RDONLY);
+		if (fd < 0)
+		{
+			//print_error(0, argv[1], strerror(errno));
+			if (errno == ENOENT)
+				exit(127);
+			else
+				exit(126);
+		}
+		dup2(fd, 0);
+		close(fd);
+	}
 }
 
 static void	looping_shell(t_mnsh *shell)

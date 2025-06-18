@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/15 13:05:18 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:29:38 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 		handle_exit_code(SYNTAX_ERROR);
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
-	return(handle_exit_code(-1));
+	return (handle_exit_code(-1));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -526,6 +526,7 @@ int	exec_builtin(int n, char **args, t_env **env, int prev)
 		return (0);
 	//return ((builtin_arr)[n](args, env, prev));
 }
+
 int	update_fd_out(t_cmd *cmd, t_tube *redir, t_exec *exec)
 {
 	int	flags;
@@ -1204,7 +1205,7 @@ int	pipeline_expansion(t_list **pipeline, t_env *env, int error_code)
 int	cmd_expansion(t_tube **cmd, t_env *env, int error_code)
 {
 	t_tube	*current;
-	t_tube	*new_chunk;
+	t_tube	*new_section;
 	t_tube	*res;
 	t_tube	**ptr;
 	int		exp;
@@ -1215,9 +1216,9 @@ int	cmd_expansion(t_tube **cmd, t_env *env, int error_code)
 	current = *cmd;
 	while (current)
 	{
-		if (expand_tube(current, &new_chunk, env, error_code) != 0)
+		if (expand_tube(current, &new_section, env, error_code) != 0)
 			exp = -1;
-		*ptr = new_chunk;
+		*ptr = new_section;
 		while (*ptr)
 			ptr = &(*ptr)->next;
 		current = current->next;
@@ -1242,8 +1243,7 @@ int	expand_tube(t_tube *tube, t_tube **res, t_env *env, int error_code)
 		free(tube->word);
 		tube->word = tmp;
 		tubo = separate_tube(tube);
-		//expand_wildcards(res, tubo); TODO
-		(void) tubo;//remove line when removing line above
+		handle_wildcards(res, tubo);
 		if (tube->modifier != -1 && (!*res || (*res)->next))
 			code = -1;
 	}
@@ -1283,10 +1283,8 @@ char	*quote_remove(char *str)
 	i = 0;
 	while (*str)
 	{
-		printf("TESTE 1\n");
 		if (!handle_quote(str, &in_s_qts, &in_d_qts))
 		{
-			printf("TESTE 2\n");
 			res[i] = *str;
 			i++;
 		}
