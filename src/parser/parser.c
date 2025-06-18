@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/18 17:29:38 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:17:17 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,30 @@ int			parse_tube(t_tube **tube, t_token **tok);
 int			is_redirection(t_token *tkn);
 int			get_modifier(t_token *tkn);
 
+void		handle_wildcards(t_tube **res, t_tube *tubes);
+void		handle_all_wildcards(t_tube *res, t_tube *t);
+t_tube		*get_last_tube(t_tube *t);
+
+void		find_wildcard_matches(char **ret, char *str);
+int			check_iwatod(char *str, char **ret);
+int			contains_wildcards(char *str);
+
+void		check_empty_and_sort(t_list **words, char **ret, char *str);
+char		*backslash_chars(char *str, int flag);
+void		lst_bubble_sort(t_list **lst, int (cmp)(const char *, const char *));
+t_list		*lst_swap(t_list *a, t_list *b);
+
+char		*lst_to_str(t_list *word);
+void		lst_words_len(t_list *word, size_t *len);
+
+int			match_wildcard(char *file, char *expr);
+char		**wildcard_split(char const *s, char c);
+char		*wc_next_word(char **str, char const c);
+int			wc_count_wrds(char const *s, char const c);
+void		ms_split_free(char **s, int i);
+
+void		quote_remove_strarr(char **strarr);
+
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
 	t_token			*lst_tkn;
@@ -147,6 +171,343 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 	free_ast(ast);
 	free_lst_tkn(lst_tkn_origin);
 	return (handle_exit_code(-1));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void	quote_remove_strarr(char **strarr)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (strarr[i])
+	{
+		tmp = quote_remove(strarr[i]);
+		free(strarr[i]);
+		strarr[i] = tmp;
+		i++;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int	match_wildcard(char *file, char *expr)
+{
+	char	**section;
+	int		i;
+	int		ret;
+
+	ret = -1;
+	expr = ft_strdup(expr);
+	section = wildcard_split(expr, '*');
+	quote_remove_strarr(section);
+	i = 0;
+	if (check_starting_wildcard(&i, &file, expr, &section) == 1)
+	{
+		free(expr);
+		return (0);
+	}
+	while (check_single_section(i, &ret, &file, section))
+		i++;
+	if (ret == 1)
+		ret = check_ending_wildcard(i, file, expr, section);
+	free_strarr(section);
+	free(expr);
+	return (ret);
+}
+
+char	**wildcard_split(char const *s, char c)
+{
+	char	**ret;
+	int		i;
+	int		word_count;
+
+	word_count = wc_count_wrds(s, c);
+	ret = (char **)ft_malloc(sizeof(char *) * (word_count + 1));
+	if (!ret)
+		return (NULL);
+	i = -1;
+	while (++i < word_count)
+	{
+		ret[i] = wc_next_word((char **)&s, c);
+		if (ret[i] == NULL)
+		{
+			ms_split_free(ret, i);
+			return (NULL);
+		}
+	}
+	ret[i] = NULL;
+	return (ret);
+}
+
+char	*wc_next_word(char **str, char const c)
+{
+	char	*ret;
+	char	*end;
+	size_t	len;
+	int		in_s_qts;
+	int		in_d_qts;
+
+	while (**str == c && **str != '\0')
+		(*str)++;
+	end = (char *)*str;
+	in_s_qts = 0;
+	in_d_qts = 0;
+	while (*end != '\0' && !(*end == c && !in_s_qts && !in_d_qts))
+	{
+		handle_quote(end, &in_s_qts, &in_d_qts);
+		end++;
+	}
+	len = end - *str + 1;
+	ret = (char *)ft_malloc(sizeof(char) * len);
+	if (!ret)
+		return (NULL);
+	end = ret;
+	while (len-- > 1)
+		*end++ = *(*str)++;
+	*end = '\0';
+	return (ret);
+}
+
+int	wc_count_wrds(char const *s, char const c)
+{
+	int		count;
+	int		flag;
+	int		old_flag;
+	int		in_s_qts;
+	int		in_d_qts;
+
+	flag = -1;
+	count = 0;
+	in_s_qts = 0;
+	in_d_qts = 0;
+	while (*s)
+	{
+		old_flag = flag;
+		handle_quote((char *)s, &in_s_qts, &in_d_qts);
+		if ((in_s_qts == 0) && (in_d_qts == 0) && (*s == c))
+			flag = 0;
+		else
+			flag = 1;
+		if (old_flag != flag && flag == 1)
+			count++;
+		s++;
+	}
+	return (count);
+}
+
+void	ms_split_free(char **s, int i)
+{
+	while (i >= 0)
+	{
+		free(s[i]);
+		i--;
+	}
+	free(s);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+char	*lst_to_str(t_list *word)
+{
+	char	*ret;
+	size_t	size;
+
+	size = 1;
+	lst_words_len(word, &size);
+	ret = (char *)ft_malloc(sizeof(char) * (size + 1));
+	ret[0] = '\0';
+	while (word)
+	{
+		ft_strlcat(ret, word->content, size);
+		word = word->next;
+	}
+	return (ret);
+}
+
+void	lst_words_len(t_list *word, size_t *len)
+{
+	if (!word)
+		return ;
+	*len += ft_strlen((char *)word->content);
+	lst_words_len(word->next, len);
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+void	check_empty_and_sort(t_list **words, char **ret, char *str)
+{
+	char	*escaped;
+
+	if (*words == NULL)
+		*ret = ft_strjoin(str, " ");
+	else
+	{
+		lst_bubble_sort(words, ft_strcmp);
+		*ret = lst_to_str(*words);
+		escaped = backslash_chars(*ret, 0);
+		free(*ret);
+		*ret = escaped;
+	}
+}
+
+char	*backslash_chars(char *str, int flag)
+{
+	int		i;
+	char	*res;
+	char	*chars;
+
+	if (flag == 1)
+		chars = "\"\\$";
+	else
+		chars = "\"\\$'";
+	res = ft_malloc(sizeof(char) * (2 * ft_strlen(str) + 1));
+	i = 0;
+	while (*str)
+	{
+		if (ft_strchr(chars, *str))
+		{
+			res[i] = '\\';
+			i++;
+		}
+		res[i] = *str;
+		i++;
+		str++;
+	}
+	res[i] = 0;
+	return (res);
+}
+
+void	lst_bubble_sort(t_list **lst, int (cmp)(const char *, const char *))
+{
+	int		sorted;
+	t_list	*current;
+
+	sorted = 0;
+	while (!sorted)
+	{
+		sorted = 1;
+		current = *lst;
+		while (current && current->next)
+		{
+			if (0 < cmp(current->content, current->next->content))
+			{
+				sorted = 0;
+				lst_swap(current, current->next);
+			}
+			current = current->next;
+		}
+	}
+}
+
+t_list	*lst_swap(t_list *a, t_list *b)
+{
+	void	*tmp;
+
+	tmp = a->content;
+	a->content = b->content;
+	b->content = tmp;
+	return (b);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void	find_wildcard_matches(char **ret, char *str)
+{
+	struct dirent	*dir_entry;
+	DIR				*dir;
+	t_list			*words;
+
+	if (check_iwatod(str, ret) == -1)
+		return ;
+	dir = opendir(".");
+	if (dir == NULL)
+	{
+		*ret = ft_strjoin(str, " ");
+		return ;
+	}
+	words = NULL;
+	dir_entry = readdir(dir);
+	while (dir_entry != NULL)
+	{
+		if (match_wildcard(dir_entry->d_name, str) == 1)
+			ft_lstadd_back(&words,
+				ft_lstnew((char *)ft_strjoin(dir_entry->d_name, " ")));
+		dir_entry = readdir(dir);
+	}
+	check_empty_and_sort(&words, ret, str);
+	ft_lstclear(&words, free);
+	closedir(dir);
+}
+
+int	check_iwatod(char *str, char **ret)
+{
+	if (str == NULL || *str == '\0')
+		return (-1);
+	if (!contains_wildcards(str))
+	{
+		*ret = ft_strjoin(str, " ");
+		return (-1);
+	}
+	return (0);
+}
+
+int	contains_wildcards(char *str)
+{
+	int	i;
+	int	in_s_qts;
+	int	in_d_qts;
+
+	in_s_qts = 0;
+	in_d_qts = 0;
+	i = 0;
+	while (str[i] && (str[i] != '*' || (in_s_qts || in_d_qts)))
+	{
+		handle_quote((str + i), &in_s_qts, &in_d_qts);
+		i++;
+	}
+	return (str[i] == '*');
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void	handle_wildcards(t_tube **res, t_tube *tubes)
+{
+	char		*tmp_word;
+
+	*res = NULL;
+	if (tubes == NULL)
+		return ;
+	find_wildcard_matches(&tmp_word, tubes->word);
+	free(tubes->word);
+	tmp_word[ft_strlen(tmp_word)-1] = '\0';
+	tubes->word = tmp_word;
+	*res = separate_tube(tubes);
+	handle_all_wildcards(*res, tubes->next);
+	free_tube_lst(tubes);
+	return ;
+}
+
+void	handle_all_wildcards(t_tube *res, t_tube *t)
+{
+	t_tube	*last;
+	char	*tmp_word;
+
+	if (t == NULL)
+		return ;
+	find_wildcard_matches(&tmp_word, t->word);
+	free(t->word);
+	tmp_word[ft_strlen(tmp_word)-1] = '\0';
+	t->word = tmp_word;
+	last = get_last_tube(res);
+	last->next = separate_tube(t);
+	handle_all_wildcards(res, t->next);
+}
+
+t_tube	*get_last_tube(t_tube *t)
+{
+	if (t == NULL)
+		return (t);
+	if (t->next == NULL)
+		return (t);
+	return (get_last_tube(t->next));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
