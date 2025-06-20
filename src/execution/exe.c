@@ -26,6 +26,7 @@ static int	open_output_file(const char *file);
 static int	backup_fd(int fd_to_backup);
 static int	redirect_fd(int new_fd, int old_fd);
 static int	restore_fd(int backup_fd, int original_fd);
+static int	check_command_validity(char *cmd);
 void		fd_bug(char *function_name, int fd, char *action);
 static void	execute_command_child(t_command *cmd, t_mnsh *shell);
 static char	*resolve_command_path(char *cmd, char **envp);
@@ -306,8 +307,8 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 		return (1);
 	expand_arguments(cmd, shell);
 	cmd->command = cmd->args[0];
-	//for (int i = 0; cmd->args[i]; i++)
-	//	printf("DEBUG 9: arg[%d]: [%s]\n", i, cmd->args[i]);
+	if (!cmd->command || cmd->command[0] == '\0')
+		return (handle_exit_code(0));
 	if (is_builtin(cmd))
 	{
 		if (DEBUG)
@@ -330,22 +331,51 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 static void	execute_command_child(t_command *cmd, t_mnsh *shell)
 {
 	char	*full_path;
+	int		status;
 
 	full_path = resolve_command_path(cmd->command, shell->envp);
 	if (!full_path)
 	{
-		fprintf(stderr, "minishell: %s: command not found\n", cmd->command);
+		printf("minishell: %s: command not found\n", cmd->command);
 		handle_exit_code(127);
-		free_ast_node(shell->ast_head);
-		free_shell(shell);
-		exit (handle_exit_code(-1));
+		goto cleanup;
+	}
+	status = check_command_validity(full_path);
+	if (status != 0)
+	{
+		handle_exit_code(status);
+		goto cleanup;
 	}
 	execve(full_path, cmd->args, shell->envp);
-	//perror("minishell");
+	perror("minishell");
+	handle_exit_code(126);
+cleanup:
 	free(full_path);
 	free_ast_node(shell->ast_head);
 	free_shell(shell);
 	exit (handle_exit_code(-1));
+}
+
+static int	check_command_validity(char *cmd)
+{
+	struct stat	sb;
+
+	if (stat(cmd, &sb) == -1)
+	{
+		printf("minishell: %s: No such file or directory\n", cmd);
+		return (127);
+	}
+	if ((sb.st_mode & S_IFMT) == S_IFDIR)
+	{
+		printf("minishell: %s: Is a directory\n", cmd);
+		return (126);
+	}
+	if (!(sb.st_mode & S_IXUSR))
+	{
+		printf("minishell: %s: Permission denied\n", cmd);
+		return (126);
+	}
+	return (0);
 }
 
 static char	*build_full_path(char *path, char *cmd)
@@ -401,17 +431,6 @@ static char	*resolve_command_path(char *cmd, char **envp)
 	free_array(paths);
 	return (NULL);
 }
-
-/*
-static void	execute_command_child(t_command *cmd, t_mnsh *shell)
-{
-	execvp(cmd->command, cmd->args);// proibida
-	fprintf(stderr, "minishell: %s: command not found\n", cmd->command);
-	handle_exit_code(127);
-	free_ast_node(shell->ast_head);
-	free_shell(shell);
-	exit (handle_exit_code(-1));
-}*/
 
 int	execute_and(t_ast_node *node, t_mnsh *shell)
 {
