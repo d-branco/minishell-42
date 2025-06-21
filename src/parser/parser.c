@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/21 07:51:15 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/21 08:00:41 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,8 @@ int			contains_wildcards(char *str);
 
 void		check_empty_and_sort(t_list **words, char **ret, char *str);
 char		*backslash_chars(char *str, int flag);
-void		lst_bubble_sort(t_list **lst, int (cmp)(const char *, const char *));
+void		lst_bubble_sort(
+				t_list **lst, int (cmp)(const char *, const char *));
 t_list		*lst_swap(t_list *a, t_list *b);
 
 char		*lst_to_str(t_list *word);
@@ -146,7 +147,12 @@ int			wc_count_wrds(char const *s, char const c);
 void		ms_split_free(char **s, int i);
 
 void		quote_remove_strarr(char **strarr);
-int			check_single_section(int i, int *ret, char **file, char **chunks);
+int			check_single_section(int i, int *ret, char **file, char **sections);
+
+int			check_starting_wildcard(
+				int *i, char **file, char *expr, char ***sections);
+int			check_ending_wildcard(
+				int i, char *file, char *expr, char **sections);
 
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
@@ -175,6 +181,44 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+int	check_starting_wildcard(int *i, char **file, char *expr, char ***sections)
+{
+	char	*tmp;
+
+	tmp = quote_remove(expr);
+	if (*file[0] == '.' && tmp[0] != '.')
+	{
+		free_strarr(*sections);
+		free(tmp);
+		return (1);
+	}
+	free(tmp);
+	if (expr[0] != '*')
+	{
+		if (0 != ft_strncmp(*file, *sections[0], ft_strlen(*sections[0])))
+		{
+			free_strarr(*sections);
+			return (1);
+		}
+		*file = *file + ft_strlen(*sections[0]);
+		*i = *i + 1;
+	}
+	return (0);
+}
+
+int	check_ending_wildcard(int i, char *file, char *expr, char **sections)
+{
+	if (expr[ft_strlen(expr) - 1] != '*')
+	{
+		file -= ft_strlen(sections[i - 1]);
+		file += ft_strlen(file) - ft_strlen(sections[i - 1]);
+		if (!*sections[i - 1] || ft_strcmp(file, sections[i - 1]) != 0)
+			return (0);
+	}
+	return (TRUE);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 void	quote_remove_strarr(char **strarr)
 {
 	int		i;
@@ -190,22 +234,22 @@ void	quote_remove_strarr(char **strarr)
 	}
 }
 
-int	check_single_section(int i, int *ret, char **file, char **chunks)
+int	check_single_section(int i, int *ret, char **file, char **sections)
 {
 	char	*tmp;
 
-	if (chunks[i] == NULL)
+	if (sections[i] == NULL)
 	{
 		*ret = 1;
 		return (0);
 	}
-	tmp = ft_strnstr(*file, chunks[i], ft_strlen(*file));
+	tmp = ft_strnstr(*file, sections[i], ft_strlen(*file));
 	if (tmp == NULL)
 	{
 		*ret = 0;
 		return (0);
 	}
-	*file = tmp + ft_strlen(chunks[i]);
+	*file = tmp + ft_strlen(sections[i]);
 	return (1);
 }
 
@@ -350,8 +394,6 @@ void	lst_words_len(t_list *word, size_t *len)
 	*len += ft_strlen((char *)word->content);
 	lst_words_len(word->next, len);
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 void	check_empty_and_sort(t_list **words, char **ret, char *str)
@@ -1639,12 +1681,9 @@ void	lst_quote_remove(t_tube *lst)
 {
 	char	*tmp;
 
-	printf("TESTE while (lst)\n");
 	while (lst)
 	{
-		printf("TESTE tmp = quote_remove(lst->word);\n");
 		tmp = quote_remove(lst->word);
-		printf("TESTE free(lst->word);\n");
 		free(lst->word);
 		lst->word = tmp;
 		lst = lst->next;
