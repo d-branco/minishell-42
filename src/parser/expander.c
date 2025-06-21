@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 11:02:22 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/06/05 14:24:14 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/21 08:07:51 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,3 @@ void	expand_arguments(t_command *cmd, t_mnsh *shell)
 		i++;
 	}
 }
-        

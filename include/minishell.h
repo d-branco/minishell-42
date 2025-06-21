@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/13 09:31:22 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/21 08:06:17 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,16 +289,16 @@ int			is_valid_token_for_argument(t_token *token);
 
 //parser/parser.c
 int			parse_n_exec_input(char *input, t_mnsh *shell);
-t_env	*make_ll_env(char **envp);
-void	env_add(t_env **env, char *key, char *value);
-t_env	*make_env(char *key, char *value, t_env *next);
-void	free_all_env(t_env *env);
-void	free_ll_env(t_env *env);
+t_env		*make_ll_env(char **envp);
+void		env_add(t_env **env, char *key, char *value);
+t_env		*make_env(char *key, char *value, t_env *next);
+void		free_all_env(t_env *env);
+void		free_ll_env(t_env *env);
 
-int		make_tkn_lst(t_token **lst, char *str);
-void	tkn_free_lst(t_token *lst);
-void	tkn_free_one(t_token *tkn);
-void	next_token(t_token **list);
+int			make_tkn_lst(t_token **lst, char *str);
+void		tkn_free_lst(t_token *lst);
+void		tkn_free_one(t_token *tkn);
+void		next_token(t_token **list);
 
 //int			parser(char *input, t_mnsh *shell);
 //parser/expander.c
