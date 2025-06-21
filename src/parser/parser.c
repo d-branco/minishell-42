@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/18 18:17:17 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:05:17 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ void		tkn_free_one(t_token *tkn);
 void		next_token(t_token **list);
 
 int			lexer(t_token **tkn, char **str);
-static int	get_tkn_type(char *str);
-const char	*get_tkn_as_str(enum e_token_type n);
+int			get_tkn_type(char *str);
+char		*get_tkn_as_str(enum e_token_type n);
 t_token		*make_one_tkn(t_token *next, char *str, enum e_token_type type);
 int			get_str_token(char **word, char **str);
 int			handle_quote(char *c, int *in_s_qts, int *in_d_qts);
 
 int			parse_ast(t_ast **ast, t_token **tkn);
 int			parse_tokens(t_ast **ast, t_token **tkn);
-static int	parse_conditionnal(t_ast **ast, t_token **tkn);
+int			parse_conditionnal(t_ast **ast, t_token **tkn);
 
 int			exec_ast(t_ast *ast, t_env **env, int previous);
 int			exec_pipeline(t_list *pipeline, t_env **env, int previous);
@@ -74,7 +74,7 @@ char		**extract_path(t_env *env);
 char		**extract_args(t_tube *lst);
 void		init_cmd_path(t_cmd *cmd, t_exec *exec);
 int			ret_builtin_enum(char *str);
-const char	*ret_builtin_literal(int n);
+char		*ret_builtin_literal(int n);
 
 int			find_cmd(char **path, char *filename, char **res);
 int			find_cmd_cnt(int errno_value);
@@ -1191,7 +1191,7 @@ int	ret_builtin_enum(char *str)
 	return (-1);
 }
 
-const char	*ret_builtin_literal(int n)
+char	*ret_builtin_literal(int n)
 {
 	static const char	*tkn_str[7] = {"echo", "cd", "pwd", "export", "unset",
 		"env", "exit"};
@@ -1774,7 +1774,7 @@ int	parse_tokens(t_ast **ast, t_token **tkn)
 	return (SUCCESS);
 }
 
-static int	parse_conditionnal(t_ast **ast, t_token **tkn)
+int	parse_conditionnal(t_ast **ast, t_token **tkn)
 {
 	t_list	*pipeline;
 
@@ -1825,7 +1825,7 @@ int	lexer(t_token **tkn, char **str)
 	return (error_code);
 }
 
-static int	get_tkn_type(char *str)
+int	get_tkn_type(char *str)
 {
 	int			i;
 	const char	*tkn_str;
@@ -1843,7 +1843,7 @@ static int	get_tkn_type(char *str)
 	return (e_WORD);
 }
 
-const char	*get_tkn_as_str(enum e_token_type n)
+char	*get_tkn_as_str(enum e_token_type n)
 {
 	static const char	*tok_strings[9] = {"(", ")", "&&", "||",
 		"<<", "<", ">>", ">", "|"};
