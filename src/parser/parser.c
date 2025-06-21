@@ -1493,14 +1493,14 @@ char	*get_word(char **str)
 
 	in_s_qts = 0;
 	in_d_qts = 0;
-	while (**str && ft_strchr("\n", **str))
+	while (**str && ft_strchr(" 	\n", **str))
 		(*str)++;
 	i = 0;
 	while ((*str)[i])
 	{
 		handle_quote(*str + i, &in_s_qts, &in_d_qts);
 		if (!(in_d_qts || in_s_qts)
-			&& ft_strchr("\n", (*str)[i]))
+			&& ft_strchr(" 	\n", (*str)[i]))
 			break ;
 		i++;
 	}
