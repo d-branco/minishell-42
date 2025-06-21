@@ -1562,6 +1562,7 @@ char	*expand_variable(char **str, t_env *env, int state)
 	int		i;
 
 	i = 1;
+	(void) state;
 	while (ft_isalnum((*str)[i]) || (*str)[i] == '_')
 		i++;
 	if (i == 1)

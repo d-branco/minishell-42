@@ -19,18 +19,18 @@
 #  define DEBUG FALSE
 # endif
 
-# define TRUE			1
-# define FALSE			0
+# define TRUE				1
+# define FALSE				0
 
-# define SUCCESS 0
-# define ERROR 1
-# define NON_EXECUTABLE 126
-# define UNKNOWN_COMMAND 127
+# define SUCCESS			0
+# define ERROR				1
+# define NON_EXECUTABLE		126
+# define UNKNOWN_COMMAND	127
 
 //cd bultin
-# define PATH_MAX 1024
+# define PATH_MAX			1024
 
-# define SYNTAX_ERROR	2
+# define SYNTAX_ERROR		2
 
 //		String and Command Line Functions
 # include <readline/readline.h>
@@ -210,6 +210,7 @@ typedef struct s_cmd
 	int		i;
 	int		n;
 }	t_cmd;
+
 typedef struct s_exec
 {
 	int		n;
