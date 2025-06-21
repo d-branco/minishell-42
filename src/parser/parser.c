@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/21 08:08:14 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:58:49 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1574,9 +1574,9 @@ char	*expand_variable(char **str, t_env *env, int state)
 	value = ret_env_key(env, key);
 	free(key);
 	*str += i;
-	if (state)
-		ret = value;
-	return (ret);
+	//if (state)
+	//	ret = value;
+	return (value);
 }
 
 char	*ret_env_key(t_env *env, char *key)
