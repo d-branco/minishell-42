@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/19 16:05:17 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/21 07:51:15 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void		next_token(t_token **list);
 
 int			lexer(t_token **tkn, char **str);
 int			get_tkn_type(char *str);
-char		*get_tkn_as_str(enum e_token_type n);
+const char	*get_tkn_as_str(enum e_token_type n);
 t_token		*make_one_tkn(t_token *next, char *str, enum e_token_type type);
 int			get_str_token(char **word, char **str);
 int			handle_quote(char *c, int *in_s_qts, int *in_d_qts);
@@ -74,7 +74,7 @@ char		**extract_path(t_env *env);
 char		**extract_args(t_tube *lst);
 void		init_cmd_path(t_cmd *cmd, t_exec *exec);
 int			ret_builtin_enum(char *str);
-char		*ret_builtin_literal(int n);
+const char	*ret_builtin_literal(int n);
 
 int			find_cmd(char **path, char *filename, char **res);
 int			find_cmd_cnt(int errno_value);
@@ -146,6 +146,7 @@ int			wc_count_wrds(char const *s, char const c);
 void		ms_split_free(char **s, int i);
 
 void		quote_remove_strarr(char **strarr);
+int			check_single_section(int i, int *ret, char **file, char **chunks);
 
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
@@ -187,6 +188,25 @@ void	quote_remove_strarr(char **strarr)
 		strarr[i] = tmp;
 		i++;
 	}
+}
+
+int	check_single_section(int i, int *ret, char **file, char **chunks)
+{
+	char	*tmp;
+
+	if (chunks[i] == NULL)
+	{
+		*ret = 1;
+		return (0);
+	}
+	tmp = ft_strnstr(*file, chunks[i], ft_strlen(*file));
+	if (tmp == NULL)
+	{
+		*ret = 0;
+		return (0);
+	}
+	*file = tmp + ft_strlen(chunks[i]);
+	return (1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1191,7 +1211,7 @@ int	ret_builtin_enum(char *str)
 	return (-1);
 }
 
-char	*ret_builtin_literal(int n)
+const char	*ret_builtin_literal(int n)
 {
 	static const char	*tkn_str[7] = {"echo", "cd", "pwd", "export", "unset",
 		"env", "exit"};
@@ -1843,7 +1863,7 @@ int	get_tkn_type(char *str)
 	return (e_WORD);
 }
 
-char	*get_tkn_as_str(enum e_token_type n)
+const char	*get_tkn_as_str(enum e_token_type n)
 {
 	static const char	*tok_strings[9] = {"(", ")", "&&", "||",
 		"<<", "<", ">>", ">", "|"};
