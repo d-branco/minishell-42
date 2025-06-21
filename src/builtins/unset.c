@@ -33,16 +33,14 @@ static void	remove_env_var(char ***envp, const char *var_name)
 	count = 0;
 	while ((*envp)[count])
 		count++;
-	new_env = ft_malloc(sizeof(char *) * count);
-	while (i < count)
+	new_env = ft_malloc(sizeof(char *) * count + 1);
+	while ((*envp)[i])
 	{
-		if (is_var_to_remove((*envp)[i], var_name))
-		{
+		if (!is_var_to_remove((*envp)[i], var_name))
+			new_env[j++] = (*envp)[i];
+		else
 			free((*envp)[i]);
-			i++;
-			continue ;
-		}
-		new_env[j++] = (*envp)[i++];
+		i++;
 	}
 	new_env[j] = NULL;
 	free(*envp);
@@ -53,12 +51,18 @@ int	ft_unset(char **av, char ***envp)
 {
 	int	i;
 
-	if (!av[1] || !envp || !*envp)
+	if (!av[1] || !envp || !*envp || av[1][0] == '$')
 		return (handle_exit_code(0));
 	i = 1;
 	while (av[i])
 	{
-		remove_env_var(envp, av[i]);
+		if (av[i][0] == '-')
+		{
+			printf("minishell: unset: invalid option\n");
+			handle_exit_code(0);
+		}
+		else
+			remove_env_var(envp, av[i]);
 		i++;
 	}
 	return (handle_exit_code(0));

@@ -23,12 +23,6 @@ int	main(int argc, char **argv, char **envp)
 
 	shell = ft_malloc(sizeof(t_mnsh) * 1);
 	init_shell(shell, envp);
-	//if (DEBUG)
-	//{
-	//	loop = -1;
-	//	while (shell->envp[++loop])
-	//		ft_printf("--DEBUG-- [envp] %s\n", shell->envp[loop]);
-	//}
 	if (argc > 1)
 	{
 		if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
@@ -63,7 +57,6 @@ int	main(int argc, char **argv, char **envp)
 	if (DEBUG)
 		ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
 	free_shell(shell);
-	//free (shell);
 	return (handle_exit_code(-1));
 }
 

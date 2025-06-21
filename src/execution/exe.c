@@ -295,18 +295,30 @@ int	handle_input_redirection(t_redirect *redir, t_ast_node *node, t_mnsh *shell)
 	return (handle_exit_code(-1));
 }
 
+static int	is_builtin_needing_expansion(const char *cmd)
+{
+	if (!cmd)
+		return (0);
+	if (ft_strcmp(cmd, "unset") == 0 ||	ft_strcmp(cmd, "cd") == 0)
+		return (0);
+	return (1);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 int	execute_command(t_ast_node *node, t_mnsh *shell)
 {
 	t_command	*cmd;
 	pid_t		pid;
 	int			status;
+	int			sig;
 
 	cmd = (t_command *)node->content;
 	if (!cmd || !cmd->command)
 		return (1);
-	expand_arguments(cmd, shell);
+	if (is_builtin_needing_expansion(cmd->command))
+		expand_arguments(cmd, shell);
 	cmd->command = cmd->args[0];
+	printf("cmd0: %s / cmd1: %s\n", cmd->args[0], cmd->args[1]);
 	if (!cmd->command || cmd->command[0] == '\0')
 		return (handle_exit_code(0));
 	if (is_builtin(cmd))
@@ -315,15 +327,31 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 			ft_printf("--DEBUG-- built-in		%s\n", cmd->command);
 		return (execute_builtin(cmd, shell));
 	}
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if ((DEBUG) && (pid == 0))
 		print_ast(node, 0);
 	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		execute_command_child(cmd, shell);
+	}
 	else if (pid < 0)
 		return (perror("minishell: fork"), 1);
 	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
+	ft_setup_interactive_signals();
+	if (WIFSIGNALED(status))
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGQUIT)
+			write(STDERR_FILENO, "Quit (core dumped)\n", 19);
+		else if (sig == SIGINT)
+			write(STDERR_FILENO, "\n", 1);
+		return (handle_exit_code(128 + sig));
+	}
+	else if (WIFEXITED(status))
 		return (handle_exit_code(WEXITSTATUS(status)));
 	return (handle_exit_code(-1));
 }
@@ -333,6 +361,8 @@ static void	execute_command_child(t_command *cmd, t_mnsh *shell)
 	char	*full_path;
 	int		status;
 
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	full_path = resolve_command_path(cmd->command, shell->envp);
 	if (!full_path)
 	{
@@ -502,9 +532,19 @@ static void	run_right_child(t_ast_node *node, int *pipefd, t_mnsh *shell)
 static int	wait_for_child(pid_t pid)
 {
 	int	status;
+	int	sig;
 
 	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
+	if (WIFSIGNALED(status))
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGQUIT)
+			write(STDERR_FILENO, "Quit (core dumped)\n", 19);
+		else if (sig == SIGINT)
+			write(STDERR_FILENO, "\n", 1);
+		return (handle_exit_code(128 + sig));
+	}
+	else if (WIFEXITED(status))
 		return (handle_exit_code(WEXITSTATUS(status)));
 	return (handle_exit_code(1));
 }
@@ -514,7 +554,10 @@ int	execute_pipe(t_ast_node *node, t_mnsh *shell)
 	int		pipefd[2];
 	pid_t	left_pid;
 	pid_t	right_pid;
+	int		right_status;
 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	if (pipe(pipefd) == -1)
 		return (perror("minishell: pipe"), 1);
 	fd_bug("execute_pipe", pipefd[0], "pipe  read end created");
@@ -523,19 +566,29 @@ int	execute_pipe(t_ast_node *node, t_mnsh *shell)
 	if (left_pid == -1)
 		return (perror("minishell: fork"), 1);
 	if (left_pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		run_left_child(node, pipefd, shell);
+	}
 	right_pid = fork();
 	if (right_pid == -1)
 		return (close(pipefd[0]), close(pipefd[1]), waitpid(left_pid, NULL, 0),
 			perror("minishell: fork"), 1);
 	if (right_pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		run_right_child(node, pipefd, shell);
+	}
 	fd_bug("execute_pipe", pipefd[0], "closing  read end in parent");
 	close(pipefd[0]);
 	fd_bug("execute_pipe", pipefd[1], "closing write end in parent");
 	close(pipefd[1]);
 	wait_for_child(left_pid);
-	return (handle_exit_code(wait_for_child(right_pid)));
+	right_status = wait_for_child(right_pid);
+	ft_setup_interactive_signals();
+	return (handle_exit_code(right_status));
 }
 
 ////////////////////////////////////////////////////////////////////////////////

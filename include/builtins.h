@@ -43,6 +43,7 @@ int		ft_export(char **av, t_mnsh *shell);
 int		ft_pwd(void);
 //src/builtins/unset.c
 int		ft_unset(char **av, char ***envp);
+int		is_valid_arg(const char *av);
 //src/builtins/check_builtins.c
 int		is_builtin(t_command *cmd);
 int		execute_builtin(t_command *cmd, t_mnsh *shell);

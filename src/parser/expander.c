@@ -37,6 +37,36 @@ char	*expand_argument(const char *arg, t_mnsh *shell)
 {
 	int		i;
 	char	*res;
+	bool	was_quoted;
+
+	res = ft_strdup("");
+	i = 0;
+	was_quoted = false;
+	while (arg[i])
+	{
+		if (arg[i] == '\'' || arg[i] == '"')
+		{
+			was_quoted = true;
+			handle_quoted(arg, &i, &res, shell);
+		}
+		else if (arg[i] == '$')
+			handle_dollar(arg, &i, &res, shell);
+		else
+			append_char(&res, arg[i++]);
+	}
+	if (!was_quoted && res[0] == '\0')
+	{
+		free(res);
+		return (NULL);
+	}
+	return (res);
+}
+
+/*
+char	*expand_argument(const char *arg, t_mnsh *shell)
+{
+	int		i;
+	char	*res;
 
 	res = NULL;
 	i = 0;
@@ -52,7 +82,7 @@ char	*expand_argument(const char *arg, t_mnsh *shell)
 	}
 	return (res);
 }
-
+*/
 static void	handle_quoted(const char *arg, int *i, char **res, t_mnsh *shell)
 {
 	char	quote;
@@ -96,10 +126,42 @@ void	expand_arguments(t_command *cmd, t_mnsh *shell)
 	while (cmd->args && cmd->args[i])
 	{
 		expanded = expand_argument_and_wildcard(cmd->args[i], shell);
+		free(cmd->args[i]);
+		if (expanded)
+		{
+			int j = 0;
+			while (expanded[j])
+			{
+				//if (expanded[j][0] != '\0')
+				ft_strarr_extend(&new_args, (char *[]){ft_strdup(expanded[j]), NULL});
+				j++;
+			}
+			ft_strarr_free(expanded);
+		}
+		i++;
+	}
+	//ft_strarr_free(cmd->args);
+	free(cmd->args);
+	cmd->args = new_args;
+}
+
+
+/*
+void	expand_arguments(t_command *cmd, t_mnsh *shell)
+{
+	int		i;
+	char	**new_args;
+	char	**expanded;
+
+	new_args = NULL;
+	i = 0;
+	while (cmd->args && cmd->args[i])
+	{
+		expanded = expand_argument_and_wildcard(cmd->args[i], shell);
 		ft_strarr_extend(&new_args, expanded);
 		ft_strarr_free(expanded);
 		i++;
 	}
 	ft_strarr_free(cmd->args);
 	cmd->args = new_args;
-}
+}*/

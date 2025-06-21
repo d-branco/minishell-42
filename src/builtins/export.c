@@ -14,7 +14,7 @@
 
 static void	ft_sort_env_tabs(char **tabs);
 
-static int	is_valid_arg(const char *av)
+int	is_valid_arg(const char *av)
 {
 	int	i;
 
@@ -97,7 +97,8 @@ int	ft_export(char **av, t_mnsh *shell)
 	char	cwd[PATH_MAX];
 
 	status = 0;
-	if (!av[1])
+	printf("av[1]: %s\n", av[1]);
+	if (!av[1] || ft_strcmp(av[1], "") == 0)
 		return (print_sort_env(shell->envp), handle_exit_code(0));
 	i = 1;
 	while (av[i])

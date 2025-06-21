@@ -162,5 +162,6 @@ int		ft_strcmp(const char *s1, const char *s2);
 //execution/signal.c
 void	ft_setup_interactive_signals(void);
 void	ft_setup_fork_signals(void);
+void	ft_exec_handler(int signo);
 
 #endif

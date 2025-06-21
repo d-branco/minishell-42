@@ -14,6 +14,8 @@
 
 static int	is_wildcard_token(const char *str)
 {
+	if (!str)
+		return (0);
 	return (ft_strchr(str, '*') != NULL);
 }
 
@@ -77,11 +79,16 @@ char	**expand_argument_and_wildcard(const char *arg, t_mnsh *shell)
 
 	res = NULL;
 	expanded = expand_argument(arg, shell);
+	if (!expanded)
+		return (NULL);
 	if (is_wildcard_token(expanded))
 	{
 		wildcards = expand_wildcard(expanded);
-		ft_strarr_extend(&res, wildcards);
-		ft_strarr_free(wildcards);
+		if (wildcards)
+		{
+			ft_strarr_extend(&res, wildcards);
+			ft_strarr_free(wildcards);
+		}
 		free(expanded);
 	}
 	else

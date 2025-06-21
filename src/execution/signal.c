@@ -13,17 +13,12 @@
 #include "../../include/minishell.h"
 
 static void	ft_prompt_handler(int signo);
-static void	ft_exec_handler(int signo);
+void	ft_exec_handler(int signo);
 /// @brief Configura sinais para modo interativo
 
 void	ft_setup_interactive_signals(void)
 {
-	struct sigaction	sa;
-
-	sa.sa_handler = ft_prompt_handler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
+	signal(SIGINT, ft_prompt_handler);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTERM, SIG_IGN);
 }
@@ -40,21 +35,17 @@ static void	ft_prompt_handler(int signo)
 		handle_exit_code(130);
 	}
 }
+/*
 /// @brief Configura sinais para processo filho (execução de comando)
 
 void	ft_setup_fork_signals(void)
 {
-	struct sigaction	sa;
-
-	sa.sa_handler = ft_exec_handler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	signal(SIGINT, ft_exec_handler);
+	signal(SIGQUIT, ft_exec_handler);
 }
 /// @brief Trata sinais durante execução de comandos (forked)
 
-static void	ft_exec_handler(int signo)
+void	ft_exec_handler(int signo)
 {
 	if (signo == SIGINT)
 	{
@@ -66,4 +57,4 @@ static void	ft_exec_handler(int signo)
 		write(STDOUT_FILENO, "Quit\n", 5);
 		handle_exit_code(131);
 	}
-}
+}*/
