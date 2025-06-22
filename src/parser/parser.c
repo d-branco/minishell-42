@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/22 17:14:44 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/22 17:34:07 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1518,7 +1518,7 @@ char	*param_expansion(char *str, t_env *env, int retn)
 	int		in_s_qts;
 	int		in_d_qts;
 
-	res = ft_malloc(1 * ((ft_strlen(str) + 1)));
+	res = ft_malloc(1 * (ft_strlen(str) + 1));
 	in_s_qts = 0;
 	in_d_qts = 0;
 	i = 0;

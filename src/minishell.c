@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/15 13:14:29 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/22 17:35:40 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static void	looping_shell(t_mnsh *shell)
 	{
 		shell->last_exit_code = handle_exit_code(-1);
 		input = readline(shell->prompt);
+		free(shell->prompt);
 		if (input == NULL)
 			break ;
 		if (ft_check_input(input))
@@ -76,7 +77,6 @@ static void	looping_shell(t_mnsh *shell)
 		if (input[0])
 			handle_exit_code(parse_n_exec_input(input, shell));
 		free(input);
-		free(shell->prompt);
 		shell->prompt = init_prompt(handle_exit_code(-1));
 		loop--; //remove before deliverance
 	}
@@ -116,8 +116,8 @@ void	free_shell(t_mnsh *shell)
 {
 	int	i;
 
-	if (shell->prompt)
-		free(shell->prompt);
+	//if (shell->prompt)
+	//	free(shell->prompt);
 	//free ast;
 	if (shell->envp)
 	{
