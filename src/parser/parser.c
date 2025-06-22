@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/21 14:58:49 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/22 17:14:44 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char		*param_expansion(char *str, t_env *env, int retn);
 char		*dollar_expansion(char **str, t_env *env, int retn, int state);
 char		*expand_variable(char **str, t_env *env, int state);
 char		*ret_env_key(t_env *env, char *key);
-void		insert_value(char **buf, char *val, int pos, int extra_space);
+void		insert_value(char **buf, char *val, int *pos, int extra_space);
 
 t_tube		*make_tube(t_tube *new);
 t_tube		*separate_tube(t_tube *tube);
@@ -326,7 +326,7 @@ char	*wc_next_word(char **str, char const c)
 	if (!ret)
 		return (NULL);
 	end = ret;
-	while (len-- > 1)
+	while ((len--) > 1)
 		*end++ = *(*str)++;
 	*end = '\0';
 	return (ret);
@@ -1070,7 +1070,7 @@ void	print_error(char *program, char *arg, char *msg)
 	char	*prefix;
 	char	*buffer;
 
-	prefix = "minishell";
+	prefix = "Minishell";
 	len = calc_len(prefix, program, arg, msg);
 	buffer = ft_malloc(1 * len);
 	ft_strlcpy(buffer, prefix, len);
@@ -1255,8 +1255,8 @@ int	ret_builtin_enum(char *str)
 
 const char	*ret_builtin_literal(int n)
 {
-	static const char	*tkn_str[7] = {"echo", "cd", "pwd", "export", "unset",
-		"env", "exit"};
+	static const char	*tkn_str[7] = {
+		"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 
 	if (n > 7 || n < 0)
 		return (NULL);
@@ -1518,7 +1518,7 @@ char	*param_expansion(char *str, t_env *env, int retn)
 	int		in_s_qts;
 	int		in_d_qts;
 
-	res = ft_malloc(1 * (ft_strlen(str) + 1));
+	res = ft_malloc(1 * ((ft_strlen(str) + 1)));
 	in_s_qts = 0;
 	in_d_qts = 0;
 	i = 0;
@@ -1527,8 +1527,7 @@ char	*param_expansion(char *str, t_env *env, int retn)
 		if (*str == '$' && !in_s_qts)
 		{
 			val = dollar_expansion(&str, env, retn, in_d_qts);
-			insert_value(&res, val, i, ft_strlen(str) + 1);
-			i += ft_strlen(val);
+			insert_value(&res, val, &i, (ft_strlen(str) + 1));
 			free(val);
 		}
 		else
@@ -1537,8 +1536,7 @@ char	*param_expansion(char *str, t_env *env, int retn)
 			res[i++] = *(str++);
 		}
 	}
-	res[i] = 0;
-	return (res);
+	return (res[i] = 0, res);
 }
 
 char	*dollar_expansion(char **str, t_env *env, int retn, int state)
@@ -1575,9 +1573,11 @@ char	*expand_variable(char **str, t_env *env, int state)
 	value = ret_env_key(env, key);
 	free(key);
 	*str += i;
-	//if (state)
-	//	ret = value;
-	return (value);
+	if (state)
+		ret = backslash_chars(value, TRUE);
+	else
+		ret = backslash_chars(value, FALSE);
+	return (ret);
 }
 
 char	*ret_env_key(t_env *env, char *key)
@@ -1595,16 +1595,17 @@ char	*ret_env_key(t_env *env, char *key)
 	return (empty);
 }
 
-void	insert_value(char **buf, char *val, int pos, int extra_space)
+void	insert_value(char **buf, char *val, int *pos, int extra_space)
 {
 	int		len;
 	char	*tmp;
 
-	(*buf)[pos] = 0;
+	(*buf)[*pos] = 0;
 	len = ft_strlen(*buf) + ft_strlen(val) + extra_space;
 	tmp = ft_malloc(1 * len);
 	ft_strlcpy(tmp, *buf, len);
 	ft_strlcat(tmp, val, len);
+	*pos += ft_strlen(val);
 	free(*buf);
 	*buf = tmp;
 }
