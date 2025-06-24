@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/24 15:59:20 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:35:31 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,28 @@ static void	looping_shell(t_mnsh *shell);
 
 void		check_args(int argc, char **argv);
 
+void		display_ctrl_c(int toggle);
+void		sigint_handler(int sig);
+void		silent_signal(int sig);
+void		parent_signals(void);
+void		silent_signals(void);
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_mnsh	*shell;
 
+	if (isatty(0) && isatty(2)) ////// check signals
+		rl_outstream = stderr;//////// check signals
 	handle_args(argc, argv);
 	shell = ft_malloc(sizeof(t_mnsh) * 1);
+	display_ctrl_c(TRUE);///////////// check signals
+	parent_signals();///////////////// check signals
 	init_shell(shell, envp);
-	//if (DEBUG)
-	//	ft_printf("--DEBUG-- \n--DEBUG-- Hello, friend.\n--DEBUG--\n");
 
 	check_args(argc, argv);
 	looping_shell(shell);
 
 	rl_clear_history();
-	//if (DEBUG)
-	//	ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
 	free_shell(shell);
 	return (handle_exit_code(-1));
 }
@@ -61,11 +67,9 @@ void	check_args(int argc, char **argv)
 
 static void	looping_shell(t_mnsh *shell)
 {
-	int		loop;
 	char	*input;
 
-	loop = 42; //change to TRUE before deliverance
-	while (loop)
+	while (TRUE)
 	{
 		shell->last_exit_code = handle_exit_code(-1);
 		input = readline(shell->prompt);
@@ -74,13 +78,19 @@ static void	looping_shell(t_mnsh *shell)
 			break ;
 		if (ft_check_input(input))
 			add_history(input);
+		silent_signals();///////////// check signals
+		display_ctrl_c(FALSE);//////// check signals
 		if (input[0])
 			handle_exit_code(parse_n_exec_input(input, shell));
+		display_ctrl_c(TRUE);///////// check signals
+		parent_signals();///////////// check signals
 		free(input);
 		shell->prompt = init_prompt(handle_exit_code(-1));
-		loop--; //remove before deliverance
 	}
-	ft_putstr_fd("exit\n", STDERR_FILENO);
+	free(input);
+	if (isatty(0) && isatty(2)) ////// check signals
+		ft_putstr_fd("exit\n", STDERR_FILENO);
+	display_ctrl_c(FALSE);
 }
 
 static void	handle_args(int argc, char **argv)
