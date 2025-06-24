@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/06/24 08:33:58 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/06/24 14:59:45 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBFT_DIR	:= libft
 ##################################################################### Compiler #
 CC			= cc
 CFLAGS		+= -Wall -Wextra
-CFLAGS		+= -Werror
+#CFLAGS		+= -Werror
 READFLAGS	= -lreadline
 
 #CFLAGS		+= -g
@@ -111,7 +111,7 @@ bonus: $(NAME)
 debug:
 	@\
 	$(MAKE) --silent fclean												;	\
-	$(MAKE) --silent all CFLAGS+=-D\ DEBUG=1							&&	\
+	$(MAKE) --silent all CFLAGS=\ -Wall\ -Wextra\ -D\ DEBUG=1			&&	\
 	$(MAKE) --silent clean
 
 clean:

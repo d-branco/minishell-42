@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/22 17:34:07 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 16:01:05 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ int			get_tkn_type(char *str);
 const char	*get_tkn_as_str(enum e_token_type n);
 t_token		*make_one_tkn(t_token *next, char *str, enum e_token_type type);
 int			get_str_token(char **word, char **str);
-int			handle_quote(char *c, int *in_s_qts, int *in_d_qts);
+
+int			handle_quote(char *c, t_quote_state *state);
+int			needs_escaping(char c, t_quote_state *state);
 
 int			parse_ast(t_ast **ast, t_token **tkn);
 int			parse_tokens(t_ast **ast, t_token **tkn);
@@ -50,8 +52,9 @@ void		lst_quote_remove(t_tube *lst);
 char		*quote_remove(char *str);
 
 char		*param_expansion(char *str, t_env *env, int retn);
-char		*dollar_expansion(char **str, t_env *env, int retn, int state);
-char		*expand_variable(char **str, t_env *env, int state);
+char		*dollar_expansion(
+				char **str, t_env *env, int retn, t_quote_state *state);
+char		*expand_variable(char **str, t_env *env, t_quote_state *state);
 char		*ret_env_key(t_env *env, char *key);
 void		insert_value(char **buf, char *val, int *pos, int extra_space);
 
@@ -159,7 +162,7 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 	t_token			*lst_tkn;
 	t_token			*lst_tkn_origin;
 	t_ast			*ast;
-	static t_env	*ll_env[1];
+	t_env			*ll_env[1];
 
 	if (make_tkn_lst(&lst_tkn, input) != 0)
 	{
@@ -305,20 +308,19 @@ char	**wildcard_split(char const *s, char c)
 
 char	*wc_next_word(char **str, char const c)
 {
-	char	*ret;
-	char	*end;
-	size_t	len;
-	int		in_s_qts;
-	int		in_d_qts;
+	char			*ret;
+	char			*end;
+	size_t			len;
+	t_quote_state	state;
 
 	while (**str == c && **str != '\0')
 		(*str)++;
 	end = (char *)*str;
-	in_s_qts = 0;
-	in_d_qts = 0;
-	while (*end != '\0' && !(*end == c && !in_s_qts && !in_d_qts))
+	state = (t_quote_state){0, 0, 0};
+	while (*end != '\0' && !(*end == c
+			&& !state.escaped && !state.single_quote && !state.double_quote))
 	{
-		handle_quote(end, &in_s_qts, &in_d_qts);
+		handle_quote(end, &state);
 		end++;
 	}
 	len = end - *str + 1;
@@ -334,21 +336,20 @@ char	*wc_next_word(char **str, char const c)
 
 int	wc_count_wrds(char const *s, char const c)
 {
-	int		count;
-	int		flag;
-	int		old_flag;
-	int		in_s_qts;
-	int		in_d_qts;
+	int				count;
+	int				flag;
+	int				old_flag;
+	t_quote_state	state;
 
 	flag = -1;
 	count = 0;
-	in_s_qts = 0;
-	in_d_qts = 0;
+	state = (t_quote_state){0, 0, 0};
 	while (*s)
 	{
 		old_flag = flag;
-		handle_quote((char *)s, &in_s_qts, &in_d_qts);
-		if ((in_s_qts == 0) && (in_d_qts == 0) && (*s == c))
+		handle_quote((char *)s, &state);
+		if (!state.escaped && !state.single_quote && !state.double_quote
+			&& *s == c)
 			flag = 0;
 		else
 			flag = 1;
@@ -514,16 +515,15 @@ int	check_iwatod(char *str, char **ret)
 
 int	contains_wildcards(char *str)
 {
-	int	i;
-	int	in_s_qts;
-	int	in_d_qts;
+	int				i;
+	t_quote_state	state;
 
-	in_s_qts = 0;
-	in_d_qts = 0;
+	state = (t_quote_state){0, 0, 0};
 	i = 0;
-	while (str[i] && (str[i] != '*' || (in_s_qts || in_d_qts)))
+	while (str[i] && (str[i] != '*'
+			|| state.escaped || state.single_quote || state.double_quote))
 	{
-		handle_quote((str + i), &in_s_qts, &in_d_qts);
+		handle_quote((str + i), &state);
 		i++;
 	}
 	return (str[i] == '*');
@@ -1486,20 +1486,18 @@ t_tube	*separate_tube(t_tube *tube)
 
 char	*get_word(char **str)
 {
-	char	*word;
-	int		i;
-	int		in_s_qts;
-	int		in_d_qts;
+	char			*word;
+	int				i;
+	t_quote_state	state;
 
-	in_s_qts = 0;
-	in_d_qts = 0;
+	state = (t_quote_state){0, 0, 0};
 	while (**str && ft_strchr(" 	\n", **str))
 		(*str)++;
 	i = 0;
 	while ((*str)[i])
 	{
-		handle_quote(*str + i, &in_s_qts, &in_d_qts);
-		if (!(in_d_qts || in_s_qts)
+		handle_quote(*str + i, &state);
+		if (!state.escaped && !state.double_quote && !state.single_quote
 			&& ft_strchr(" 	\n", (*str)[i]))
 			break ;
 		i++;
@@ -1512,34 +1510,33 @@ char	*get_word(char **str)
 ////////////////////////////////////////////////////////////////////////////////
 char	*param_expansion(char *str, t_env *env, int retn)
 {
-	char	*val;
-	char	*res;
-	int		i;
-	int		in_s_qts;
-	int		in_d_qts;
+	char			*val;
+	char			*res;
+	int				i;
+	t_quote_state	state;
 
 	res = ft_malloc(1 * (ft_strlen(str) + 1));
-	in_s_qts = 0;
-	in_d_qts = 0;
+	state = (t_quote_state){0, 0, 0};
 	i = 0;
 	while (*str)
 	{
-		if (*str == '$' && !in_s_qts)
+		if (*str == '$' && !state.escaped && !state.single_quote)
 		{
-			val = dollar_expansion(&str, env, retn, in_d_qts);
+			val = dollar_expansion(&str, env, retn, &state);
 			insert_value(&res, val, &i, (ft_strlen(str) + 1));
 			free(val);
 		}
 		else
 		{
-			handle_quote(str, &in_s_qts, &in_d_qts);
+			handle_quote(str, &state);
 			res[i++] = *(str++);
 		}
 	}
 	return (res[i] = 0, res);
 }
 
-char	*dollar_expansion(char **str, t_env *env, int retn, int state)
+char	*dollar_expansion(
+			char **str, t_env *env, int retn, t_quote_state *state)
 {
 	char	*ret;
 
@@ -1552,7 +1549,7 @@ char	*dollar_expansion(char **str, t_env *env, int retn, int state)
 	return (ret);
 }
 
-char	*expand_variable(char **str, t_env *env, int state)
+char	*expand_variable(char **str, t_env *env, t_quote_state *state)
 {
 	char	*ret;
 	char	*key;
@@ -1694,18 +1691,16 @@ void	lst_quote_remove(t_tube *lst)
 
 char	*quote_remove(char *str)
 {
-	int		i;
-	char	*res;
-	int		in_s_qts;
-	int		in_d_qts;
+	int				i;
+	char			*res;
+	t_quote_state	state;
 
 	res = ft_malloc(1 * (ft_strlen(str) + 1));
-	in_s_qts = 0;
-	in_d_qts = 0;
+	state = (t_quote_state){0, 0, 0};
 	i = 0;
 	while (*str)
 	{
-		if (!handle_quote(str, &in_s_qts, &in_d_qts))
+		if (!handle_quote(str, &state))
 		{
 			res[i] = *str;
 			i++;
@@ -1814,7 +1809,7 @@ int	parse_tokens(t_ast **ast, t_token **tkn)
 	*ast = NULL;
 	if (parse_conditionnal(ast, tkn) != SUCCESS)
 		return (SYNTAX_ERROR);
-	while (1)
+	while (TRUE)
 	{
 		if ((*tkn)->type == e_END || (*tkn)->type == e_PARENTHESIS_CLOSE)
 			break ;
@@ -1894,7 +1889,7 @@ int	get_tkn_type(char *str)
 	if (*str == '\0' || *str == '\n')
 		return (e_END);
 	i = 0;
-	while (i < 7)
+	while (i < 9)
 	{
 		tkn_str = get_tkn_as_str(i);
 		if (!ft_strncmp(str, tkn_str, ft_strlen(tkn_str)))
@@ -1906,14 +1901,14 @@ int	get_tkn_type(char *str)
 
 const char	*get_tkn_as_str(enum e_token_type n)
 {
-	static const char	*tok_strings[9] = {"(", ")", "&&", "||",
-		"<<", "<", ">>", ">", "|"};
+	static const char	*tkn_strings[9] = {
+		"(", ")", "&&", "||", "<<", "<", ">>", ">", "|"};
 
 	if (n == e_END)
 		return ("EOL");
 	if (n > 9 || n < 0)
 		return (NULL);
-	return (tok_strings[n]);
+	return (tkn_strings[n]);
 }
 
 t_token	*make_one_tkn(t_token *next, char *str, enum e_token_type type)
@@ -1927,27 +1922,25 @@ t_token	*make_one_tkn(t_token *next, char *str, enum e_token_type type)
 	return (new);
 }
 
-//	in_s_qts means: in single quotes
-//	in_d_qts means: in double quotes
 int	get_str_token(char **word, char **str)
 {
-	int	i;
-	int	in_s_qts;
-	int	in_d_qts;
+	int				i;
+	t_quote_state	state;
 
-	in_s_qts = 0;
-	in_d_qts = 0;
+	state = (t_quote_state){0, 0, 0};
 	i = 0;
-	while ((*str)[i] && (!ft_isspace((*str)[i]) || (in_s_qts + in_d_qts)))
+	while ((*str)[i] && (!ft_isspace((*str)[i])
+		|| state.escaped || state.single_quote || state.double_quote))
 	{
-		handle_quote(*str + i, &in_s_qts, &in_d_qts);
-		if (!(in_s_qts + in_d_qts) && get_tkn_type(*str + i) != e_WORD)
+		handle_quote(*str + i, &state);
+		if (!state.escaped && !state.single_quote && !state.double_quote
+			&& get_tkn_type(*str + i) != e_WORD)
 			break ;
 		i++;
 	}
 	*word = ft_substr(*str, 0, i);
 	*str += i;
-	if (in_s_qts || in_d_qts)
+	if (state.single_quote || state.double_quote)
 	{
 		ft_putstr_fd("Minishell: syntax error\n", STDERR_FILENO);
 		return (handle_exit_code(2));
@@ -1955,15 +1948,38 @@ int	get_str_token(char **word, char **str)
 	return (0);
 }
 
-int	handle_quote(char *c, int *in_s_qts, int *in_d_qts)
+////////////////////////////////////////////////////////////////////////////////
+
+int	handle_quote(char *c, t_quote_state *state)
 {
-	if (*c == '\'' && !(*in_d_qts))
-		*in_s_qts = !(*in_s_qts);
-	else if (*c == '"' && !(*in_s_qts))
-		*in_d_qts = !(*in_d_qts);
+	int	ret;
+
+	ret = 1;
+	if (*c == '\'' && !state->double_quote && !state->escaped)
+	{
+		state->single_quote = !state->single_quote;
+	}
+	else if (*c == '"' && !state->single_quote && !state->escaped)
+	{
+		state->double_quote = !state->double_quote;
+	}
+	else if (*c == '\\' && !state->single_quote && !state->escaped
+		&& needs_escaping(*(c + 1), state))
+	{
+		state->escaped = TRUE;
+	}
 	else
-		return (0);
-	return (1);
+	{
+		ret = 0;
+		state->escaped = FALSE;
+	}
+	return (ret);
+}
+
+int	needs_escaping(char c, t_quote_state *state)
+{
+	return (c == '\\' || c == '"' || (c == '\'' && !state->double_quote)
+		|| (c == '$') || (c == '*' && !state->double_quote));
 }
 
 ////////////////////////////////////////////////////////////////////////////////

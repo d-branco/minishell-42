@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/24 08:31:32 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 16:00:23 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 //cd bultin
 # define PATH_MAX			1024
 
-# define SYNTAX_ERROR		2
+# define SYNTAX_ERROR		-2
 
 //		String and Command Line Functions
 # include <readline/readline.h>
@@ -252,6 +252,13 @@ typedef struct s_redirect
 	t_tkn_type			redirect_type;
 	char				*file;
 }	t_redirect;
+
+typedef struct s_quote_state
+{
+	int					single_quote;
+	int					double_quote;
+	int					escaped;
+}	t_quote_state;
 
 //minishell.c
 //int			main(int argc, char **argv, char **envp);
