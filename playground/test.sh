@@ -45,15 +45,15 @@ run_test() {
             echo "Command: $test_cmd"
             echo "------------------------------------------(bash):"
             cat "$BASH_OUTPUT"
-            
+
             echo -e "\n------------------------------------------(minishell):"
             cat "$MINISHELL_OUTPUT"
             echo -e "\n------------------------------------------"
             echo -e "\nExit status: \nbash      = $BASH_EXIT\nminishell = $MINISHELL_EXIT"
-            
+
             echo -e "\nStderr bash:"
             cat "$BASH_ERROR"
-            echo -e "\nStderr minishell:"
+            echo -e "\nStderr Minishell:"
             cat "$MINISHELL_ERROR"
         } > "log/$LOG_FILE"
     fi
@@ -101,7 +101,7 @@ run_signal_test() {
         kill -SIGQUIT $MINISHELL_PID
         wait $MINISHELL_PID
         MINISHELL_EXIT=$?
-        
+
         if [ "$MINISHELL_EXIT" -eq "$expected_exit_code" ]; then
             echo -e "${GREEN}GOOD${RESET}  ($expected_exit_code/$MINISHELL_EXIT)"
             PASS_COUNT=$((PASS_COUNT + 1))

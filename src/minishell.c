@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/22 17:35:40 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 08:30:00 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	check_args(int argc, char **argv)
 		fd = open(argv[1], O_RDONLY);
 		if (fd < 0)
 		{
-			//print_error(0, argv[1], strerror(errno));
+			print_error(0, argv[1], strerror(errno));
 			if (errno == ENOENT)
 				exit(127);
 			else

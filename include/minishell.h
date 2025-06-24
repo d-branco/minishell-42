@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/21 08:06:17 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 08:31:32 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,7 @@ typedef struct s_redirect
 void		free_shell(t_mnsh *shell);
 int			handle_exit_code(int newcode);
 bool		ft_check_input(const char *input);
+void		print_error(char *program, char *arg, char *msg);
 //execution/exe.c
 int			execute_ast(t_ast_node *node, t_mnsh *shell);
 //utils/ft_isspace.c

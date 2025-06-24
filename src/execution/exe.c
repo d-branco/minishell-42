@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/27 13:01:54 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/24 08:27:49 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
 	int		status;
 
 	if (pipe(pipefd) == -1)
-		return (perror("minishell: pipe"), 1);
+		return (perror("Minishell: pipe"), 1);
 	fd_bug("handle_here_doc", pipefd[0], "pipe read end created");
 	fd_bug("handle_here_doc", pipefd[1], "pipe write end created");
 	original_stdin = backup_fd(STDIN_FILENO);
@@ -104,7 +104,7 @@ int	handle_here_doc(t_ast_node *node, t_mnsh *shell, char *delimiter)
 	pid = fork();
 	if (pid == -1)
 		return (close(pipefd[0]), close(pipefd[1]), close(original_stdin),
-			perror("minishell: fork"), 1);
+			perror("Minishell: fork"), 1);
 	if (pid == 0)
 	{
 		fd_bug("handle_here_doc", pipefd[0], "child closing read end");
@@ -272,20 +272,20 @@ int	handle_input_redirection(t_redirect *redir, t_ast_node *node, t_mnsh *shell)
 
 	fd = open(redir->file, O_RDONLY);
 	if (fd == -1)
-		return (perror("minishell: input redirection"), 1);
+		return (perror("Minishell: input redirection"), 1);
 	fd_bug("handle_input_redirection", fd, "opened");
 	original_stdin = dup(STDIN_FILENO);
 	if (original_stdin == -1)
-		return (perror("minishell: dup"), close(fd), 1);
+		return (perror("Minishell: dup"), close(fd), 1);
 	fd_bug("handle_input_redirection", original_stdin, "created as backup");
 	if (dup2(fd, STDIN_FILENO) == -1)
-		return (perror("minishell: dup2"), close(fd), close(original_stdin), 1);
+		return (perror("Minishell: dup2"), close(fd), close(original_stdin), 1);
 	fd_bug("handle_input_redirection", STDIN_FILENO, "after redirection");
 	fd_bug("handle_input_redirection", fd, "closing after redirection");
 	close(fd);
 	handle_exit_code(execute_ast(node->left, shell));
 	if (dup2(original_stdin, STDIN_FILENO) == -1)
-		return (perror("minishell: dup2 restore"), close(original_stdin), 1);
+		return (perror("Minishell: dup2 restore"), close(original_stdin), 1);
 	fd_bug("handle_input_redirection", STDIN_FILENO, "after restoration");
 	fd_bug("handle_input_redirection", original_stdin, "closing after restore");
 	close(original_stdin);
@@ -318,7 +318,7 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 	if (pid == 0)
 		execute_command_child(cmd, shell);
 	else if (pid < 0)
-		return (perror("minishell: fork"), 1);
+		return (perror("Minishell: fork"), 1);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		return (handle_exit_code(WEXITSTATUS(status)));
@@ -332,7 +332,7 @@ static void	execute_command_child(t_command *cmd, t_mnsh *shell)
 	full_path = resolve_command_path(cmd->command, shell->envp);
 	if (!full_path)
 	{
-		fprintf(stderr, "minishell: %s: command not found\n", cmd->command);
+		fprintf(stderr, "Minishell: %s: command not found\n", cmd->command);
 		handle_exit_code(127);
 		free_ast_node(shell->ast_head);
 		free_shell(shell);
@@ -404,7 +404,7 @@ static char	*resolve_command_path(char *cmd, char **envp)
 static void	execute_command_child(t_command *cmd, t_mnsh *shell)
 {
 	execvp(cmd->command, cmd->args);// proibida
-	fprintf(stderr, "minishell: %s: command not found\n", cmd->command);
+	fprintf(stderr, "Minishell: %s: command not found\n", cmd->command);
 	handle_exit_code(127);
 	free_ast_node(shell->ast_head);
 	free_shell(shell);
@@ -495,18 +495,18 @@ int	execute_pipe(t_ast_node *node, t_mnsh *shell)
 	pid_t	right_pid;
 
 	if (pipe(pipefd) == -1)
-		return (perror("minishell: pipe"), 1);
+		return (perror("Minishell: pipe"), 1);
 	fd_bug("execute_pipe", pipefd[0], "pipe  read end created");
 	fd_bug("execute_pipe", pipefd[1], "pipe write end created");
 	left_pid = fork();
 	if (left_pid == -1)
-		return (perror("minishell: fork"), 1);
+		return (perror("Minishell: fork"), 1);
 	if (left_pid == 0)
 		run_left_child(node, pipefd, shell);
 	right_pid = fork();
 	if (right_pid == -1)
 		return (close(pipefd[0]), close(pipefd[1]), waitpid(left_pid, NULL, 0),
-			perror("minishell: fork"), 1);
+			perror("Minishell: fork"), 1);
 	if (right_pid == 0)
 		run_right_child(node, pipefd, shell);
 	fd_bug("execute_pipe", pipefd[0], "closing  read end in parent");

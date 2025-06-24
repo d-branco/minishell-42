@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:10:29 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 08:27:49 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	handle_shlvl(t_mnsh *shell)
 		if (n > 999)
 		{
 			new_lvl = "1";
-			printf("minishell: warning: shell level (%d) too high, "
+			printf("Minishell: warning: shell level (%d) too high, "
 				"resetting to 1\n", n);
 		}
 		else if (n < 0)

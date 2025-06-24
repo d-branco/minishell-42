@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:44:01 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/17 13:23:05 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 08:27:49 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	ft_export(char **av, t_mnsh *shell)
 		}
 		else if (!is_valid_arg(av[i]))
 		{
-			printf("minishell: export: '%s': not a valid identifier\n", av[i]);
+			printf("Minishell: export: '%s': not a valid identifier\n", av[i]);
 			status = 1;
 		}
 		else if (export_var(av[i], &shell->envp) == -1)

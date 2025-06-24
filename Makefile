@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/06/15 12:56:56 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/06/24 08:33:58 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,10 +16,11 @@ LIBFT_DIR	:= libft
 ##################################################################### Compiler #
 CC			= cc
 CFLAGS		+= -Wall -Wextra
-CFLAGS		+= -Werror -g -g3
+CFLAGS		+= -Werror
 READFLAGS	= -lreadline
 
-CFLAGS		+= -g
+#CFLAGS		+= -g
+#CFLAGS		+= -g3
 #CFLAGS		+= -D DEBUG=1
 #CFLAGS		+= -fsanitize=address -fsanitize=leak
 ########################################################### Intermidiate steps #
@@ -72,11 +73,13 @@ all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS) supp_doc
 	@\
+	echo "$(GRAY)Compile flags:$(COR)	$(CC) $(CFLAGS)"				;	\
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(READFLAGS)
 
 
 %.o: %.c
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@							&&	\
+	@\
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@								&&	\
 	echo "$(GRAY)File compiled:$(COR)	$<"
 
 $(LIBFT):
@@ -115,9 +118,6 @@ clean:
 	@\
 	make --silent --no-print-directory -C $(LIBFT_DIR) clean			;	\
 	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS) 				;	\
-	$(RM) ./*sync-conf*													;	\
-	$(RM) ./*/*sync-conf*												;	\
-	$(RM) ./*/*/*sync-conf*												;	\
 	$(RM) ./a.out														;	\
 	$(RM) ./playground/a.out											;	\
 	echo "$(GRAY)Files cleaned.$(COR)"
