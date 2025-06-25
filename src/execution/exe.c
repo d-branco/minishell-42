@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:07:05 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/27 13:01:54 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:43:24 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,16 +294,6 @@ int	handle_input_redirection(t_redirect *redir, t_ast_node *node, t_mnsh *shell)
 	close(original_stdin);
 	return (handle_exit_code(-1));
 }
-
-static int	is_builtin_needing_expansion(const char *cmd)
-{
-	if (!cmd)
-		return (0);
-	if (ft_strcmp(cmd, "unset") == 0 ||	ft_strcmp(cmd, "cd") == 0)
-		return (0);
-	return (1);
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 int	execute_command(t_ast_node *node, t_mnsh *shell)
 {
@@ -315,12 +305,10 @@ int	execute_command(t_ast_node *node, t_mnsh *shell)
 	cmd = (t_command *)node->content;
 	if (!cmd || !cmd->command)
 		return (1);
-	if (is_builtin_needing_expansion(cmd->command))
-		expand_arguments(cmd, shell);
-	cmd->command = cmd->args[0];
-	printf("cmd0: %s / cmd1: %s\n", cmd->args[0], cmd->args[1]);
-	if (!cmd->command || cmd->command[0] == '\0')
+	expand_arguments(cmd, shell);
+	if (!cmd || !cmd->args || !cmd->args[0])
 		return (handle_exit_code(0));
+	cmd->command = cmd->args[0];
 	if (is_builtin(cmd))
 	{
 		if (DEBUG)
@@ -366,7 +354,7 @@ static void	execute_command_child(t_command *cmd, t_mnsh *shell)
 	full_path = resolve_command_path(cmd->command, shell->envp);
 	if (!full_path)
 	{
-		printf("minishell: %s: command not found\n", cmd->command);
+		ft_dprintf(2, "minishell: %s: command not found\n", cmd->command);
 		handle_exit_code(127);
 		goto cleanup;
 	}
@@ -392,17 +380,18 @@ static int	check_command_validity(char *cmd)
 
 	if (stat(cmd, &sb) == -1)
 	{
-		printf("minishell: %s: No such file or directory\n", cmd);
+		ft_dprintf(2, "minishell: %s: ", cmd);
+		perror("");
 		return (127);
 	}
 	if ((sb.st_mode & S_IFMT) == S_IFDIR)
 	{
-		printf("minishell: %s: Is a directory\n", cmd);
+		ft_dprintf(2, "minishell: %s: Is a directory\n", cmd);
 		return (126);
 	}
 	if (!(sb.st_mode & S_IXUSR))
 	{
-		printf("minishell: %s: Permission denied\n", cmd);
+		ft_dprintf(2, "minishell: %s: Permission denied\n", cmd);
 		return (126);
 	}
 	return (0);
@@ -440,10 +429,12 @@ static char	*resolve_command_path(char *cmd, char **envp)
 	char	*full_path;
 	int		i;
 
+	if (!cmd || cmd[0] == '\0')
+		return (NULL);
 	if (ft_strchr(cmd, '/')) // comando com caminho direto
 		return (ft_strdup(cmd));
-	path_var = ft_getenv(envp, "PATH=");
-	if (!path_var)
+	path_var = ft_getenv(envp, "PATH");
+	if (!path_var || !path_var[0])
 		return (NULL);
 	paths = ft_split(path_var, ':');
 	free(path_var);

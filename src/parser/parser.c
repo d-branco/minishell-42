@@ -18,6 +18,8 @@ int	parser(char *input, t_mnsh *shell)
 	t_token		*list_o_tokens_origin;
 	t_ast_node	*ast;
 
+//	if (ft_strcmp(input, "\"\"") == 0 || ft_strcmp(input, "\'\'") == 0)
+//		return (printf("minishell: '': command not found\n"), handle_exit_code(127));
 	if (validate_syntax(input) == SYNTAX_ERROR)
 	{
 		printf("Minishell: Syntax error: %s\n", input);

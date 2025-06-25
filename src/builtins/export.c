@@ -6,14 +6,14 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:44:01 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/17 13:23:05 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:21:39 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 static void	ft_sort_env_tabs(char **tabs);
-
+/*
 int	is_valid_arg(const char *av)
 {
 	int	i;
@@ -22,6 +22,21 @@ int	is_valid_arg(const char *av)
 	if (!av || (!ft_isalpha(av[0]) && av[0] != '_'))
 		return (0);
 	while (av[i] && av[i] != '=')
+	{
+		if (!ft_isalnum(av[i]) && av[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}*/
+
+int	is_valid_arg(const char *av)
+{
+	int	i = 1;
+
+	if (!av || (!ft_isalpha(av[0]) && av[0] != '_'))
+		return (0);
+	while (av[i] && av[i] != '=' && !(av[i] == '+' && av[i + 1] == '='))
 	{
 		if (!ft_isalnum(av[i]) && av[i] != '_')
 			return (0);
@@ -97,7 +112,6 @@ int	ft_export(char **av, t_mnsh *shell)
 	char	cwd[PATH_MAX];
 
 	status = 0;
-	printf("av[1]: %s\n", av[1]);
 	if (!av[1] || ft_strcmp(av[1], "") == 0)
 		return (print_sort_env(shell->envp), handle_exit_code(0));
 	i = 1;
@@ -110,7 +124,7 @@ int	ft_export(char **av, t_mnsh *shell)
 		}
 		else if (!is_valid_arg(av[i]))
 		{
-			printf("minishell: export: '%s': not a valid identifier\n", av[i]);
+			ft_dprintf(2, "minishell: export: '%s': not a valid identifier\n", av[i]);
 			status = 1;
 		}
 		else if (export_var(av[i], &shell->envp) == -1)

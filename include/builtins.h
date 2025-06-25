@@ -52,6 +52,7 @@ char	*ft_getenv(char **envp, char *var_name);
 int		export_var(const char *av, char ***envp);
 //src/builtins/init_utils.c
 int		replace_add_var(char *var_name, char *value, char ***envp);
+int		add_var_env(char *new_var, int size, char ***envp);
 char	**init_envp(char **envp);
 void	handle_shlvl(t_mnsh *shell);
 

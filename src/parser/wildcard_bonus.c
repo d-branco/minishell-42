@@ -6,18 +6,11 @@
 /*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 11:17:23 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/06/12 11:17:29 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:06:06 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static int	is_wildcard_token(const char *str)
-{
-	if (!str)
-		return (0);
-	return (ft_strchr(str, '*') != NULL);
-}
 
 static int	match_pattern(const char *pattern, const char *str)
 {
@@ -76,12 +69,13 @@ char	**expand_argument_and_wildcard(const char *arg, t_mnsh *shell)
 	char	*expanded;
 	char	**res;
 	char	**wildcards;
+	int		was_quoted;
 
 	res = NULL;
-	expanded = expand_argument(arg, shell);
+	expanded = expand_argument(arg, shell, &was_quoted);
 	if (!expanded)
 		return (NULL);
-	if (is_wildcard_token(expanded))
+	if (!was_quoted && ft_strchr(expanded, '*'))
 	{
 		wildcards = expand_wildcard(expanded);
 		if (wildcards)
@@ -92,8 +86,6 @@ char	**expand_argument_and_wildcard(const char *arg, t_mnsh *shell)
 		free(expanded);
 	}
 	else
-	{
 		ft_strarr_add_back(&res, expanded);
-	}
 	return (res);
 }

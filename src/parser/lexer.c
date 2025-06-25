@@ -42,7 +42,7 @@ static int	check_invalid_operators(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if ((i == 0) && (str[i] == '&') && (str[i + 1] != '&'))
+		if ((i == 0) && (str[i] == '&' || str[i] == '|'))//&& (str[i + 1] != '&'))
 			return (SYNTAX_ERROR);
 		if (i >= 1)
 		{
@@ -55,7 +55,7 @@ static int	check_invalid_operators(char *str)
 		}
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 static int	check_parentheses_and_quotes(char *str)
@@ -82,11 +82,11 @@ static int	check_parentheses_and_quotes(char *str)
 		if (n_parenthese < 0)
 			return (SYNTAX_ERROR);
 	}
-	if ((n_parenthese != 0) || ((in_s_quote % 2) != 0) || ((in_d_quote % 2) != 0))
+	if ((n_parenthese != 0) || (in_s_quote  != 0) || (in_d_quote  != 0))
 		return (SYNTAX_ERROR);
 	if (validate_heredoc_syntax(str))
 		return (SYNTAX_ERROR);
-	return (1);
+	return (0);
 }
 
 int	validate_heredoc_syntax(char *input)
@@ -117,14 +117,14 @@ int	validate_heredoc_syntax(char *input)
 
 int	validate_syntax(char *str)
 {
-	if (!check_invalid_operators(str))
+	if (check_invalid_operators(str))
 		return (SYNTAX_ERROR);
-	if (!check_parentheses_and_quotes(str))
+	if (check_parentheses_and_quotes(str))
 		return (SYNTAX_ERROR);
 	return (1);
 }
 
-void	handle_quoted_string(char *input, int *pos, char **str, char quote_type)
+int	handle_quoted_string(char *input, int *pos, char **str, char quote_type)
 {
 	int	start;
 
@@ -135,14 +135,12 @@ void	handle_quoted_string(char *input, int *pos, char **str, char quote_type)
 		if (input[*pos] == quote_type)
 		{
 			(*pos)++;
-			break ;
+			*str = ft_substr(input, start, *pos - start);
+			return (1);
 		}
 		(*pos)++;
 	}
-	if (input[*pos - 1] != quote_type)
-	{
-		handle_exit_code(SYNTAX_ERROR);
-		return ;
-	}
-	*str = ft_substr(input, start, *pos - start);
+	handle_exit_code(SYNTAX_ERROR);
+	*str = NULL;
+	return (0);
 }

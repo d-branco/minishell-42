@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/06/05 16:12:33 by alde-alm         ###   ########.fr        #
+#    Updated: 2025/06/24 15:43:10 by alde-alm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ SRCS		:=	\
 	src/parser/wildcard_bonus.c                                             \
 	src/parser/wildcard_utils_bonus.c                                       \
 	src/utils/ft_isspace.c													\
+	src/utils/ft_dprintf.c                          \
 	src/utils/ft_malloc.c													\
 	src/utils/ft_strcmp.c                                                   \
 	src/builtins/cd.c														\

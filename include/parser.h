@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:07 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/05 16:11:43 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/24 22:48:11 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 typedef struct s_mnsh	t_mnsh;
 typedef struct s_list	t_list;
+
+# include <stdbool.h>
 
 typedef enum e_token_type
 {
@@ -92,15 +94,16 @@ int			is_valid_token_for_argument(t_token *token);
 int			parser(char *input, t_mnsh *shell);
 //parser/expander.c
 void		expand_arguments(t_command *cmd, t_mnsh *shell);
-char		*expand_argument(const char *arg, t_mnsh *shell);
-char		*get_env_value(const char *name, char **envp);
+char		*expand_argument(const char *arg, t_mnsh *shell, int *was_quoted_out);
 //parser/expander_util.c
+char		*get_env_value(const char *name, char **envp);
+int			ft_strarr_len(char **arr);
 void		append_and_free(char **dst, char *src);
 void		append_char(char **res, char c);
 //parser/lexer.c
 int			parse_input_into_token_list(t_token **list, char *input);
 int			validate_syntax(char *str);
-void		handle_quoted_string(char *input, int *pos, char **str, char chr);
+int			handle_quoted_string(char *input, int *pos, char **str, char chr);
 //parser/lexer-list.c
 void		tkn_lst_printer(t_token *lst);
 void		tkn_lstclear(t_token **lst);
@@ -115,7 +118,6 @@ void		isolate_word_token(char *input, int *pos, char **token_string);
 void		isolate_operator_token(char *input, int *pos, char **token_string);
 //parser/wildcard_bonus.c
 char		**expand_argument_and_wildcard(const char *arg, t_mnsh *shell);
-//int			is_wildcard_token(const char *str);
 //parser/wildcard_utils_bonus.c
 void		ft_strarr_add_back(char ***arr, char *new_str);
 void		ft_strarr_extend(char ***dest, char **src);

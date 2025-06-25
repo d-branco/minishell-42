@@ -77,8 +77,11 @@ static void	free_command(t_command *cmd)
 	i = 0;
 	if (!cmd)
 		return ;
-	while (cmd->args[i])
-		free(cmd->args[i++]);
-	free(cmd->args);
+	if (cmd->args)
+	{
+		while (cmd->args[i])
+			free(cmd->args[i++]);
+		free(cmd->args);
+	}
 	free(cmd);
 }

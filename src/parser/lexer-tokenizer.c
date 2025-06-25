@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 //	char	*ft_strchr(const char *s, int c)
 t_tkn_type	check_type_of_token(char *input, int *pos)

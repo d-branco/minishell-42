@@ -16,6 +16,8 @@ static void	handle_word_part(char **joined, char **part)
 {
 	char	*tmp;
 
+	if (!*part)
+		return ;
 	tmp = *joined;
 	*joined = ft_strjoin(*joined, *part);
 	free(tmp);
@@ -46,7 +48,8 @@ static int	handle_token_segment(char *input, int *pos, char **part)
 	{
 		quote_char = input[*pos];
 		type = check_type_of_token(input, pos);
-		handle_quoted_string(input, pos, part, quote_char);
+		if (!handle_quoted_string(input, pos, part, quote_char))
+			return (0);
 	}
 	else
 	{

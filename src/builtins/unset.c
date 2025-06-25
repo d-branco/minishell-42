@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                           :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 15:55:05 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/12 16:54:40 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:25:47 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ int	ft_unset(char **av, char ***envp)
 {
 	int	i;
 
-	if (!av[1] || !envp || !*envp || av[1][0] == '$')
+	if (!av[1] || !envp || !*envp)
 		return (handle_exit_code(0));
 	i = 1;
 	while (av[i])
 	{
 		if (av[i][0] == '-')
 		{
-			printf("minishell: unset: invalid option\n");
+			ft_dprintf(2, "minishell: unset: invalid option\n");
 			handle_exit_code(0);
 		}
 		else

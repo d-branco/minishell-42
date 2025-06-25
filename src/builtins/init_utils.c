@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-static int	add_var_env(char *new_var, int size, char ***envp);
+int	add_var_env(char *new_var, int size, char ***envp);
 
 char	**init_envp(char **envp)
 {
@@ -63,7 +63,7 @@ void	handle_shlvl(t_mnsh *shell)
 	char	*new_lvl;
 	int		n;
 
-	lvl = ft_getenv(shell->envp, "SHLVL=");
+	lvl = ft_getenv(shell->envp, "SHLVL");
 	if (lvl && is_valid_num(lvl))
 	{
 		n = ft_atoi(lvl) + 1;
@@ -115,7 +115,7 @@ int	replace_add_var(char *var_name, char *value, char ***envp)
 	return (free(key), add_var_env(new_var, i, envp));
 }
 
-static int	add_var_env(char *new_var, int size, char ***envp)
+int	add_var_env(char *new_var, int size, char ***envp)
 {
 	char	**new_env;
 	int		i;

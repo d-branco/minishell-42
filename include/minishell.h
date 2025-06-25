@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/27 13:24:45 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:25:18 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 //	void			rl_replace_line (const char *text, int clear_undo);
 //	void			rl_redisplay (void);
 //	void			add_history (const char *string);
-
+# include <stdbool.h>
 //		Standard I/O Functions
 # include <stdio.h>
 //	int				printf(const char *restrict format, ...);
@@ -103,7 +103,7 @@
 # include <dirent.h>
 //	struct dirent	*readdir(DIR *dirp);
 //	int				closedir(DIR *dirp);
-
+# include <stdarg.h>
 //		Error Handling
 # include <string.h>
 //	char			*strerror(int errnum);
@@ -153,6 +153,8 @@ int		handle_exit_code(int newcode);
 bool	ft_check_input(const char *input);
 //execution/exe.c
 int		execute_ast(t_ast_node *node, t_mnsh *shell);
+//utils/ft_dprintf.c
+int		ft_dprintf(int fd, const char *format, ...);
 //utils/ft_isspace.c
 int		ft_isspace(char chr);
 //utils/ft_malloc.c
