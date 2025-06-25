@@ -30,7 +30,7 @@
 //cd bultin
 # define PATH_MAX			1024
 
-# define SYNTAX_ERROR		-2
+# define SYNTAX_ERROR		2
 
 //		String and Command Line Functions
 # include <readline/readline.h>
@@ -275,26 +275,26 @@ void		*ft_malloc(int total_size);
 //utils/ft_strcmp.c
 int			ft_strcmp(const char *s1, const char *s2);
 //execution/signal.c
-void		ft_setup_interactive_signals(void);
-void		ft_setup_fork_signals(void);
+//void		ft_setup_interactive_signals(void);
+//void		ft_setup_fork_signals(void);
 
 //parser/ast.c
-t_ast_node	*build_ast(t_token **tokens);
-t_ast_node	*parse_logical_ops(t_token **tokens);
-t_ast_node	*parse_pipe(t_token **tokens);
-t_ast_node	*parse_redirections(t_token **tokens);
-t_ast_node	*create_ast_node(t_ast_type type, void *content);
+//t_ast_node	*build_ast(t_token **tokens);
+//t_ast_node	*parse_logical_ops(t_token **tokens);
+//t_ast_node	*parse_pipe(t_token **tokens);
+//t_ast_node	*parse_redirections(t_token **tokens);
+//t_ast_node	*create_ast_node(t_ast_type type, void *content);
 //parser/ast-print.c
-void		print_ast(t_ast_node *node, int depth);
+//void		print_ast(t_ast_node *node, int depth);
 //parser/ast-free.c
-void		free_arg_list(t_list *arg_list);
-void		free_arg_list_structure(t_list *arg_list);
-void		free_ast_node(t_ast_node *node);
+//void		free_arg_list(t_list *arg_list);
+//void		free_arg_list_structure(t_list *arg_list);
+//void		free_ast_node(t_ast_node *node);
 //parse/ast-parse-cmd.c
-t_ast_node	*parse_commands(t_token **tokens);
+//t_ast_node	*parse_commands(t_token **tokens);
 //parse/ast-parse-cmd2.c
-t_ast_node	*handle_tokens_inside_parenthesis(t_token **tokens);
-int			is_valid_token_for_argument(t_token *token);
+//t_ast_node	*handle_tokens_inside_parenthesis(t_token **tokens);
+//int			is_valid_token_for_argument(t_token *token);
 
 //parser/parser.c
 int			parse_n_exec_input(char *input, t_mnsh *shell);
@@ -311,27 +311,27 @@ void		next_token(t_token **list);
 
 //int			parser(char *input, t_mnsh *shell);
 //parser/expander.c
-void		expand_arguments(t_command *cmd, t_mnsh *shell);
-char		*get_env_value(const char *name, char **envp);
-//parser/expander_util.c
-void		append_and_free(char **dst, char *src);
-void		append_char(char **res, char c);
-//parser/lexer.c
-int			parse_input_into_token_list(t_token **list, char *input);
-int			validate_syntax(char *str);
-void		handle_quoted_string(char *input, int *pos, char **str, char chr);
-//parser/lexer-list.c
-void		tkn_lst_printer(t_token *lst);
-void		tkn_lstclear(t_token **lst);
-t_token		*create_token(t_tkn_type token_type, char *token_string);
-void		tkn_lstadd_back(t_token **lst, t_token *new);
-int			validate_heredoc_syntax(char *input);
-//parser/lexer-token.c
-void		get_token(t_token **list, char *input, int *pos);
-//parser/lexer-tokenizer.c
-t_tkn_type	check_type_of_token(char *input, int *pos);
-void		isolate_word_token(char *input, int *pos, char **token_string);
-void		isolate_operator_token(char *input, int *pos, char **token_string);
+//void		expand_arguments(t_command *cmd, t_mnsh *shell);
+//char		*get_env_value(const char *name, char **envp);
+////parser/expander_util.c
+//void		append_and_free(char **dst, char *src);
+//void		append_char(char **res, char c);
+////parser/lexer.c
+//int			parse_input_into_token_list(t_token **list, char *input);
+//int			validate_syntax(char *str);
+//void		handle_quoted_string(char *input, int *pos, char **str, char chr);
+////parser/lexer-list.c
+//void		tkn_lst_printer(t_token *lst);
+//void		tkn_lstclear(t_token **lst);
+//t_token		*create_token(t_tkn_type token_type, char *token_string);
+//void		tkn_lstadd_back(t_token **lst, t_token *new);
+//int			validate_heredoc_syntax(char *input);
+////parser/lexer-token.c
+//void		get_token(t_token **list, char *input, int *pos);
+////parser/lexer-tokenizer.c
+//t_tkn_type	check_type_of_token(char *input, int *pos);
+//void		isolate_word_token(char *input, int *pos, char **token_string);
+//void		isolate_operator_token(char *input, int *pos, char **token_string);
 
 //bulti-ins
 //src/builtins/cd.c

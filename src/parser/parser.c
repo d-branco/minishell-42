@@ -1070,7 +1070,7 @@ void	read_single_heredoc(char **buffer, char *delim)
 
 	free(*buffer);
 	*buffer = ft_strdup("");
-	while (1)
+	while (TRUE)
 	{
 		line = get_input_line("> ");
 		if (line == NULL || ft_strcmp(line, delim) == 0)
