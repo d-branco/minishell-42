@@ -37,14 +37,28 @@ char	*expand_argument(const char *arg, t_mnsh *shell, int *was_quoted_out)
 {
 	int		i;
 	char	*res;
+	char	*literal;
 	int		was_quoted;
+	int		start;
 
 	res = ft_strdup("");
 	i = 0;
 	was_quoted = 0;
 	while (arg[i])
 	{
-		if (arg[i] == '\'' || arg[i] == '"')
+		if (arg[i] == '$' && arg[i + 1] == '"')
+		{
+			i += 2;
+			start = i;
+			while (arg[i] && arg[i] != '"')
+				i++;
+			literal = ft_substr(arg, start, i - start);
+			append_and_free(&res, literal);
+			if (arg[i] == '"')
+				i++;
+			was_quoted = 1;
+		}
+		else if (arg[i] == '\'' || arg[i] == '"')
 		{
 			was_quoted = 1;
 			handle_quoted(arg, &i, &res, shell);
@@ -80,28 +94,35 @@ static void	handle_quoted(const char *arg, int *i, char **res, t_mnsh *shell)
 		(*i)++;
 }
 
+static int	handle_edge_cases(const char *arg, int *i, char **res)
+{
+	if (!arg[*i + 1])
+	{
+		append_char(res, arg[(*i)++]);
+		return (1);
+	}
+	if (arg[*i + 1] == '*')
+	{
+		append_and_free(res, ft_strdup(""));
+		*i += 2;
+		return (1);
+	}
+	if (!ft_isalpha(arg[*i + 1]) && arg[*i + 1] != '_' && arg[*i + 1] != '?')
+	{
+		append_char(res, arg[(*i)++]);
+		return (1);
+	}
+	return (0);
+}
+
 static void	handle_dollar(const char *arg, int *i, char **res, t_mnsh *shell)
 {
 	int		var_len;
 	char	*var_name;
 	char	*var_value;
 
-	if (!arg[*i + 1])
-	{
-		append_char(res, arg[(*i)++]);
+	if (handle_edge_cases(arg, i, res))
 		return ;
-	}
-	if (arg[*i + 1] == '*')
-	{
-		append_and_free(res, ft_strdup(""));
-		*i += 2;
-		return ;
-	}
-	if (!ft_isalpha(arg[*i + 1]) && arg[*i + 1] != '_' && arg[*i + 1] != '?')
-	{
-		append_char(res, arg[(*i)++]);
-		return ;
-	}
 	var_name = get_var_name(&arg[*i + 1], &var_len);
 	if (ft_strcmp(var_name, "?") == 0)
 		var_value = ft_itoa(shell->last_exit_code);
@@ -112,42 +133,58 @@ static void	handle_dollar(const char *arg, int *i, char **res, t_mnsh *shell)
 	*i += var_len + 1;
 }
 
+static void	split_and_extend(char *arg, char ***new_args)
+{
+	char	**split;
+	int		k;
+
+	split = ft_split(arg, ' ');
+	if (!split)
+		return ;
+	k = 0;
+	while (split[k])
+	{
+		ft_strarr_extend(new_args, (char *[]){ft_strdup(split[k]), NULL});
+		k++;
+	}
+	ft_strarr_free(split);
+}
+
+static void	expand_and_append(char **expanded, char ***new_args, int was_quoted)
+{
+	int		j;
+	int		is_assignment;
+
+	j = 0;
+	while (expanded[j])
+	{
+		is_assignment = ft_strchr(expanded[0], '=') != NULL;
+		if (!was_quoted && !is_assignment && expanded[1] == NULL
+			&& ft_strchr(expanded[0], ' '))
+			split_and_extend(expanded[0], new_args);
+		else
+			ft_strarr_extend(new_args,
+				(char *[]){ft_strdup(expanded[j]), NULL});
+		j++;
+	}
+}
+
 void	expand_arguments(t_command *cmd, t_mnsh *shell)
 {
 	int		i;
-	char	**new_args;
+	int		was_quoted;
 	char	**expanded;
+	char	**new_args;
 
-	new_args = NULL;
 	i = 0;
+	new_args = NULL;
 	while (cmd->args && cmd->args[i])
 	{
-		expanded = expand_argument_and_wildcard(cmd->args[i], shell);
+		expanded = expand_argument_and_wildcard(cmd->args[i],
+				shell, &was_quoted);
 		if (expanded)
 		{
-			int j = 0;
-			while (expanded[j])
-			{
-				bool is_single_token_with_spaces = (expanded[1] == NULL && ft_strchr(expanded[0], ' '));
-				bool is_assignment = ft_strchr(expanded[0], '=') != NULL;
-
-				if (is_single_token_with_spaces && !is_assignment)
-				{
-					char **split = ft_split(expanded[0], ' ');
-					if (split)
-					{
-						int k = 0;
-						while (split[k])
-							ft_strarr_extend(&new_args, (char *[]){ft_strdup(split[k++]), NULL});
-						ft_strarr_free(split);
-					}
-				}
-				else
-				{
-					ft_strarr_extend(&new_args, (char *[]){ft_strdup(expanded[j]), NULL});
-				}
-				j++;
-			}
+			expand_and_append(expanded, &new_args, was_quoted);
 			ft_strarr_free(expanded);
 		}
 		i++;

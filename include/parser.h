@@ -117,7 +117,7 @@ t_tkn_type	check_type_of_token(char *input, int *pos);
 void		isolate_word_token(char *input, int *pos, char **token_string);
 void		isolate_operator_token(char *input, int *pos, char **token_string);
 //parser/wildcard_bonus.c
-char		**expand_argument_and_wildcard(const char *arg, t_mnsh *shell);
+char		**expand_argument_and_wildcard(const char *arg, t_mnsh *shell, int *was_quoted_out);
 //parser/wildcard_utils_bonus.c
 void		ft_strarr_add_back(char ***arr, char *new_str);
 void		ft_strarr_extend(char ***dest, char **src);
