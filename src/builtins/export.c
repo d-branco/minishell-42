@@ -13,27 +13,12 @@
 #include "../../include/minishell.h"
 
 static void	ft_sort_env_tabs(char **tabs);
-/*
+
 int	is_valid_arg(const char *av)
 {
 	int	i;
 
 	i = 1;
-	if (!av || (!ft_isalpha(av[0]) && av[0] != '_'))
-		return (0);
-	while (av[i] && av[i] != '=')
-	{
-		if (!ft_isalnum(av[i]) && av[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}*/
-
-int	is_valid_arg(const char *av)
-{
-	int	i = 1;
-
 	if (!av || (!ft_isalpha(av[0]) && av[0] != '_'))
 		return (0);
 	while (av[i] && av[i] != '=' && !(av[i] == '+' && av[i + 1] == '='))
@@ -114,8 +99,8 @@ int	ft_export(char **av, t_mnsh *shell)
 	status = 0;
 	if (!av[1] || ft_strcmp(av[1], "") == 0)
 		return (print_sort_env(shell->envp), handle_exit_code(0));
-	i = 1;
-	while (av[i])
+	i = 0;
+	while (av[++i])
 	{
 		if (strcmp(av[i], "PWD") == 0 && shell->export_status == 1)
 		{
@@ -124,12 +109,12 @@ int	ft_export(char **av, t_mnsh *shell)
 		}
 		else if (!is_valid_arg(av[i]))
 		{
-			ft_dprintf(2, "minishell: export: '%s': not a valid identifier\n", av[i]);
+			ft_dprintf(2, "minishell: export: '%s': not a valid identifier\n",
+				av[i]);
 			status = 1;
 		}
 		else if (export_var(av[i], &shell->envp) == -1)
 			status = 1;
-		i++;
 	}
 	return (handle_exit_code(status));
 }

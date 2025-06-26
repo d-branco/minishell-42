@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/06/24 15:43:10 by alde-alm         ###   ########.fr        #
+#    Updated: 2025/06/26 01:11:17 by alde-alm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,10 +56,12 @@ SRCS		:=	\
 	src/builtins/env.c														\
 	src/builtins/exit.c														\
 	src/builtins/export.c													\
+	src/builtins/export_utils.c                          \
 	src/builtins/pwd.c														\
 	src/builtins/unset.c													\
 	src/builtins/check_builtins.c											\
-	src/builtins/init_utils.c
+	src/builtins/init_utils.c                     \
+	src/builtins/replace_add_var.c
 
 OBJS		:= $(SRCS:.c=.o)
 

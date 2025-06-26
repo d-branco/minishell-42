@@ -64,7 +64,8 @@ static char	**expand_wildcard(const char *pattern)
 	return (matches);
 }
 
-char	**expand_argument_and_wildcard(const char *arg, t_mnsh *shell, int *was_quoted_out)
+char	**expand_argument_and_wildcard(const char *arg,
+		t_mnsh *shell, int *was_quoted_out)
 {
 	char	*expanded;
 	char	**res;
@@ -88,4 +89,3 @@ char	**expand_argument_and_wildcard(const char *arg, t_mnsh *shell, int *was_quo
 		ft_strarr_add_back(&res, expanded);
 	return (res);
 }
-

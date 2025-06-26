@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/05/24 19:05:55 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/26 01:23:06 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,9 @@ int	parser(char *input, t_mnsh *shell)
 	t_token		*list_o_tokens_origin;
 	t_ast_node	*ast;
 
-//	if (ft_strcmp(input, "\"\"") == 0 || ft_strcmp(input, "\'\'") == 0)
-//		return (printf("minishell: '': command not found\n"), handle_exit_code(127));
 	if (validate_syntax(input) == SYNTAX_ERROR)
 	{
-		printf("Minishell: Syntax error: %s\n", input);
+		ft_dprintf(2, "Minishell: Syntax error: %s\n", input);
 		return (handle_exit_code(2));
 	}
 	list_o_tokens = NULL;
@@ -38,9 +36,3 @@ int	parser(char *input, t_mnsh *shell)
 	free_ast_node(shell->ast_head);
 	return (handle_exit_code(-1));
 }
-
-//	Parsing order:
-//1. Logic operators	||, &&
-//2. Pipes				|
-//3. Redirections		<, <<, >, >>
-//4. Commands			et cetera

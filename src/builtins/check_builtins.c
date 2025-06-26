@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:24:23 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/17 13:42:45 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/25 23:40:31 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,56 +86,14 @@ char	*ft_getenv(char **envp, char *var_name)
 	return (NULL);
 }
 
-static int	envp_size(char **envp)
+int	envp_size(char **envp)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	if (!envp)
 		return (0);
 	while (envp[i])
 		i++;
 	return (i);
-}
-
-
-int	export_var(const char *av, char ***envp)
-{
-	char	*var_name;
-	char	*value;
-	char	*equal_posit;
-	char	*plus_equal;
-	char	*existing;
-	char	*new_val;
-	char	*key;
-
-	plus_equal = ft_strnstr(av, "+=", ft_strlen(av));
-	if (plus_equal)
-	{
-		var_name = ft_substr(av, 0, plus_equal - av);
-		value = ft_strdup(plus_equal + 2);
-		if (!var_name || !value)
-			return (free(var_name), free(value), -1);
-		existing = ft_getenv(*envp, var_name);
-		if (existing)
-			new_val = ft_strjoin(existing, value);
-		else
-			new_val = ft_strdup(value);
-		key = ft_strjoin(var_name, "=");
-		int ret = replace_add_var(key, new_val, envp);
-		return (free(var_name), free(value), free(existing), free(new_val), free(key), ret);
-	}
-
-	equal_posit = ft_strchr(av, '=');
-	if (equal_posit)
-	{
-		var_name = ft_substr(av, 0, equal_posit - av + 1);
-		value = ft_strdup(equal_posit + 1);
-		if (!var_name || !value)
-			return (free(var_name), free(value), -1);
-		replace_add_var(var_name, value, envp);
-		return (free(var_name), free(value), 0);
-	}
-	if (!ft_getenv(*envp, (char*)av))
-		add_var_env(ft_strdup(av), envp_size(*envp), envp);
-	return (0);
 }

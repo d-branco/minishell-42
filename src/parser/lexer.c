@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:10:35 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/06 09:51:49 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/26 01:28:55 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	check_invalid_operators(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if ((i == 0) && (str[i] == '&' || str[i] == '|'))//&& (str[i + 1] != '&'))
+		if ((i == 0) && (str[i] == '&' || str[i] == '|'))
 			return (SYNTAX_ERROR);
 		if (i >= 1)
 		{
@@ -82,7 +82,7 @@ static int	check_parentheses_and_quotes(char *str)
 		if (n_parenthese < 0)
 			return (SYNTAX_ERROR);
 	}
-	if ((n_parenthese != 0) || (in_s_quote  != 0) || (in_d_quote  != 0))
+	if ((n_parenthese != 0) || (in_s_quote != 0) || (in_d_quote != 0))
 		return (SYNTAX_ERROR);
 	if (validate_heredoc_syntax(str))
 		return (SYNTAX_ERROR);

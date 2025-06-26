@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-static void error_cd(const char *path)
+static void	error_cd(const char *path)
 {
 	ft_dprintf(2, "minishell: cd: %s: ", path);
 	perror("");

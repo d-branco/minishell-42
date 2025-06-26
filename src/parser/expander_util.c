@@ -50,7 +50,7 @@ char	*get_env_value(const char *name, char **envp)
 
 int	ft_strarr_len(char **arr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (arr && arr[i])
