@@ -145,7 +145,7 @@ static void	init_shell(t_mnsh *shell, char **envp)
 	shell->envp = init_envp(envp);
 	handle_shlvl(shell);
 	shell->ast_head = NULL;
-	//ft_setup_interactive_signals();
+	//ft_setup_interactive_signals();/////////////////////////////////////////
 }
 
 static char	*init_prompt(int exit_code)

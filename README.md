@@ -12,9 +12,8 @@ To clone
 --------
 
 ```shell
-git clone --recurse-submodule git@github.com:d-branco/minishell-42.git
+git clone git@github.com:d-branco/minishell-42.git
 ```
-`--recurse-submodule` is needed to include the *libft* library submodule.
 
 ## To build
 ```shell
@@ -29,30 +28,30 @@ make
 Project Instructions
 ====================
 ## Restrictions
-- [ ] Use **one global variable** at most (to indicate a received signal);
+- [x] Use **one global variable** at most (to indicate a received signal);
 - [ ] Follow the [norm](doc/normv4.pdf);
-- [ ] Limited use of function to the [allowed bellow](#allowed-functions).
+- [x] Limited use of function to the [allowed bellow](#allowed-functions).
 ## Comand Prompt
- - [ ] **display a prompt** when waiting for a command;
- - [ ] have a working **history**.
+ - [x] **display a prompt** when waiting for a command;
+ - [x] have a working **history**.
 ## Command Execution
-- [ ] Execute commands with their parameters;
-	- [ ] Handle relative and absolute paths;
-	- [ ] Handle PATH environment variable;
-- [ ] Support pipes (`|`) to connect commands;
-- [ ] Support redirections:
-  - [ ] `<` (input redirection);
-  - [ ] `>` (output redirection);
-  - [ ] `<<` (here-document);
-  - [ ] `>>` (append output redirection).
+- [x] Execute commands with their parameters;
+	- [x] Handle relative and absolute paths;
+	- [x] Handle PATH environment variable;
+- [x] Support pipes (`|`) to connect commands;
+- [x] Support redirections:
+  - [x] `<` (input redirection);
+  - [x] `>` (output redirection);
+  - [x] `<<` (here-document);
+  - [x] `>>` (append output redirection).
 ## Command Line Parsing
 - [ ] Parse command lines with quotes (single `'` and double `"`);
-- [ ] Ignore unclosed quotes and special characters (like backslash`\` or semicolon `;`);
+- [x] Ignore unclosed quotes and special characters (like backslash`\` or semicolon `;`);
 - [ ] Handle environment variables `($NAME)` expansion;
-- [ ] Handle exit status `$?`;
+- [x] Handle exit status `$?`;
 - [ ] handle `ctrl-C`, `ctrl-D`, and `ctrl-\` signals (similar to bash);
 - [ ] `BONUS` Handle wildcards `*` in the current working directory;
-- [ ] `BONUS` Handle logical operators `AND` (`&&`) and `OR` (`||`) with parentheses.
+- [x] `BONUS` Handle logical operators `AND` (`&&`) and `OR` (`||`) with parentheses.
 ## Builtins commands
 - [ ] `echo` with option `-n`;
 - [ ] `cd` with relative or absolute path;
@@ -67,33 +66,13 @@ Directory organization
 ```txt
 minishell/
 ├── include/
-│   ├── minishell.h
-│   ├── ast.h
-│   ├── parser.h
-│   └── <et cetera>.h
+│   └── minishell.h
 ├── srcs/
 │   ├── minishell.c
-│   ├── (prompt.c)
-│   ├── parser/
-│   │   ├── ast-free.c
-│   │   ├── ast-parse-cmd.c
-│   │   ├── ast-parse-cmd2.c
-│   │   ├── ast-print.c
-│   │   ├── ast-redirect.c
-│   │   ├── ast.c
-│   │   ├── lexer-list.c
-│   │   ├── lexer-tokenizer.c
-│   │   ├── lexer.c
-│   │   └── parser.c
-│   ├── execution/
-│   │   └── exe.c
-│   ├── (signals.c)
-│   ├── (redirections.c)
-│   ├── (piping.c)
-│   ├── (environment.c)
 │   ├── (<other features>/)
 │   ├── utils/
 │   │   ├── ft_isspace.c
+│   │   ├── ft_strcmp.c
 │   │   └── ft_malloc.c
 │   └── builtins/
 │       ├── echo.c
@@ -182,5 +161,3 @@ Allowed Functions
 - [`tgetstr`](https://linux.die.net/man/3/tgetstr): Gets string terminal capability
 - [`tgoto`](https://linux.die.net/man/3/tgoto): Formats cursor motion strings
 - [`tputs`](https://linux.die.net/man/3/tputs): Outputs terminal capability strings
-
-![https://octodex.github.com/images/welcometocat.png](https://octodex.github.com/images/mona-the-rivetertocat.png)
