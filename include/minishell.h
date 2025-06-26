@@ -267,12 +267,10 @@ int			handle_exit_code(int newcode);
 bool		ft_check_input(const char *input);
 void		print_error(char *program, char *arg, char *msg);
 //execution/exe.c
-int			execute_ast(t_ast_node *node, t_mnsh *shell);
-//utils/ft_isspace.c
+//int			execute_ast(t_ast_node *node, t_mnsh *shell);
+//utils
 int			ft_isspace(char chr);
-//utils/ft_malloc.c
 void		*ft_malloc(int total_size);
-//utils/ft_strcmp.c
 int			ft_strcmp(const char *s1, const char *s2);
 //execution/signal.c
 //void		ft_setup_interactive_signals(void);
@@ -305,7 +303,7 @@ void		free_all_env(t_env *env);
 void		free_ll_env(t_env *env);
 
 int			make_tkn_lst(t_token **lst, char *str);
-void		tkn_free_lst(t_token *lst);
+//void		tkn_free_lst(t_token *lst);
 void		tkn_free_one(t_token *tkn);
 void		next_token(t_token **list);
 
