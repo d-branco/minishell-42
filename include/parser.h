@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:07 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/24 22:48:11 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:53:16 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,14 @@ typedef struct s_redirect
 	char				*file;
 }	t_redirect;
 
+typedef struct s_expctx
+{
+	int					*i;
+	char				**res;
+	int					*was_quoted;
+	t_mnsh				*shell;
+}	t_expctx;
+
 //parser/ast.c
 t_ast_node	*build_ast(t_token **tokens);
 t_ast_node	*parse_logical_ops(t_token **tokens);
@@ -95,11 +103,16 @@ int			parser(char *input, t_mnsh *shell);
 //parser/expander.c
 void		expand_arguments(t_command *cmd, t_mnsh *shell);
 char		*expand_argument(const char *arg, t_mnsh *shell, int *was_quoted_out);
-//parser/expander_util.c
+//parser/expander_two.c
+char		*expand_argument(const char *arg, t_mnsh *shell, int *was_quoted_out);
+//parser/expander_three.c
 char		*get_env_value(const char *name, char **envp);
 int			ft_strarr_len(char **arr);
 void		append_and_free(char **dst, char *src);
 void		append_char(char **res, char c);
+//parser/expander_four.c
+void		handle_quoted(const char *arg, int *i, char **res, t_mnsh *shell);
+void		handle_dollar(const char *arg, int *i, char **res, t_mnsh *shell);
 //parser/lexer.c
 int			parse_input_into_token_list(t_token **list, char *input);
 int			validate_syntax(char *str);
