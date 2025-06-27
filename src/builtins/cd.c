@@ -6,11 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 14:29:16 by alde-alm          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/06/24 08:27:49 by abessa-m         ###   ########.fr       */
-=======
-/*   Updated: 2025/06/24 23:07:23 by alde-alm         ###   ########.fr       */
->>>>>>> origin/wildcards
+/*   Updated: 2025/06/27 12:22:59 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +14,8 @@
 
 static void	error_cd(const char *path)
 {
-<<<<<<< HEAD
-	if (errno == ENOENT)
-		printf("Minishell: cd: %s - No such file or directory\n", path);
-	else if (errno == EACCES)
-		printf("Minishell: cd: %s - Permission denied\n", path);
-	else if (errno == ENOTDIR)
-		printf("Minishell: cd: %s - Not a directory\n", path);
-	else if (errno == ELOOP)
-		printf("Minishell: cd: %s - Too many levels of symbolic links\n", path);
-	else if (errno == EINVAL)
-		printf("Minishell: cd: %s - Invalid argument\n", path);
-	else if (errno == EFAULT)
-		printf("Minishell: cd: %s - Bad address\n", path);
-	else if (errno == ENAMETOOLONG)
-		printf("Minishell: cd: %s - File name too long\n", path);
-	else
-		printf("Unknown cd Error");
-	return (1);
-=======
 	ft_dprintf(2, "minishell: cd: %s: ", path);
 	perror("");
->>>>>>> origin/wildcards
 }
 
 static void	ft_setenv(char **envp, const char *var_name, const char *str)
@@ -86,11 +62,7 @@ static int	cd_handle_path(int ac, char **av, t_mnsh *shell, char **path_out)
 	{
 		path = ft_getenv(shell->envp, "HOME");
 		if (!path)
-<<<<<<< HEAD
-			return (printf("Minishell: cd: HOME not set\n"),
-=======
 			return (ft_dprintf(2, "minishell: cd: HOME not set\n"),
->>>>>>> origin/wildcards
 				handle_exit_code(1));
 	}
 	else
@@ -105,11 +77,7 @@ int	ft_cd(int ac, char **av, t_mnsh *shell)
 	char	*path;
 
 	if (ac > 2)
-<<<<<<< HEAD
-		return (printf("Minishell: cd: too many arguments\n"),
-=======
 		return (ft_dprintf(2, "minishell: cd: too many arguments\n"),
->>>>>>> origin/wildcards
 			handle_exit_code(1));
 	if (!getcwd(cwd, sizeof(cwd)))
 		return (handle_exit_code(1));

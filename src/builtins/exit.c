@@ -6,11 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:02 by alde-alm          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/06/24 08:27:49 by abessa-m         ###   ########.fr       */
-=======
-/*   Updated: 2025/06/24 23:15:48 by alde-alm         ###   ########.fr       */
->>>>>>> origin/wildcards
+/*   Updated: 2025/06/27 12:39:29 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,32 +45,16 @@ static int	handle_exit(int ac, char **av, t_mnsh *shell)
 	}
 	if (!is_num(av[1]) || ft_strlen(av[1]) > 19)
 	{
-<<<<<<< HEAD
-		printf("Minishell: exit: %s: numeric argument required\n", av[1]);
-=======
 		ft_dprintf(2, "minishell: exit: %s:	numeric	argument required\n",
 			av[1]);
->>>>>>> origin/wildcards
 		free_exit_s(shell);
 		exit(handle_exit_code(2));
 	}
 	if (ac == 2)
 	{
-<<<<<<< HEAD
-		if (ac == 2)
-		{
-			handle_exit_code(ft_atoi(av[1]));
-			free_exit_s(shell);
-			exit(handle_exit_code(-1));
-		}
-		else
-			return (printf("Minishell: exit: too many arguments\n"),
-				handle_exit_code(1));
-=======
 		handle_exit_code(ft_atoi(av[1]));
 		free_exit_s(shell);
 		exit(handle_exit_code(-1));
->>>>>>> origin/wildcards
 	}
 	ft_dprintf(2, "minishell: exit: too many arguments\n");
 	return (handle_exit_code(1));
