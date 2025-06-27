@@ -6,11 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2025/06/24 14:59:45 by abessa-m         ###   ########.fr        #
-=======
-#    Updated: 2025/06/26 15:53:48 by alde-alm         ###   ########.fr        #
->>>>>>> origin/wildcards
+#    Updated: 2025/06/27 11:09:41 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,19 +31,18 @@ INCLUDES	:= -I./include
 
 SRCS		:=	\
 	src/minishell.c															\
-<<<<<<< HEAD
 																			\
-=======
 	src/execution/exe.c														\
 	src/execution/signal.c													\
+																			\
 	src/parser/parser.c														\
-	src/parser/expander.c                                                   \
-	src/parser/expander_two.c                                               \
-	src/parser/expander_three.c	                                            \
-	src/parser/expander_four.c	                                            \
+	src/parser/expander.c													\
+	src/parser/expander_two.c												\
+	src/parser/expander_three.c												\
+	src/parser/expander_four.c												\
 	src/parser/lexer.c														\
 	src/parser/lexer-list.c													\
-	src/parser/lexer-token.c                                                \
+	src/parser/lexer-token.c												\
 	src/parser/lexer-tokenizer.c											\
 	src/parser/ast.c														\
 	src/parser/ast-free.c													\
@@ -55,11 +50,11 @@ SRCS		:=	\
 	src/parser/ast-parse-cmd2.c												\
 	src/parser/ast-print.c													\
 	src/parser/ast-redirect.c												\
-	src/parser/wildcard_bonus.c                                             \
-	src/parser/wildcard_utils_bonus.c                                       \
->>>>>>> origin/wildcards
+	src/parser/wildcard_bonus.c												\
+	src/parser/wildcard_utils_bonus.c										\
+																			\
 	src/utils/ft_isspace.c													\
-	src/utils/ft_dprintf.c                                                  \
+	src/utils/ft_dprintf.c													\
 	src/utils/ft_malloc.c													\
 	src/utils/ft_strcmp.c													\
 																			\
@@ -68,34 +63,12 @@ SRCS		:=	\
 	src/builtins/env.c														\
 	src/builtins/exit.c														\
 	src/builtins/export.c													\
-	src/builtins/export_utils.c                                             \
+	src/builtins/export_utils.c												\
 	src/builtins/pwd.c														\
 	src/builtins/unset.c													\
 	src/builtins/check_builtins.c											\
-<<<<<<< HEAD
 	src/builtins/init_utils.c												\
-																			\
-	src/parser/parser.c
-
-#	src/parser/expander.c													\
-#	src/parser/expander_util.c												\
-#	src/parser/lexer.c														\
-#	src/parser/lexer-list.c													\
-#	src/parser/lexer-token.c												\
-#	src/parser/lexer-tokenizer.c											\
-#	src/parser/ast.c														\
-#	src/parser/ast-free.c													\
-#	src/parser/ast-parse-cmd.c												\
-#	src/parser/ast-parse-cmd2.c												\
-#	src/parser/ast-print.c													\
-#	src/parser/ast-redirect.c												\
-#																			\
-#	src/execution/exe.c														\
-#	src/execution/signal.c													\
-=======
-	src/builtins/init_utils.c                                               \
 	src/builtins/replace_add_var.c
->>>>>>> origin/wildcards
 
 OBJS		:= $(SRCS:.c=.o)
 
