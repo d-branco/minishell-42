@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/27 10:20:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:54:42 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	main(int argc, char **argv, char **envp)
 	display_ctrl_c(TRUE);///////////// check signals
 	parent_signals();///////////////// check signals
 	init_shell(shell, envp);
+<<<<<<< HEAD
 
 	check_args(argc, argv);
 	looping_shell(shell);
@@ -49,6 +50,8 @@ void	check_args(int argc, char **argv)
 {
 	int	fd;
 
+=======
+>>>>>>> origin/wildcards
 	if (argc > 1)
 	{
 		fd = open(argv[1], O_RDONLY);
@@ -87,6 +90,7 @@ static void	looping_shell(t_mnsh *shell)
 		free(input);
 		shell->prompt = init_prompt(handle_exit_code(-1));
 	}
+<<<<<<< HEAD
 	free(input);
 	if (isatty(0) && isatty(2)) ////// check signals
 		ft_putstr_fd("exit\n", STDERR_FILENO);
@@ -109,9 +113,16 @@ static void	handle_args(int argc, char **argv)
 			exit (SYNTAX_ERROR);
 		}
 	}
+=======
+	rl_clear_history();
+	if (DEBUG)
+		ft_printf("--DEBUG-- \n--DEBUG-- Goodbye, friend.\n--DEBUG-- \n");
+	free_shell(shell);
+	return (handle_exit_code(-1));
+>>>>>>> origin/wildcards
 }
 
-bool	ft_check_input(const char *input)
+int	ft_check_input(const char *input)
 {
 	while (*input)
 	{

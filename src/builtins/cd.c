@@ -6,14 +6,19 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 14:29:16 by alde-alm          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/06/24 08:27:49 by abessa-m         ###   ########.fr       */
+=======
+/*   Updated: 2025/06/24 23:07:23 by alde-alm         ###   ########.fr       */
+>>>>>>> origin/wildcards
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	error_cd(const char *path)
+static void	error_cd(const char *path)
 {
+<<<<<<< HEAD
 	if (errno == ENOENT)
 		printf("Minishell: cd: %s - No such file or directory\n", path);
 	else if (errno == EACCES)
@@ -31,6 +36,10 @@ static int	error_cd(const char *path)
 	else
 		printf("Unknown cd Error");
 	return (1);
+=======
+	ft_dprintf(2, "minishell: cd: %s: ", path);
+	perror("");
+>>>>>>> origin/wildcards
 }
 
 static void	ft_setenv(char **envp, const char *var_name, const char *str)
@@ -75,9 +84,13 @@ static int	cd_handle_path(int ac, char **av, t_mnsh *shell, char **path_out)
 
 	if (ac == 1)
 	{
-		path = ft_getenv(shell->envp, "HOME=");
+		path = ft_getenv(shell->envp, "HOME");
 		if (!path)
+<<<<<<< HEAD
 			return (printf("Minishell: cd: HOME not set\n"),
+=======
+			return (ft_dprintf(2, "minishell: cd: HOME not set\n"),
+>>>>>>> origin/wildcards
 				handle_exit_code(1));
 	}
 	else
@@ -90,10 +103,13 @@ int	ft_cd(int ac, char **av, t_mnsh *shell)
 {
 	char	cwd[PATH_MAX];
 	char	*path;
-	int		error_code;
 
 	if (ac > 2)
+<<<<<<< HEAD
 		return (printf("Minishell: cd: too many arguments\n"),
+=======
+		return (ft_dprintf(2, "minishell: cd: too many arguments\n"),
+>>>>>>> origin/wildcards
 			handle_exit_code(1));
 	if (!getcwd(cwd, sizeof(cwd)))
 		return (handle_exit_code(1));
@@ -102,10 +118,10 @@ int	ft_cd(int ac, char **av, t_mnsh *shell)
 		return (1);
 	if (chdir(path) != 0 && ft_strcmp(path, "") != 0)
 	{
-		error_code = error_cd(path);
+		error_cd(path);
 		if (ac == 1)
 			free(path);
-		return (handle_exit_code(error_code));
+		return (handle_exit_code(1));
 	}
 	if (ac == 1)
 		free(path);

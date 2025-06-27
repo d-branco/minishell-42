@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/24 16:00:23 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:53:46 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 //	void			rl_replace_line (const char *text, int clear_undo);
 //	void			rl_redisplay (void);
 //	void			add_history (const char *string);
-
+# include <stdbool.h>
 //		Standard I/O Functions
 # include <stdio.h>
 //	int				printf(const char *restrict format, ...);
@@ -109,7 +109,7 @@
 # include <dirent.h>
 //	struct dirent	*readdir(DIR *dirp);
 //	int				closedir(DIR *dirp);
-
+# include <stdarg.h>
 //		Error Handling
 # include <string.h>
 //	char			*strerror(int errnum);
@@ -260,11 +260,107 @@ typedef struct s_quote_state
 	int					escaped;
 }	t_quote_state;
 
+typedef struct s_expctx
+{
+	int					*i;
+	char				**res;
+	int					*was_quoted;
+	t_mnsh				*shell;
+}	t_expctx;
+
+//from the previous parser.h
+//parser/ast.c
+t_ast_node	*build_ast(t_token **tokens);
+t_ast_node	*parse_logical_ops(t_token **tokens);
+t_ast_node	*parse_pipe(t_token **tokens);
+t_ast_node	*parse_redirections(t_token **tokens);
+t_ast_node	*create_ast_node(t_ast_type type, void *content);
+//parser/ast-print.c
+void		print_ast(t_ast_node *node, int depth);
+//parser/ast-free.c
+void		free_arg_list(t_list *arg_list);
+void		free_arg_list_structure(t_list *arg_list);
+void		free_ast_node(t_ast_node *node);
+//parse/ast-parse-cmd.c
+t_ast_node	*parse_commands(t_token **tokens);
+//parse/ast-parse-cmd2.c
+t_ast_node	*handle_tokens_inside_parenthesis(t_token **tokens);
+int			is_valid_token_for_argument(t_token *token);
+
+//parser/parser.c
+int			parser(char *input, t_mnsh *shell);
+//parser/expander.c
+void		expand_arguments(t_command *cmd, t_mnsh *shell);
+char		*expand_argument(const char *arg, t_mnsh *shell, int *was_quoted_out);
+//parser/expander_two.c
+char		*expand_argument(const char *arg, t_mnsh *shell, int *was_quoted_out);
+//parser/expander_three.c
+char		*get_env_value(const char *name, char **envp);
+int			ft_strarr_len(char **arr);
+void		append_and_free(char **dst, char *src);
+void		append_char(char **res, char c);
+//parser/expander_four.c
+void		handle_quoted(const char *arg, int *i, char **res, t_mnsh *shell);
+void		handle_dollar(const char *arg, int *i, char **res, t_mnsh *shell);
+//parser/lexer.c
+int			parse_input_into_token_list(t_token **list, char *input);
+int			validate_syntax(char *str);
+int			handle_quoted_string(char *input, int *pos, char **str, char chr);
+//parser/lexer-list.c
+void		tkn_lst_printer(t_token *lst);
+void		tkn_lstclear(t_token **lst);
+t_token		*create_token(t_tkn_type token_type, char *token_string);
+void		tkn_lstadd_back(t_token **lst, t_token *new);
+int			validate_heredoc_syntax(char *input);
+//parser/lexer-token.c
+void		get_token(t_token **list, char *input, int *pos);
+//parser/lexer-tokenizer.c
+t_tkn_type	check_type_of_token(char *input, int *pos);
+void		isolate_word_token(char *input, int *pos, char **token_string);
+void		isolate_operator_token(char *input, int *pos, char **token_string);
+//parser/wildcard_bonus.c
+char		**expand_argument_and_wildcard(const char *arg, t_mnsh *shell, int *was_quoted_out);
+//parser/wildcard_utils_bonus.c
+void		ft_strarr_add_back(char ***arr, char *new_str);
+void		ft_strarr_extend(char ***dest, char **src);
+void		ft_strarr_free(char **arr);
+void		ft_strarr_sort(char **arr);
+
+//src/builtins/cd.c
+int			ft_cd(int ac, char **av, t_mnsh *shell);
+//src/builtins/echo.c
+int			ft_echo(char **av);
+//src/builtins/env.c
+int			ft_env(char **av, char **envp);
+//src/builtins/exit.c
+int			ft_exit(int ac, char **av, t_mnsh *shell);
+//src/builtins/export.c
+int			ft_export(char **av, t_mnsh *shell);
+//src/builtins/export_utils.c
+int			export_var(const char *av, char ***envp);
+//src/builtins/pwd.c
+int			ft_pwd(void);
+//src/builtins/unset.c
+int			ft_unset(char **av, char ***envp);
+int			is_valid_arg(const char *av);
+//src/builtins/replace_add_var.c
+int			replace_add_var(char *var_name, char *value, char ***envp);
+int			add_var_env(char *new_var, int size, char ***envp);
+//src/builtins/check_builtins.c
+int			is_builtin(t_command *cmd);
+int			envp_size(char **envp);
+int			execute_builtin(t_command *cmd, t_mnsh *shell);
+void		ft_free_env(char **envp);
+char		*ft_getenv(char **envp, char *var_name);
+//src/builtins/init_utils.c
+char		**init_envp(char **envp);
+void		handle_shlvl(t_mnsh *shell);
+
 //minishell.c
 //int			main(int argc, char **argv, char **envp);
 void		free_shell(t_mnsh *shell);
 int			handle_exit_code(int newcode);
-bool		ft_check_input(const char *input);
+int			ft_check_input(const char *input);
 void		print_error(char *program, char *arg, char *msg);
 //execution/exe.c
 //int			execute_ast(t_ast_node *node, t_mnsh *shell);
@@ -356,5 +452,18 @@ int			export_var(const char *av, char ***envp);
 int			replace_add_var(char *var_name, char *value, char ***envp);
 char		**init_envp(char **envp);
 void		handle_shlvl(t_mnsh *shell);
+int			execute_ast(t_ast_node *node, t_mnsh *shell);
+//utils/ft_dprintf.c
+int			ft_dprintf(int fd, const char *format, ...);
+//utils/ft_isspace.c
+int			ft_isspace(char chr);
+//utils/ft_malloc.c
+void		*ft_malloc(int total_size);
+//utils/ft_strcmp.c
+int			ft_strcmp(const char *s1, const char *s2);
+//execution/signal.c
+void		ft_setup_interactive_signals(void);
+void		ft_setup_fork_signals(void);
+void		ft_exec_handler(int signo);
 
 #endif

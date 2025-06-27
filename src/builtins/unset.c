@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                           :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alde-alm <alde-alm@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 15:55:05 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/04/12 16:54:40 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:25:47 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,14 @@ static void	remove_env_var(char ***envp, const char *var_name)
 	count = 0;
 	while ((*envp)[count])
 		count++;
-	new_env = ft_malloc(sizeof(char *) * count);
-	while (i < count)
+	new_env = ft_malloc(sizeof(char *) * count + 1);
+	while ((*envp)[i])
 	{
-		if (is_var_to_remove((*envp)[i], var_name))
-		{
+		if (!is_var_to_remove((*envp)[i], var_name))
+			new_env[j++] = (*envp)[i];
+		else
 			free((*envp)[i]);
-			i++;
-			continue ;
-		}
-		new_env[j++] = (*envp)[i++];
+		i++;
 	}
 	new_env[j] = NULL;
 	free(*envp);
@@ -58,7 +56,13 @@ int	ft_unset(char **av, char ***envp)
 	i = 1;
 	while (av[i])
 	{
-		remove_env_var(envp, av[i]);
+		if (av[i][0] == '-')
+		{
+			ft_dprintf(2, "minishell: unset: invalid option\n");
+			handle_exit_code(0);
+		}
+		else
+			remove_env_var(envp, av[i]);
 		i++;
 	}
 	return (handle_exit_code(0));

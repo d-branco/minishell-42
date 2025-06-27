@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 15:38:09 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:11:55 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_env(char **av, char **envp)
 		return (handle_exit_code(0));
 	if (av[1])
 	{
-		printf("env: '%s': No such file or directory\n", av[1]);
+		ft_dprintf(2, "env: '%s': No such file or directory\n", av[1]);
 		return (handle_exit_code(UNKNOWN_COMMAND));
 	}
 	i = -1;

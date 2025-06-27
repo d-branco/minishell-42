@@ -6,7 +6,11 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/06/24 19:32:32 by abessa-m         ###   ########.fr       */
+=======
+/*   Updated: 2025/06/26 01:23:06 by alde-alm         ###   ########.fr       */
+>>>>>>> origin/wildcards
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2205,7 +2209,7 @@ void	free_ll_env(t_env *env)
 
 	if (validate_syntax(input) == SYNTAX_ERROR)
 	{
-		printf("Minishell: Syntax error: %s\n", input);
+		ft_dprintf(2, "Minishell: Syntax error: %s\n", input);
 		return (handle_exit_code(2));
 	}
 	list_o_tokens = NULL;
@@ -2220,6 +2224,7 @@ void	free_ll_env(t_env *env)
 	execute_ast(shell->ast_head, shell);
 	free_ast_node(shell->ast_head);
 	return (handle_exit_code(-1));
+<<<<<<< HEAD
 }*/
 
 //	Parsing order:
@@ -2227,3 +2232,6 @@ void	free_ll_env(t_env *env)
 //2. Pipes				|
 //3. Redirections		<, <<, >, >>
 //4. Commands			et cetera
+=======
+}
+>>>>>>> origin/wildcards
