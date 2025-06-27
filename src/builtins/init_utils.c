@@ -6,11 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:10:29 by alde-alm          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/06/24 08:27:49 by abessa-m         ###   ########.fr       */
-=======
-/*   Updated: 2025/06/26 01:12:45 by alde-alm         ###   ########.fr       */
->>>>>>> origin/wildcards
+/*   Updated: 2025/06/27 11:29:41 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,17 +81,6 @@ void	handle_shlvl(t_mnsh *shell)
 		new_lvl = shlvl_to_str(n);
 		if (!new_lvl)
 			return (ft_putstr_fd("ERROR malloc!\n", 2), free(lvl), (void)0);
-<<<<<<< HEAD
-		if (n > 999)
-		{
-			new_lvl = "1";
-			printf("Minishell: warning: shell level (%d) too high, "
-				"resetting to 1\n", n);
-		}
-		else if (n < 0)
-			new_lvl = "0";
-=======
->>>>>>> origin/wildcards
 		replace_add_var("SHLVL=", new_lvl, &shell->envp);
 		free(lvl);
 		free(new_lvl);
