@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/24 19:35:31 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:20:36 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static void	looping_shell(t_mnsh *shell)
 	free(input);
 	if (isatty(0) && isatty(2)) ////// check signals
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-	display_ctrl_c(FALSE);
+	display_ctrl_c(FALSE);//////////// check signals
 }
 
 static void	handle_args(int argc, char **argv)
