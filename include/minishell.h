@@ -141,7 +141,6 @@
 typedef struct s_mnsh
 {
 	int					last_exit_code;
-	int					export_status;
 	char				*prompt;
 	char				**envp;
 	struct s_ast_node	*ast_head;

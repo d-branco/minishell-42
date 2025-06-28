@@ -43,7 +43,7 @@ int		ft_export(char **av, t_mnsh *shell);
 int		export_var(const char *av, char ***envp);
 //src/builtins/pwd.c
 char	**init_expo(char **envp);
-int		ft_pwd(void);
+int		ft_pwd(t_mnsh *shell);
 //src/builtins/unset.c
 int		ft_unset(char **av, char ***envp);
 int		is_valid_arg(const char *av);

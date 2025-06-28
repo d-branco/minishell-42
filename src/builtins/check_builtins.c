@@ -51,7 +51,7 @@ int	execute_builtin(t_command *cmd, t_mnsh *shell)
 	else if (ft_strncmp(cmd->command, "export", ft_strlen(cmd->command)) == 0)
 		return (ft_export(cmd->args, shell));
 	else if (ft_strncmp(cmd->command, "pwd", ft_strlen(cmd->command)) == 0)
-		return (ft_pwd());
+		return (ft_pwd(shell));
 	else if (ft_strncmp(cmd->command, "unset", ft_strlen(cmd->command)) == 0)
 		return (ft_unset(cmd->args, &shell->envp));
 	return (0);
