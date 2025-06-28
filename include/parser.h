@@ -100,6 +100,10 @@ int			is_valid_token_for_argument(t_token *token);
 
 //parser/parser.c
 int			parser(char *input, t_mnsh *shell);
+int			is_operator(t_token *t);
+int			is_redirection(t_token *t);
+int			check_token_syntax_errors(t_token *lst);
+int			print_unexpected_token(t_token *tkn);
 //parser/expander.c
 void		expand_arguments(t_command *cmd, t_mnsh *shell);
 char		*expand_argument(const char *arg, t_mnsh *shell, int *was_quoted_out);

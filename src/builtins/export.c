@@ -54,7 +54,7 @@ static void	print_sort_env(char **envp)
 	char	**env_copy;
 	int		i;
 
-	env_copy = init_envp(envp);
+	env_copy = init_expo(envp);
 	if (!env_copy)
 		return ;
 	ft_sort_env_tabs(env_copy);
@@ -94,20 +94,14 @@ int	ft_export(char **av, t_mnsh *shell)
 {
 	int		i;
 	int		status;
-	char	cwd[PATH_MAX];
 
 	status = 0;
-	if (!av[1] || ft_strcmp(av[1], "") == 0)
+	if (!av[1])
 		return (print_sort_env(shell->envp), handle_exit_code(0));
 	i = 0;
 	while (av[++i])
 	{
-		if (strcmp(av[i], "PWD") == 0 && shell->export_status == 1)
-		{
-			replace_add_var("PWD=", getcwd(cwd, sizeof(cwd)), &shell->envp);
-			shell->export_status = 0;
-		}
-		else if (!is_valid_arg(av[i]))
+		if (!is_valid_arg(av[i]))
 		{
 			ft_dprintf(2, "minishell: export: '%s': not a valid identifier\n",
 				av[i]);

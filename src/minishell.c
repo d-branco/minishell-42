@@ -77,7 +77,6 @@ void	free_shell(t_mnsh *shell)
 
 	if (shell->prompt)
 		free(shell->prompt);
-	//free ast;
 	if (shell->envp)
 	{
 		i = 0;

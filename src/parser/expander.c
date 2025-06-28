@@ -43,7 +43,7 @@ static void	expand_and_append(char **expanded, char ***new_args, int was_quoted)
 			split_and_extend(expanded[0], new_args);
 		else
 			ft_strarr_extend(new_args,
-				(char *[]){ft_strdup(expanded[j]), NULL});
+				(char *[]){expanded[j], NULL});
 		j++;
 	}
 }
