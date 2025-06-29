@@ -6,185 +6,92 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/06/24 19:32:32 by abessa-m         ###   ########.fr       */
-=======
 /*   Updated: 2025/06/26 01:23:06 by alde-alm         ###   ########.fr       */
->>>>>>> origin/wildcards
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int			parse_n_exec_input(char *input, t_mnsh *shell);
-
-t_env		*make_ll_env(char **envp);
-void		env_add(t_env **env, char *key, char *value);
-t_env		*make_env(char *key, char *value, t_env *next);
-void		free_all_env(t_env *env);
-void		free_ll_env(t_env *env);
-
-int			make_tkn_lst(t_token **lst, char *str);
-void		free_lst_tkn(t_token *lst);
-void		tkn_free_one(t_token *tkn);
-void		next_token(t_token **list);
-
-int			lexer(t_token **tkn, char **str);
-int			get_tkn_type(char *str);
-const char	*get_tkn_as_str(enum e_token_type n);
-t_token		*make_one_tkn(t_token *next, char *str, enum e_token_type type);
-int			get_str_token(char **word, char **str);
-
-int			handle_quote(char *c, t_quote_state *state);
-int			needs_escaping(char c, t_quote_state *state);
-
-int			parse_ast(t_ast **ast, t_token **tkn);
-int			parse_tokens(t_ast **ast, t_token **tkn);
-int			parse_conditionnal(t_ast **ast, t_token **tkn);
-
-int			exec_ast(t_ast *ast, t_env **env, int previous);
-int			exec_pipeline(t_list *pipeline, t_env **env, int previous);
-
-void		free_ast(t_ast *ast);
-void		free_pipeline(t_list *pipeline);
-void		free_tube_lst(t_tube *lst);
-
-int			pipeline_expansion(t_list **pipeline, t_env *env, int error_code);
-int			cmd_expansion(t_tube **cmd, t_env *env, int error_code);
-int			expand_tube(t_tube *tube, t_tube **res, t_env *env, int error_code);
-void		lst_quote_remove(t_tube *lst);
-char		*quote_remove(char *str);
-
-char		*param_expansion(char *str, t_env *env, int retn);
-char		*dollar_expansion(
-				char **str, t_env *env, int retn, t_quote_state *state);
-char		*expand_variable(char **str, t_env *env, t_quote_state *state);
-char		*ret_env_key(t_env *env, char *key);
-void		insert_value(char **buf, char *val, int *pos, int extra_space);
-
-t_tube		*make_tube(t_tube *new);
-t_tube		*separate_tube(t_tube *tube);
-char		*get_word(char **str);
-
-t_exec		*init_pipeline(t_list *pipeline, t_env **env, int prev);
-void		init_cmd(t_tube *lst, t_exec *exec, int i);
-void		init_redirs(t_tube *lst, t_cmd *cmd, t_exec *exec);
-
-char		**env_to_strarr(t_env *env);
-size_t		size_env(t_env *env);
-void		free_strarr(char **s);
-
-void		init_exec(t_list *pipeline, t_exec *exec, t_env **env, int prev);
-int			**get_pipes(int n);
-char		**extract_path(t_env *env);
-
-char		**extract_args(t_tube *lst);
-void		init_cmd_path(t_cmd *cmd, t_exec *exec);
-int			ret_builtin_enum(char *str);
-const char	*ret_builtin_literal(int n);
-
-int			find_cmd(char **path, char *filename, char **res);
-int			find_cmd_cnt(int errno_value);
-int			check_file(char *filename, char **res);
-int			search_path(char **path, const char *filename, char **res);
-char		*concat_slash(const char *str1, const char *str2);
-
-void		print_error(char *program, char *arg, char *msg);
-int			calc_len(char *prefix, char *program, char *arg, char *msg);
-
-int			update_fd_in(t_cmd *cmd, t_tube *redir, t_exec *exec);
-void		read_single_heredoc(char **buffer, char *delim);
-void		add_line(char **buffer, char *line);
-char		*get_input_line(char *prompt);
-void		remove_endl(char *line);
-
-int			fd_builtin(t_exec *exec, int i);
-void		close_fds(t_exec *exec);
-int			exec_builtin(int n, char **args, t_env **env, int prev);
-int			update_fd_out(t_cmd *cmd, t_tube *redir, t_exec *exec);
-
-void		free_exec(t_exec *exec);
-int			**free_pipes(int **pipes, int n);
-void		free_cmd(t_cmd *cmd);
-
-int			cmds_with_forks(t_exec *exec);
-int			*start_children(t_exec *exec);
-int			start_child(t_exec *exec, int i);
-int			fd_redirect(int input_fd, int output_fd);
-void		exec_cmd(t_exec *exec, int i);
-
-void		write_all_heredocs(t_exec *exec);
-int			wait_all(int n, int *pids);
-int			get_return_value(int status);
-
-t_ast		*make_ast_node(int type, t_ast *lhs, t_ast *rhs, t_list *pipeline);
-int			check_tkn(t_token *tok, enum e_token_type expected);
-int			tkn_error(t_token *tok);
-
-int			parse_pipeline(t_list **pipeline, t_token **tok);
-int			make_pipeline(t_list **pipeline, t_token **tok);
-void		next_tkn(t_token **list);
-int			parse_cmd(t_tube **cmd, t_token **tok);
-int			parse_tube(t_tube **tube, t_token **tok);
-
-int			is_redirection(t_token *tkn);
-int			get_modifier(t_token *tkn);
-
-void		handle_wildcards(t_tube **res, t_tube *tubes);
-void		handle_all_wildcards(t_tube *res, t_tube *t);
-t_tube		*get_last_tube(t_tube *t);
-
-void		find_wildcard_matches(char **ret, char *str);
-int			check_iwatod(char *str, char **ret);
-int			contains_wildcards(char *str);
-
-void		check_empty_and_sort(t_list **words, char **ret, char *str);
-char		*backslash_chars(char *str, int flag);
-void		lst_bubble_sort(
-				t_list **lst, int (cmp)(const char *, const char *));
-t_list		*lst_swap(t_list *a, t_list *b);
-
-char		*lst_to_str(t_list *word);
-void		lst_words_len(t_list *word, size_t *len);
-
-int			match_wildcard(char *file, char *expr);
-char		**wildcard_split(char const *s, char c);
-char		*wc_next_word(char **str, char const c);
-int			wc_count_wrds(char const *s, char const c);
-void		ms_split_free(char **s, int i);
-
-void		quote_remove_strarr(char **strarr);
-int			check_single_section(int i, int *ret, char **file, char **sections);
-
-int			check_starting_wildcard(
-				int *i, char **file, char *expr, char ***sections);
-int			check_ending_wildcard(
-				int i, char *file, char *expr, char **sections);
-
-int	parse_n_exec_input(char *input, t_mnsh *shell)
+int	parser(char *input, t_mnsh *shell)
 {
-	t_token			*lst_tkn;
-	t_token			*lst_tkn_origin;
-	t_ast			*ast;
-	t_env			*ll_env[1];
+	t_token		*list_o_tokens;
+	t_token		*list_o_tokens_origin;
+	t_ast_node	*ast;
 
-	if (make_tkn_lst(&lst_tkn, input) != 0)
+	if (validate_syntax(input) == SYNTAX_ERROR)
 	{
-		handle_exit_code(SYNTAX_ERROR);
-		return (handle_exit_code(-1));
+		ft_dprintf(2, "Minishell: Syntax error: %s\n", input);
+		return (handle_exit_code(2));
 	}
-	lst_tkn_origin = lst_tkn;
-	if (parse_ast(&ast, &lst_tkn) != SYNTAX_ERROR)
+	list_o_tokens = NULL;
+	parse_input_into_token_list(&list_o_tokens, input);
+	tkn_lst_printer(list_o_tokens);
+
+	if (check_token_syntax_errors(list_o_tokens) == SYNTAX_ERROR)
 	{
-		*ll_env = make_ll_env(shell->envp);
-		handle_exit_code(exec_ast(ast, ll_env, handle_exit_code(-1)));
-		free_all_env(*ll_env);
+		tkn_lstclear(&list_o_tokens);
+		return (handle_exit_code(2));
 	}
-	else
-		handle_exit_code(SYNTAX_ERROR);
-	free_ast(ast);
-	free_lst_tkn(lst_tkn_origin);
+
+	list_o_tokens_origin = list_o_tokens;
+	ast = build_ast(&list_o_tokens);
+	tkn_lstclear(&list_o_tokens_origin);
+
+	if (DEBUG)
+		print_ast(ast, 0);
+
+	shell->ast_head = ast;
+	execute_ast(shell->ast_head, shell);
+	free_ast_node(shell->ast_head);
+
 	return (handle_exit_code(-1));
+}
+
+int	is_operator(t_token *t)
+{
+	return (t->type == e_PIPE || t->type == e_AND || t->type == e_OR);
+}
+
+int	is_redirection(t_token *t)
+{
+	return (t->type == e_OUTPUT_REDIRECTION || t->type == e_APPEND
+		|| t->type == e_INPUT_REDIRECTION || t->type == e_HERE_DOC);
+}
+
+int	check_token_syntax_errors(t_token *lst)
+{
+	t_token	*curr;
+
+	curr = lst;
+	if (!curr)
+		return (0);
+	if (is_operator(curr) || is_redirection(curr))
+		return (print_unexpected_token(curr));
+	while (curr && curr->next)
+	{
+		if (is_operator(curr) && is_operator(curr->next))
+			return (print_unexpected_token(curr->next));
+		if (is_redirection(curr) && curr->next->type != e_WORD)
+			return (print_unexpected_token(curr->next));
+		curr = curr->next;
+	}
+	if (is_operator(curr) || is_redirection(curr))
+		return (print_unexpected_token(NULL));
+	return (0);
+}
+
+int	print_unexpected_token(t_token *tkn)
+{
+	if (!tkn)
+		ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+	else
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+		ft_putstr_fd(tkn->token_string, 2);
+		ft_putstr_fd("'\n", 2);
+	}
+	handle_exit_code(SYNTAX_ERROR);
+	return (SYNTAX_ERROR);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2198,40 +2105,51 @@ void	free_ll_env(t_env *env)
 	}
 	free(env);
 }
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////
-
-/*int	parser(char *input, t_mnsh *shell)
+int	is_operator(t_token *t)
 {
-	t_token		*list_o_tokens;
-	t_token		*list_o_tokens_origin;
-	t_ast_node	*ast;
-
-	if (validate_syntax(input) == SYNTAX_ERROR)
-	{
-		ft_dprintf(2, "Minishell: Syntax error: %s\n", input);
-		return (handle_exit_code(2));
-	}
-	list_o_tokens = NULL;
-	parse_input_into_token_list(&list_o_tokens, input);
-	lst_tkn_printer(list_o_tokens);
-	list_o_tokens_origin = list_o_tokens;
-	ast = build_ast(&list_o_tokens);
-	lst_tknclear(&list_o_tokens_origin);
-	if (DEBUG)
-		print_ast(ast, 0);
-	shell->ast_head = ast;
-	execute_ast(shell->ast_head, shell);
-	free_ast_node(shell->ast_head);
-	return (handle_exit_code(-1));
-<<<<<<< HEAD
-}*/
-
-//	Parsing order:
-//1. Logic operators	||, &&
-//2. Pipes				|
-//3. Redirections		<, <<, >, >>
-//4. Commands			et cetera
-=======
+	return (t->type == e_PIPE || t->type == e_AND || t->type == e_OR);
 }
->>>>>>> origin/wildcards
+
+int	is_redirection(t_token *t)
+{
+	return (t->type == e_OUTPUT_REDIRECTION || t->type == e_APPEND
+		|| t->type == e_INPUT_REDIRECTION || t->type == e_HERE_DOC);
+}
+
+int	check_token_syntax_errors(t_token *lst)
+{
+	t_token	*curr;
+
+	curr = lst;
+	if (!curr)
+		return (0);
+	if (is_operator(curr) || is_redirection(curr))
+		return (print_unexpected_token(curr));
+	while (curr && curr->next)
+	{
+		if (is_operator(curr) && is_operator(curr->next))
+			return (print_unexpected_token(curr->next));
+		if (is_redirection(curr) && curr->next->type != e_WORD)
+			return (print_unexpected_token(curr->next));
+		curr = curr->next;
+	}
+	if (is_operator(curr) || is_redirection(curr))
+		return (print_unexpected_token(NULL));
+	return (0);
+}
+
+int	print_unexpected_token(t_token *tkn)
+{
+	if (!tkn)
+		ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+	else
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+		ft_putstr_fd(tkn->token_string, 2);
+		ft_putstr_fd("'\n", 2);
+	}
+	handle_exit_code(SYNTAX_ERROR);
+	return (SYNTAX_ERROR);
+}

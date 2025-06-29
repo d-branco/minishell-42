@@ -170,7 +170,6 @@ typedef enum e_ast_type
 typedef struct s_mnsh
 {
 	int					last_exit_code;
-	int					export_status;
 	char				*prompt;
 	char				**envp;
 	struct s_ast_node	*ast_head;
@@ -287,6 +286,28 @@ t_ast_node	*parse_commands(t_token **tokens);
 t_ast_node	*handle_tokens_inside_parenthesis(t_token **tokens);
 int			is_valid_token_for_argument(t_token *token);
 
+
+//other parser. For syntax error
+//parser/parser.c
+int			parser(char *input, t_mnsh *shell);
+int			is_operator(t_token *t);
+int			is_redirection(t_token *t);
+int			check_token_syntax_errors(t_token *lst);
+int			print_unexpected_token(t_token *tkn);
+//parser/expander.c
+void		expand_arguments(t_command *cmd, t_mnsh *shell);
+char		*expand_argument(const char *arg, t_mnsh *shell, int *was_quoted_out);
+//parser/expander_two.c
+char		*expand_argument(const char *arg, t_mnsh *shell, int *was_quoted_out);
+//parser/expander_three.c
+char		*get_env_value(const char *name, char **envp);
+int			ft_strarr_len(char **arr);
+void		append_and_free(char **dst, char *src);
+void		append_char(char **res, char c);
+//parser/expander_four.c
+void		handle_quoted(const char *arg, int *i, char **res, t_mnsh *shell);
+void		handle_dollar(const char *arg, int *i, char **res, t_mnsh *shell);
+
 //parser/parser.c
 int			parser(char *input, t_mnsh *shell);
 //parser/expander.c
@@ -339,7 +360,7 @@ int			ft_export(char **av, t_mnsh *shell);
 //src/builtins/export_utils.c
 int			export_var(const char *av, char ***envp);
 //src/builtins/pwd.c
-int			ft_pwd(void);
+int			ft_pwd(t_mnsh *shell);
 //src/builtins/unset.c
 int			ft_unset(char **av, char ***envp);
 int			is_valid_arg(const char *av);
@@ -439,7 +460,7 @@ int			ft_exit(int ac, char **av, t_mnsh *shell);
 //src/builtins/export.c
 int			ft_export(char **av, t_mnsh *shell);
 //src/builtins/pwd.c
-int			ft_pwd(void);
+//int			ft_pwd(void);
 //src/builtins/unset.c
 int			ft_unset(char **av, char ***envp);
 //src/builtins/check_builtins.c

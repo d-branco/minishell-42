@@ -12,6 +12,7 @@
 
 #include "../../include/minishell.h"
 
+/*
 char	**init_envp(char **envp)
 {
 	char	**new_envp;
@@ -35,6 +36,49 @@ char	**init_envp(char **envp)
 		count++;
 	}
 	new_envp[count] = NULL;
+	return (new_envp);
+}*/
+static int	count_and_copy_env(char **envp, char **new_envp)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (envp[i])
+	{
+		if (ft_strchr(envp[i], '='))
+		{
+			if (new_envp)
+			{
+				new_envp[j] = ft_strdup(envp[i]);
+				if (!new_envp[j])
+					return (0);
+			}
+			j++;
+		}
+		i++;
+	}
+	if (new_envp)
+		new_envp[j] = NULL;
+	return (j);
+}
+
+char	**init_envp(char **envp)
+{
+	char	**new_envp;
+	int		count;
+
+	count = count_and_copy_env(envp, NULL);
+	new_envp = ft_calloc(count + 1, sizeof(char *));
+	if (!new_envp)
+		return (ft_putstr_fd("ERROR malloc!\n", 2), NULL);
+	if (!count_and_copy_env(envp, new_envp))
+	{
+		ft_free_env(new_envp);
+		ft_putstr_fd("ERROR malloc!\n", 2);
+		return (NULL);
+	}
 	return (new_envp);
 }
 
