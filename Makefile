@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/06/29 12:10:37 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/06/29 12:14:45 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ SRCS		:=	\
 	src/builtins/init_utils.c												\
 	src/builtins/export_utils.c												\
 	src/builtins/replace_add_var.c											\
+	src/builtins/bridge.c													\
 																			\
 	src/parser/parser.c
 

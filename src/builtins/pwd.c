@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 02:59:19 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:48:36 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,14 @@ int	ft_pwd(t_mnsh *shell)
 	{
 		printf("%s\n", cwd);
 		free(cwd);
+		free(pwd_env);
 		return (handle_exit_code(0));
 	}
 	if (pwd_env)
 	{
 		printf("%s\n", pwd_env);
+		free(cwd);
+		free(pwd_env);
 		return (handle_exit_code(0));
 	}
 	ft_dprintf(2, "Minishell: pwd: error current directory\n");

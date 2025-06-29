@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/24 19:32:32 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/29 13:04:34 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void		remove_endl(char *line);
 
 int			fd_builtin(t_exec *exec, int i);
 void		close_fds(t_exec *exec);
-int			exec_builtin(int n, char **args, t_env **env, int prev);
 int			update_fd_out(t_cmd *cmd, t_tube *redir, t_exec *exec);
 
 void		free_exec(t_exec *exec);
@@ -156,6 +155,38 @@ int			check_starting_wildcard(
 				int *i, char **file, char *expr, char ***sections);
 int			check_ending_wildcard(
 				int i, char *file, char *expr, char **sections);
+
+int			exec_builtin(int n, char **args, t_env **env, int prev);
+int			exec_pwd(char **args, t_env **env, int prev);
+
+//char		**env_to_array(t_env *env);
+//void		free_env_array(char **array);
+int	exec_pwd(char **args, t_env **env, int prev)
+{
+	t_mnsh	shell;
+	int		ret;
+
+	(void) args;
+	(void) prev;
+	shell.envp = env_to_array(*env);
+	ret = ft_pwd(&shell);
+	free_env_array(shell.envp);
+	return (ret);
+}
+
+int	exec_builtin(int n, char **args, t_env **env, int prev)
+{
+	static int	(*builtin_arr[7])(char **, t_env **, int) = {exec_pwd,
+		exec_pwd, exec_pwd, exec_pwd, exec_pwd, exec_pwd, exec_pwd};
+	//static int	(*builtin_arr[7])(char **, t_env **, int) = { exec_echo,
+	//	exec_cd, exec_pwd, exec_export, exec_unset, exec_env, exec_exit };
+
+	if (n >= 7 || n < 0)
+		return (0);
+	return ((builtin_arr)[n](args, env, prev));
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 int	parse_n_exec_input(char *input, t_mnsh *shell)
 {
@@ -1007,19 +1038,6 @@ void	close_fds(t_exec *exec)
 		close(i);
 		i++;
 	}
-}
-
-int	exec_builtin(int n, char **args, t_env **env, int prev)
-{
-	//static int	(*builtin_arr[7])(char **, t_env **, int) = { exec_echo,
-	//	exec_cd, exec_pwd, exec_export, exec_unset, exec_env, exec_exit };
-	(void) n;//to be removed
-	(void) args;//to be removed
-	(void) env;//to be removed
-	(void) prev;//to be removed
-	//if (n > 7 || n < 0)
-		return (0);
-	//return ((builtin_arr)[n](args, env, prev));
 }
 
 int	update_fd_out(t_cmd *cmd, t_tube *redir, t_exec *exec)

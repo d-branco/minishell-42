@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/24 16:00:23 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:31:37 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,7 +343,9 @@ int			ft_exit(int ac, char **av, t_mnsh *shell);
 //src/builtins/export.c
 int			ft_export(char **av, t_mnsh *shell);
 //src/builtins/pwd.c
-int			ft_pwd(void);
+int			ft_pwd(t_mnsh *shell);
+char		**init_expo(char **envp);
+//int			ft_pwd(void);
 //src/builtins/unset.c
 int			ft_unset(char **av, char ***envp);
 //src/builtins/check_builtins.c
@@ -356,5 +358,8 @@ int			export_var(const char *av, char ***envp);
 int			replace_add_var(char *var_name, char *value, char ***envp);
 char		**init_envp(char **envp);
 void		handle_shlvl(t_mnsh *shell);
+//src/builtins/bridge.c
+char		**env_to_array(t_env *env);
+void		free_env_array(char **array);
 
 #endif
