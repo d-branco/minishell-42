@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/06/24 14:59:45 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/06/29 12:10:37 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ INCLUDES	:= -I./include
 SRCS		:=	\
 	src/minishell.c															\
 																			\
+	src/utils/ft_dprintf.c													\
 	src/utils/ft_isspace.c													\
 	src/utils/ft_malloc.c													\
 	src/utils/ft_strcmp.c													\
@@ -45,6 +46,8 @@ SRCS		:=	\
 	src/builtins/unset.c													\
 	src/builtins/check_builtins.c											\
 	src/builtins/init_utils.c												\
+	src/builtins/export_utils.c												\
+	src/builtins/replace_add_var.c											\
 																			\
 	src/parser/parser.c
 

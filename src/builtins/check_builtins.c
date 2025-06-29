@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:24:23 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/17 13:42:45 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/25 23:40:31 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	execute_builtin(t_command *cmd, t_mnsh *shell)
 	else if (ft_strncmp(cmd->command, "export", ft_strlen(cmd->command)) == 0)
 		return (ft_export(cmd->args, shell));
 	else if (ft_strncmp(cmd->command, "pwd", ft_strlen(cmd->command)) == 0)
-		return (ft_pwd());
+		return (ft_pwd(shell));
 	else if (ft_strncmp(cmd->command, "unset", ft_strlen(cmd->command)) == 0)
 		return (ft_unset(cmd->args, &shell->envp));
 	return (0);
@@ -79,38 +79,21 @@ char	*ft_getenv(char **envp, char *var_name)
 	len = ft_strlen(var_name);
 	while (*envp)
 	{
-		if (ft_strncmp(*envp, var_name, len) == 0)
-			return (ft_strdup(*envp + len));
+		if (ft_strncmp(*envp, var_name, len) == 0 && (*envp)[len] == '=')
+			return (ft_strdup(*envp + len + 1));
 		envp++;
 	}
 	return (NULL);
 }
 
-int	export_var(const char *av, char ***envp)
+int	envp_size(char **envp)
 {
-	char	*var_name;
-	char	*value;
-	char	*equal_posit;
+	int	i;
 
-	equal_posit = ft_strchr(av, '=');
-	if (equal_posit)
-	{
-		var_name = ft_substr(av, 0, equal_posit - av + 1);
-		value = ft_strdup(equal_posit + 1);
-	}
-	else
-	{
-		var_name = ft_strjoin(av, "=");
-		value = ft_getenv(*envp, var_name);
-		if (!value)
-		{
-			value = ft_strdup("");
-			replace_add_var((char *)av, value, envp);
-			return (free(var_name), free(value), 0);
-		}
-	}
-	if (!var_name || !value)
-		return (free(var_name), free(value), -1);
-	replace_add_var(var_name, value, envp);
-	return (free(var_name), free(value), 0);
+	i = 0;
+	if (!envp)
+		return (0);
+	while (envp[i])
+		i++;
+	return (i);
 }

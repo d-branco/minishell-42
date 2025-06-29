@@ -6,108 +6,86 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 14:29:16 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/06/24 08:27:49 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:07:23 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	error_cd(const char *path)
+static void	print_cd_error(const char *path)
 {
-	if (errno == ENOENT)
-		printf("Minishell: cd: %s - No such file or directory\n", path);
-	else if (errno == EACCES)
-		printf("Minishell: cd: %s - Permission denied\n", path);
-	else if (errno == ENOTDIR)
-		printf("Minishell: cd: %s - Not a directory\n", path);
-	else if (errno == ELOOP)
-		printf("Minishell: cd: %s - Too many levels of symbolic links\n", path);
-	else if (errno == EINVAL)
-		printf("Minishell: cd: %s - Invalid argument\n", path);
-	else if (errno == EFAULT)
-		printf("Minishell: cd: %s - Bad address\n", path);
-	else if (errno == ENAMETOOLONG)
-		printf("Minishell: cd: %s - File name too long\n", path);
-	else
-		printf("Unknown cd Error");
-	return (1);
+	ft_dprintf(2, "minishell: cd: %s: ", path);
+	perror("");
+	handle_exit_code(1);
 }
 
-static void	ft_setenv(char **envp, const char *var_name, const char *str)
+static void	update_pwd_vars(t_mnsh *shell, char *oldpwd)
 {
-	while (*envp)
+	char	cwd[PATH_MAX];
+
+	if (oldpwd)
+		replace_add_var("OLDPWD=", oldpwd, &shell->envp);
+	else
 	{
-		if (ft_strncmp(*envp, var_name, ft_strlen(var_name)) == 0)
-		{
-			free(*envp);
-			*envp = ft_strjoin(var_name, str);
-			if (!*envp)
-				return ;
-			return ;
-		}
-		envp++;
+		replace_add_var("OLDPWD=", "", &shell->envp);
+	}
+	if (getcwd(cwd, sizeof(cwd)))
+	{
+		replace_add_var("PWD=", cwd, &shell->envp);
 	}
 }
 
-static int	cd_update_env(t_mnsh *shell)
+static int	cd_no_args(t_mnsh *shell, char *oldpwd)
+{
+	char	*home;
+
+	home = ft_getenv(shell->envp, "HOME");
+	if (!home)
+	{
+		ft_dprintf(2, "minishell: cd: HOME not set\n");
+		return (free(oldpwd), handle_exit_code(1));
+	}
+	if (chdir(home) == -1)
+	{
+		print_cd_error(home);
+		free(home);
+		return (free(oldpwd), 1);
+	}
+	free(home);
+	update_pwd_vars(shell, oldpwd);
+	free(oldpwd);
+	return (handle_exit_code(0));
+}
+
+static int	cd_with_path(char *path, char *oldpwd, t_mnsh *shell)
+{
+	if (ft_strcmp(path, "") != 0 && chdir(path) == -1)
+	{
+		print_cd_error(path);
+		return (free(oldpwd), 1);
+	}
+	update_pwd_vars(shell, oldpwd);
+	free(oldpwd);
+	return (handle_exit_code(0));
+}
+
+int	ft_cd(int argc, char **argv, t_mnsh *shell)
 {
 	char	cwd[PATH_MAX];
 	char	*oldpwd;
 
+	if (argc > 2)
+	{
+		ft_dprintf(2, "minishell: cd: too many arguments\n");
+		return (handle_exit_code(1));
+	}
 	if (!getcwd(cwd, sizeof(cwd)))
 		return (handle_exit_code(1));
-	oldpwd = ft_getenv(shell->envp, "PWD=");
-	if (oldpwd)
-	{
-		replace_add_var("OLDPWD=", oldpwd, &shell->envp);
-		free(oldpwd);
-	}
-	else
-		ft_setenv(shell->envp, "OLDPWD", "");
-	if (getcwd(cwd, sizeof(cwd)))
-		ft_setenv(shell->envp, "PWD=", cwd);
-	return (handle_exit_code(0));
-}
-
-static int	cd_handle_path(int ac, char **av, t_mnsh *shell, char **path_out)
-{
-	char	*path;
-
-	if (ac == 1)
-	{
-		path = ft_getenv(shell->envp, "HOME=");
-		if (!path)
-			return (printf("Minishell: cd: HOME not set\n"),
-				handle_exit_code(1));
-	}
-	else
-		path = av[1];
-	*path_out = path;
-	return (0);
-}
-
-int	ft_cd(int ac, char **av, t_mnsh *shell)
-{
-	char	cwd[PATH_MAX];
-	char	*path;
-	int		error_code;
-
-	if (ac > 2)
-		return (printf("Minishell: cd: too many arguments\n"),
-			handle_exit_code(1));
-	if (!getcwd(cwd, sizeof(cwd)))
+	oldpwd = ft_strdup(cwd);
+	if (!oldpwd)
 		return (handle_exit_code(1));
-	shell->export_status = 1;
-	if (cd_handle_path(ac, av, shell, &path))
-		return (1);
-	if (chdir(path) != 0 && ft_strcmp(path, "") != 0)
-	{
-		error_code = error_cd(path);
-		if (ac == 1)
-			free(path);
-		return (handle_exit_code(error_code));
-	}
-	if (ac == 1)
-		free(path);
-	return (cd_update_env(shell));
+	if (argc == 1)
+		return (cd_no_args(shell, oldpwd));
+	else
+		return (cd_with_path(argv[1], oldpwd, shell));
 }

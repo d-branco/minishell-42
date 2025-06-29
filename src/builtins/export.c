@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:44:01 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/06/24 08:27:49 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:21:39 by alde-alm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 static void	ft_sort_env_tabs(char **tabs);
 
-static int	is_valid_arg(const char *av)
+int	is_valid_arg(const char *av)
 {
 	int	i;
 
 	i = 1;
 	if (!av || (!ft_isalpha(av[0]) && av[0] != '_'))
 		return (0);
-	while (av[i] && av[i] != '=')
+	while (av[i] && av[i] != '=' && !(av[i] == '+' && av[i + 1] == '='))
 	{
 		if (!ft_isalnum(av[i]) && av[i] != '_')
 			return (0);
@@ -54,7 +54,7 @@ static void	print_sort_env(char **envp)
 	char	**env_copy;
 	int		i;
 
-	env_copy = init_envp(envp);
+	env_copy = init_expo(envp);
 	if (!env_copy)
 		return ;
 	ft_sort_env_tabs(env_copy);
@@ -94,27 +94,21 @@ int	ft_export(char **av, t_mnsh *shell)
 {
 	int		i;
 	int		status;
-	char	cwd[PATH_MAX];
 
 	status = 0;
 	if (!av[1])
 		return (print_sort_env(shell->envp), handle_exit_code(0));
-	i = 1;
-	while (av[i])
+	i = 0;
+	while (av[++i])
 	{
-		if (strcmp(av[i], "PWD") == 0 && shell->export_status == 1)
+		if (!is_valid_arg(av[i]))
 		{
-			replace_add_var("PWD=", getcwd(cwd, sizeof(cwd)), &shell->envp);
-			shell->export_status = 0;
-		}
-		else if (!is_valid_arg(av[i]))
-		{
-			printf("Minishell: export: '%s': not a valid identifier\n", av[i]);
+			ft_dprintf(2, "minishell: export: '%s': not a valid identifier\n",
+				av[i]);
 			status = 1;
 		}
 		else if (export_var(av[i], &shell->envp) == -1)
 			status = 1;
-		i++;
 	}
 	return (handle_exit_code(status));
 }
