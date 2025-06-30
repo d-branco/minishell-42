@@ -46,8 +46,8 @@ int	execute_builtin(t_command *cmd, t_mnsh *shell)
 		return (ft_echo(cmd->args));
 	else if (ft_strncmp(cmd->command, "env", ft_strlen(cmd->command)) == 0)
 		return (ft_env(cmd->args, shell->envp));
-	else if (ft_strncmp(cmd->command, "exit", ft_strlen(cmd->command)) == 0)
-		return (ft_exit(cmd->argc, cmd->args, shell));
+	//else if (ft_strncmp(cmd->command, "exit", ft_strlen(cmd->command)) == 0)
+	//	return (ft_exit(cmd->argc, cmd->args, shell));
 	else if (ft_strncmp(cmd->command, "export", ft_strlen(cmd->command)) == 0)
 		return (ft_export(cmd->args, shell));
 	else if (ft_strncmp(cmd->command, "pwd", ft_strlen(cmd->command)) == 0)

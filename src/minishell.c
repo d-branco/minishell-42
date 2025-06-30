@@ -84,10 +84,10 @@ static void	looping_shell(t_mnsh *shell)
 			handle_exit_code(parse_n_exec_input(input, shell));
 		display_ctrl_c(TRUE);///////// check signals
 		parent_signals();///////////// check signals
-		free(input);
+		//free(input);
 		shell->prompt = init_prompt(handle_exit_code(-1));
 	}
-	free(input);
+	//free(input);
 	if (isatty(0) && isatty(2)) ////// check signals
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	display_ctrl_c(FALSE);//////////// check signals

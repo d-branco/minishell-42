@@ -36,32 +36,24 @@ static int	is_num(char *av)
 	return (1);
 }
 
-static int	handle_exit(int ac, char **av, t_mnsh *shell)
+int	ft_exit(int ac, char **av, int prev)
 {
-	if (ac == 1)
+	write(2, "exit\n", 5);
+	if (ac == 0)
 	{
-		free_exit_s(shell);
-		exit(handle_exit_code(0));
+		exit(handle_exit_code(prev));
 	}
-	if (!is_num(av[1]) || ft_strlen(av[1]) > 19)
+	if (!is_num(av[0]) || ft_strlen(av[0]) > 19)
 	{
 		ft_dprintf(2, "minishell: exit: %s:	numeric	argument required\n",
-			av[1]);
-		free_exit_s(shell);
+			av[0]);
 		exit(handle_exit_code(2));
 	}
-	if (ac == 2)
+	if (ac == 1)
 	{
-		handle_exit_code(ft_atoi(av[1]));
-		free_exit_s(shell);
+		handle_exit_code(ft_atoi(av[0]));
 		exit(handle_exit_code(-1));
 	}
 	ft_dprintf(2, "minishell: exit: too many arguments\n");
 	return (handle_exit_code(1));
-}
-
-int	ft_exit(int ac, char **av, t_mnsh *shell)
-{
-	printf("exit\n");
-	return (handle_exit(ac, av, shell));
 }

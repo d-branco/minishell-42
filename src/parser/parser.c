@@ -231,14 +231,31 @@ int	exec_echo(char **args, t_env **env, int prev)
 	return (ft_echo(args));
 }
 
-//exit has leaks as it is. Maybe use
+
+	//(void) env;
+	//(void) prev;
+	//return (ft_echo(args));
 int	exec_exit(char **args, t_env **env, int prev)
 {
-	(void) args;
-	(void) env;
+	t_command	*cmd;
+	int			ret;
+
 	(void) prev;
-	print_error(NULL, NULL, "WOULD YOU KINDLY MAKE ME");
-	return (0);
+	(void) env;
+	print_error(NULL, NULL, ">>>>TESTE ft_exit: env_to_array");
+	
+	print_error(NULL, NULL, ">>>>TESTE ft_exit: parse_command");
+	cmd = parse_command(args);
+
+	//ft_printf("Command: %s\n", cmd->command);
+	//for (int i = 0; i < cmd->argc; i++)///////////////////// TEST
+	//	ft_printf("Arg[%d]: %s\n", i, cmd->args[i]);
+	//ft_printf("Argc: %d\n", cmd->argc);
+
+	ret = ft_exit(cmd->argc, cmd->args, prev);
+
+	free(cmd);
+	return (ret);
 }
 
 //int	ft_env(char **av, char **envp)
@@ -266,6 +283,8 @@ int	exec_env(char **args, t_env **env, int prev)
 	return (ret);
 }
 
+//export
+//unset
 int	exec_builtin(int n, char **args, t_env **env, int prev)
 {
 	int			ret;

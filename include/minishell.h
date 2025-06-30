@@ -342,7 +342,7 @@ int			ft_echo(char **av);
 //src/builtins/env.c
 int			ft_env(char **av, char **envp);
 //src/builtins/exit.c
-int			ft_exit(int ac, char **av, t_mnsh *shell);
+int			ft_exit(int ac, char **av, int prev);
 //src/builtins/export.c
 int			ft_export(char **av, t_mnsh *shell);
 //src/builtins/pwd.c
