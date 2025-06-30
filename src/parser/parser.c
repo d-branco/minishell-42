@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/29 15:31:47 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/30 11:57:41 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ int			check_ending_wildcard(
 
 int			exec_builtin(int n, char **args, t_env **env, int prev);
 int			exec_pwd(char **args, t_env **env, int prev);
+int			exec_cd(char **args, t_env **env, int prev);
 
 t_command	*parse_command(char **input);
 
@@ -169,14 +170,14 @@ t_command	*parse_command(char **input)
 
 	cmd = ft_malloc(sizeof(t_command) * 1);
 	count = 0;
-	if (!input || !*input)
-		return (NULL);
-	while (input[count])
-		count++;
+	if (input && *input)
+	{
+		while (input[count])
+			count++;
+	}
 	cmd->command = *input;
 	cmd->args = input;
 	cmd->argc = count;
-
 	return (cmd);
 }
 
@@ -196,32 +197,56 @@ int	exec_pwd(char **args, t_env **env, int prev)
 	return (ret);
 }
 
-int	exec_builtin(int n, char **args, t_env **env, int prev)
+int	exec_cd(char **args, t_env **env, int prev)
 {
 	t_command	*cmd;
 	t_mnsh		shell;
 	int			ret;
-	//static int	(*builtin_arr[7])(char **, t_env **, int) = { exec_echo,
-	//	exec_cd, exec_pwd, exec_export, exec_unset, exec_env, exec_exit };
 
-	if (n >= 7 || n < 0)
-		return (0);
+	(void) prev;
+	print_error(NULL, NULL, ">>>>TESTE cd: env_to_array");
 	shell.envp = env_to_array(*env);
-
+	print_error(NULL, NULL, ">>>>TESTE cd: parse_command");
 	cmd = parse_command(args);
 
-	ft_printf("Command: %s\n", cmd->command);
-	for (int i = 0; i < cmd->argc; i++)///////////////////// TEST
-		ft_printf("Arg[%d]: %s\n", i, cmd->args[i]);
-	ft_printf("Argc: %d\n", cmd->argc);
+	//ft_printf("Command: %s\n", cmd->command);
+	//for (int i = 0; i < cmd->argc; i++)///////////////////// TEST
+	//	ft_printf("Arg[%d]: %s\n", i, cmd->args[i]);
+	//ft_printf("Argc: %d\n", cmd->argc);
 
-	print_error(NULL, NULL, "TESTE 1");
-	ret = execute_builtin(cmd, &shell);
-	print_error(NULL, NULL, "TESTE 2");
-	free(cmd);
+	ret = ft_cd(cmd->argc, cmd->args, &shell);
 
 	free_env_array(shell.envp);
-	//	((builtin_arr)[n](args, env, prev));
+	free(cmd);
+	return (ret);
+}
+
+int	exec_builtin(int n, char **args, t_env **env, int prev)
+{
+	int			ret;
+	static int	(*builtin_arr[7])(char **, t_env **, int) = {exec_pwd,
+		exec_cd, exec_pwd, exec_pwd, exec_pwd, exec_pwd, exec_pwd};
+
+	//static int	(*builtin_arr[7])(char **, t_env **, int) = {exec_echo,
+	//	exec_cd, exec_pwd, exec_export, exec_unset, exec_env, exec_exit};
+	if (n >= 7 || n < 0)
+		return (0);
+	//shell.envp = env_to_array(*env);
+	//cmd = parse_command(args);
+
+	//ft_printf("Command: %s\n", cmd->command);
+	//for (int i = 0; i < cmd->argc; i++)///////////////////// TEST
+	//	ft_printf("Arg[%d]: %s\n", i, cmd->args[i]);
+	//ft_printf("Argc: %d\n", cmd->argc);
+
+	print_error(NULL, NULL, ">>>>TESTE 1");
+	//ret = execute_builtin(cmd, &shell);
+
+	//free(cmd);
+	//free_env_array(shell.envp);
+
+	ret = ((builtin_arr)[n](args, env, prev));
+	print_error(NULL, NULL, ">>>>TESTE 2");
 	return (ret);
 }
 ////////////////////////////////////////////////////////////////////////////////

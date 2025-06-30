@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 14:29:16 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/06/24 23:07:23 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/06/30 11:47:00 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	ft_cd(int argc, char **argv, t_mnsh *shell)
 	char	cwd[PATH_MAX];
 	char	*oldpwd;
 
-	if (argc > 2)
+	if (argc > 1)
 	{
 		ft_dprintf(2, "minishell: cd: too many arguments\n");
 		return (handle_exit_code(1));
@@ -84,8 +84,8 @@ int	ft_cd(int argc, char **argv, t_mnsh *shell)
 	oldpwd = ft_strdup(cwd);
 	if (!oldpwd)
 		return (handle_exit_code(1));
-	if (argc == 1)
+	if (argc == 0)
 		return (cd_no_args(shell, oldpwd));
 	else
-		return (cd_with_path(argv[1], oldpwd, shell));
+		return (cd_with_path(argv[0], oldpwd, shell));
 }
