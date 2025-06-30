@@ -272,6 +272,9 @@ void		print_error(char *program, char *arg, char *msg);
 int			ft_isspace(char chr);
 void		*ft_malloc(int total_size);
 int			ft_strcmp(const char *s1, const char *s2);
+int			ft_dprintf(int fd, const char *format, ...);
+int			envp_size(char **envp);
+int			add_var_env(char *new_var, int size, char ***envp);
 //execution/signal.c
 //void		ft_setup_interactive_signals(void);
 //void		ft_setup_fork_signals(void);
