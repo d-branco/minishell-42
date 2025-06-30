@@ -231,7 +231,6 @@ int	exec_echo(char **args, t_env **env, int prev)
 	return (ft_echo(args));
 }
 
-
 	//(void) env;
 	//(void) prev;
 	//return (ft_echo(args));
@@ -242,8 +241,6 @@ int	exec_exit(char **args, t_env **env, int prev)
 
 	(void) prev;
 	(void) env;
-	print_error(NULL, NULL, ">>>>TESTE ft_exit: env_to_array");
-	
 	print_error(NULL, NULL, ">>>>TESTE ft_exit: parse_command");
 	cmd = parse_command(args);
 
