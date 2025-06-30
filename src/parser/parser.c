@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/30 12:08:59 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:58:31 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ int			exec_builtin(int n, char **args, t_env **env, int prev);
 int			exec_pwd(char **args, t_env **env, int prev);
 int			exec_cd(char **args, t_env **env, int prev);
 int			exec_echo(char **args, t_env **env, int prev);
+int			exec_exit(char **args, t_env **env, int prev);
 
 t_command	*parse_command(char **input);
 
@@ -229,11 +230,20 @@ int	exec_echo(char **args, t_env **env, int prev)
 	return (ft_echo(args));
 }
 
+int	exec_exit(char **args, t_env **env, int prev)
+{
+	(void) args;
+	(void) env;
+	(void) prev;
+	print_error(NULL, NULL, "WOULD YOU KINDLY MAKE ME");
+	return (0);
+}
+
 int	exec_builtin(int n, char **args, t_env **env, int prev)
 {
 	int			ret;
 	static int	(*builtin_arr[7])(char **, t_env **, int) = {exec_echo,
-		exec_cd, exec_pwd, exec_pwd, exec_pwd, exec_pwd, exec_pwd};
+		exec_cd, exec_pwd, exec_pwd, exec_pwd, exec_pwd, exec_exit};
 
 	//static int	(*builtin_arr[7])(char **, t_env **, int) = {exec_echo,
 	//	exec_cd, exec_pwd, exec_export, exec_unset, exec_env, exec_exit};
@@ -257,6 +267,7 @@ int	exec_builtin(int n, char **args, t_env **env, int prev)
 	print_error(NULL, NULL, ">>>>TESTE 2");
 	return (ret);
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 
 int	parse_n_exec_input(char *input, t_mnsh *shell)
