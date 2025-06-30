@@ -79,8 +79,7 @@ int	ft_cd(int argc, char **argv, t_mnsh *shell)
 		ft_dprintf(2, "minishell: cd: too many arguments\n");
 		return (handle_exit_code(1));
 	}
-	if (!getcwd(cwd, sizeof(cwd)))
-		return (handle_exit_code(1));
+	getcwd(cwd, sizeof(cwd));
 	oldpwd = ft_strdup(cwd);
 	if (!oldpwd)
 		return (handle_exit_code(1));
