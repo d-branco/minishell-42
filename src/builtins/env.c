@@ -18,9 +18,9 @@ int	ft_env(char **av, char **envp)
 
 	if (!envp || !*envp)
 		return (handle_exit_code(0));
-	if (av[1])
+	if (av[0])
 	{
-		ft_dprintf(2, "env: '%s': No such file or directory\n", av[1]);
+		ft_dprintf(2, "env: '%s': No such file or directory\n", av[0]);
 		return (handle_exit_code(UNKNOWN_COMMAND));
 	}
 	i = -1;

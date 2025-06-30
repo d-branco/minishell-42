@@ -161,6 +161,7 @@ int			exec_pwd(char **args, t_env **env, int prev);
 int			exec_cd(char **args, t_env **env, int prev);
 int			exec_echo(char **args, t_env **env, int prev);
 int			exec_exit(char **args, t_env **env, int prev);
+int			exec_env(char **args, t_env **env, int prev);
 
 t_command	*parse_command(char **input);
 
@@ -230,6 +231,7 @@ int	exec_echo(char **args, t_env **env, int prev)
 	return (ft_echo(args));
 }
 
+//exit has leaks as it is. Maybe use
 int	exec_exit(char **args, t_env **env, int prev)
 {
 	(void) args;
@@ -239,11 +241,36 @@ int	exec_exit(char **args, t_env **env, int prev)
 	return (0);
 }
 
+//int	ft_env(char **av, char **envp)
+int	exec_env(char **args, t_env **env, int prev)
+{
+	t_command	*cmd;
+	t_mnsh		shell;
+	int			ret;
+
+	(void) prev;
+	print_error(NULL, NULL, ">>>>TESTE ft_env: env_to_array");
+	shell.envp = env_to_array(*env);
+	print_error(NULL, NULL, ">>>>TESTE ft_env: parse_command");
+	cmd = parse_command(args);
+
+	//ft_printf("Command: %s\n", cmd->command);
+	//for (int i = 0; i < cmd->argc; i++)///////////////////// TEST
+	//	ft_printf("Arg[%d]: %s\n", i, cmd->args[i]);
+	//ft_printf("Argc: %d\n", cmd->argc);
+
+	ret = ft_env(cmd->args, shell.envp);
+
+	free_env_array(shell.envp);
+	free(cmd);
+	return (ret);
+}
+
 int	exec_builtin(int n, char **args, t_env **env, int prev)
 {
 	int			ret;
 	static int	(*builtin_arr[7])(char **, t_env **, int) = {exec_echo,
-		exec_cd, exec_pwd, exec_pwd, exec_pwd, exec_pwd, exec_exit};
+		exec_cd, exec_pwd, exec_pwd, exec_pwd, exec_env, exec_exit};
 
 	//static int	(*builtin_arr[7])(char **, t_env **, int) = {exec_echo,
 	//	exec_cd, exec_pwd, exec_export, exec_unset, exec_env, exec_exit};
