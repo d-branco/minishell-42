@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 16:46:29 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/05/14 10:39:21 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:09:28 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_echo(char **av)
 	int	i;
 	int	nflag;
 
-	i = 0;
+	i = -1;
 	nflag = '\n';
 	while (av[++i] && n_flag(av[i]))
 		nflag = '\0';
