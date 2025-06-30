@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/27 10:20:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/30 21:24:19 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	init_shell(t_mnsh *shell, char **envp);
 static char	*init_prompt(int exit_code);
 static void	handle_args(int argc, char **argv);
-static void	looping_shell(t_mnsh *shell);
+static void	looping_shell(t_mnsh *shell, t_env **env);
 
 void		check_args(int argc, char **argv);
 
@@ -27,7 +27,8 @@ void		silent_signals(void);
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_mnsh	*shell;
+	t_mnsh			*shell;
+	static t_env	*env[1];
 
 	if (isatty(0) && isatty(2)) ////// check signals
 		rl_outstream = stderr;//////// check signals
@@ -36,11 +37,13 @@ int	main(int argc, char **argv, char **envp)
 	display_ctrl_c(TRUE);///////////// check signals
 	parent_signals();///////////////// check signals
 	init_shell(shell, envp);
+	*env = make_ll_env(shell->envp);
 
 	check_args(argc, argv);
-	looping_shell(shell);
+	looping_shell(shell, env);
 
 	rl_clear_history();
+	free_all_env(*env);
 	free_shell(shell);
 	return (handle_exit_code(-1));
 }
@@ -65,9 +68,9 @@ void	check_args(int argc, char **argv)
 	}
 }
 
-static void	looping_shell(t_mnsh *shell)
+static void	looping_shell(t_mnsh *shell, t_env **env)
 {
-	char	*input;
+	char			*input;
 
 	while (TRUE)
 	{
@@ -81,13 +84,11 @@ static void	looping_shell(t_mnsh *shell)
 		silent_signals();///////////// check signals
 		display_ctrl_c(FALSE);//////// check signals
 		if (input[0])
-			handle_exit_code(parse_n_exec_input(input, shell));
+			handle_exit_code(parse_n_exec_input(input, env));
 		display_ctrl_c(TRUE);///////// check signals
 		parent_signals();///////////// check signals
-		//free(input);
 		shell->prompt = init_prompt(handle_exit_code(-1));
 	}
-	//free(input);
 	if (isatty(0) && isatty(2)) ////// check signals
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	display_ctrl_c(FALSE);//////////// check signals

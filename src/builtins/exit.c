@@ -6,17 +6,17 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:02 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/06/29 12:40:52 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/30 21:38:31 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static void	free_exit_s(t_mnsh *shell)
-{
-	//free_ast_node(shell->ast_head);
-	free_shell(shell);
-}
+//static void	free_exit_s(t_mnsh *shell)
+//{
+//	//free_ast_node(shell->ast_head);
+//	free_shell(shell);
+//}
 
 static int	is_num(char *av)
 {

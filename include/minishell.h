@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/29 14:01:40 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/30 21:03:44 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,7 +298,7 @@ int			add_var_env(char *new_var, int size, char ***envp);
 //int			is_valid_token_for_argument(t_token *token);
 
 //parser/parser.c
-int			parse_n_exec_input(char *input, t_mnsh *shell);
+int			parse_n_exec_input(char *input, t_env **all_env);
 t_env		*make_ll_env(char **envp);
 void		env_add(t_env **env, char *key, char *value);
 t_env		*make_env(char *key, char *value, t_env *next);

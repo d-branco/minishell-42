@@ -6,13 +6,13 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/30 12:58:31 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/06/30 21:35:43 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int			parse_n_exec_input(char *input, t_mnsh *shell);
+int			parse_n_exec_input(char *input, t_env **all_env);
 
 t_env		*make_ll_env(char **envp);
 void		env_add(t_env **env, char *key, char *value);
@@ -161,7 +161,24 @@ int			exec_pwd(char **args, t_env **env, int prev);
 int			exec_cd(char **args, t_env **env, int prev);
 int			exec_echo(char **args, t_env **env, int prev);
 int			exec_exit(char **args, t_env **env, int prev);
+
 int			exec_env(char **args, t_env **env, int prev);
+int			exec_unset(char **args, t_env **env, int prev);
+void		env_remove(t_env **env, char *key);
+
+int			is_valid_identifier(char *str);
+char		*in_quotes(char *str);
+int			exe_env(char **args, t_env **env, int prev);
+void		strarr_print(char **s);
+int			exec_export(char **args, t_env **env, int prev);
+
+int			exec_export(char **args, t_env **env, int prev);
+int			export_arg(char *str, t_env **env);
+int			split_equal(char *str, char **identifier, char **value);
+void		print_export(t_env *env);
+
+void		sort_env(t_env **env);
+void		ll_swap(char **str1, char **str2);
 
 t_command	*parse_command(char **input);
 
@@ -256,7 +273,7 @@ int	exec_exit(char **args, t_env **env, int prev)
 }
 
 //int	ft_env(char **av, char **envp)
-int	exec_env(char **args, t_env **env, int prev)
+int	exe_env(char **args, t_env **env, int prev)
 {
 	t_command	*cmd;
 	t_mnsh		shell;
@@ -280,17 +297,218 @@ int	exec_env(char **args, t_env **env, int prev)
 	return (ret);
 }
 
-//export
-//unset
+////////////////////////////////////////////////////////////////////////////////
+int	exec_env(char **args, t_env **env, int prev)
+{
+	char	**strs;
+
+	(void)args;
+	(void)prev;
+	strs = env_to_strarr(*env);
+	strarr_print(strs);
+	free_strarr(strs);
+	return (0);
+}
+
+void	strarr_print(char **s)
+{
+	if (!*s)
+		return ;
+	while (*s)
+	{
+		ft_printf("%s\n", *s);
+		s++;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int	exec_unset(char **args, t_env **env, int prev)
+{
+	int		ret;
+	char	*quoted_id;
+
+	(void)prev;
+	ret = 0;
+	while (*args)
+	{
+		if (!is_valid_identifier(*args))
+		{
+			quoted_id = in_quotes(*args);
+			print_error("unset", quoted_id, "not a valid identifier");
+			free(quoted_id);
+			ret = 1;
+		}
+		else
+		{
+			write(2, "\nTESTEEEEEEEE PATH EEEEEEEEEEEEEEEE\n", 36);
+			env_remove(env, *args);
+		}
+		args++;
+	}
+	return (ret);
+}
+
+void	env_remove(t_env **env, char *key)
+{
+	t_env	*current;
+	t_env	*previous;
+	t_env	*next;
+
+	current = *env;
+	previous = 0;
+	while (current)
+	{
+		if (ft_strcmp(key, current->key) == 0)
+		{
+			next = current->next;
+			if (previous)
+				previous->next = next;
+			else
+				*env = next;
+			free_ll_env(current);
+			current = NULL;
+			break ;
+		}
+		previous = current;
+		current = current->next;
+	}
+}
+
+int	is_valid_identifier(char *str)
+{
+	if (ft_isdigit(*str))
+		return (0);
+	while (ft_isalnum(*str) || *str == '_')
+		str++;
+	return (*str == '\0');
+}
+
+char	*in_quotes(char *str)
+{
+	int		len;
+	char	*res;
+
+	len = ft_strlen(str) + 3;
+	res = ft_malloc(1 * len);
+	res[0] = '`';
+	ft_strlcpy(res + 1, str, len - 1);
+	res[len - 2] = '\'';
+	res[len - 1] = 0;
+	return (res);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int	exec_export(char **args, t_env **env, int prev)
+{
+	int		ret;
+
+	(void)prev;
+	ret = 0;
+	if (!*args)
+		print_export(*env);
+	while (*args)
+	{
+		if (export_arg(*args, env) == -1)
+			ret = 1;
+		args++;
+	}
+	return (ret);
+}
+
+int	export_arg(char *str, t_env **env)
+{
+	char	*identifier;
+	char	*value;
+	char	*quoted;
+
+	split_equal(str, &identifier, &value);
+	if (!is_valid_identifier(identifier))
+	{
+		quoted = in_quotes(str);
+		print_error("export", quoted, "not a valid identifier");
+		free(quoted);
+		return (-1);
+	}
+	else if (value)
+		env_add(env, identifier, value);
+	free(identifier);
+	free(value);
+	return (0);
+}
+
+int	split_equal(char *str, char **identifier, char **value)
+{
+	int	i;
+
+	*value = NULL;
+	i = 0;
+	while (str[i] && (i == 0 || str[i] != '='))
+	{
+		i++;
+	}
+	*identifier = ft_substr(str, 0, i);
+	if (str[i] == '=')
+		*value = ft_strdup(str + i + 1);
+	return (0);
+}
+
+void	print_export(t_env *env)
+{
+	t_env	*current;
+	char	*escaped;
+
+	sort_env(&env);
+	current = env;
+	while (current)
+	{
+		escaped = backslash_chars(current->value, TRUE);
+		ft_printf("declare -x %s=\"%s\"\n", current->key, escaped);
+		free(escaped);
+		current = current->next;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void	sort_env(t_env **env)
+{
+	int		sorted;
+	t_env	*current;
+
+	sorted = 0;
+	while (!sorted)
+	{
+		sorted = 1;
+		current = *env;
+		while (current && current->next)
+		{
+			if (ft_strcmp(current->key, current->next->key) > 0)
+			{
+				sorted = 0;
+				ll_swap(&current->key, &current->next->key);
+				ll_swap(&current->value, &current->next->value);
+			}
+			current = current->next;
+		}
+	}
+}
+
+void	ll_swap(char **str1, char **str2)
+{
+	char	*tmp;
+
+	tmp = *str1;
+	*str1 = *str2;
+	*str2 = tmp;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 int	exec_builtin(int n, char **args, t_env **env, int prev)
 {
 	int			ret;
 	static int	(*builtin_arr[7])(char **, t_env **, int) = {exec_echo,
-		exec_cd, exec_pwd, exec_pwd, exec_pwd, exec_env, exec_exit};
+		exec_cd, exec_pwd, exec_export, exec_unset, exec_env, exec_exit};
 
-	//static int	(*builtin_arr[7])(char **, t_env **, int) = {exec_echo,
-	//	exec_cd, exec_pwd, exec_export, exec_unset, exec_env, exec_exit};
-	if (n >= 7 || n < 0)
+	if (n > 7 || n < 0)
 		return (0);
 	//shell.envp = env_to_array(*env);
 	//cmd = parse_command(args);
@@ -313,12 +531,11 @@ int	exec_builtin(int n, char **args, t_env **env, int prev)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int	parse_n_exec_input(char *input, t_mnsh *shell)
+int	parse_n_exec_input(char *input, t_env **all_env)
 {
 	t_token			*lst_tkn;
 	t_token			*lst_tkn_origin;
 	t_ast			*ast;
-	t_env			*ll_env[1];
 
 	if (make_tkn_lst(&lst_tkn, input) != 0)
 	{
@@ -328,9 +545,8 @@ int	parse_n_exec_input(char *input, t_mnsh *shell)
 	lst_tkn_origin = lst_tkn;
 	if (parse_ast(&ast, &lst_tkn) != SYNTAX_ERROR)
 	{
-		*ll_env = make_ll_env(shell->envp);
-		handle_exit_code(exec_ast(ast, ll_env, handle_exit_code(-1)));
-		free_all_env(*ll_env);
+		handle_exit_code(exec_ast(ast, all_env, handle_exit_code(-1)));
+		//free_all_env(*all_env);
 	}
 	else
 		handle_exit_code(SYNTAX_ERROR);
