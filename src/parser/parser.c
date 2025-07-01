@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/30 21:35:43 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 08:55:07 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,9 +224,9 @@ int	exec_cd(char **args, t_env **env, int prev)
 	int			ret;
 
 	(void) prev;
-	print_error(NULL, NULL, ">>>>TESTE cd: env_to_array");
+	//print_error(NULL, NULL, ">>>>TESTE cd: env_to_array");
 	shell.envp = env_to_array(*env);
-	print_error(NULL, NULL, ">>>>TESTE cd: parse_command");
+	//print_error(NULL, NULL, ">>>>TESTE cd: parse_command");
 	cmd = parse_command(args);
 
 	//ft_printf("Command: %s\n", cmd->command);
@@ -280,9 +280,9 @@ int	exe_env(char **args, t_env **env, int prev)
 	int			ret;
 
 	(void) prev;
-	print_error(NULL, NULL, ">>>>TESTE ft_env: env_to_array");
+	//print_error(NULL, NULL, ">>>>TESTE ft_env: env_to_array");
 	shell.envp = env_to_array(*env);
-	print_error(NULL, NULL, ">>>>TESTE ft_env: parse_command");
+	//print_error(NULL, NULL, ">>>>TESTE ft_env: parse_command");
 	cmd = parse_command(args);
 
 	//ft_printf("Command: %s\n", cmd->command);
@@ -518,14 +518,14 @@ int	exec_builtin(int n, char **args, t_env **env, int prev)
 	//	ft_printf("Arg[%d]: %s\n", i, cmd->args[i]);
 	//ft_printf("Argc: %d\n", cmd->argc);
 
-	print_error(NULL, NULL, ">>>>TESTE 1");
+	print_error(NULL, NULL, ">>>>TESTE exec_builtin: ARRIVAL");
 	//ret = execute_builtin(cmd, &shell);
 
 	//free(cmd);
 	//free_env_array(shell.envp);
 
 	ret = ((builtin_arr)[n](args, env, prev));
-	print_error(NULL, NULL, ">>>>TESTE 2");
+	print_error(NULL, NULL, ">>>>TESTE exec_builtin: DEPARTURE");
 	return (ret);
 }
 
@@ -2001,7 +2001,7 @@ char	*expand_variable(char **str, t_env *env, t_quote_state *state)
 	value = ret_env_key(env, key);
 	free(key);
 	*str += i;
-	if (state)
+	if (state->double_quote)
 		ret = backslash_chars(value, TRUE);
 	else
 		ret = backslash_chars(value, FALSE);

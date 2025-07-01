@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/30 21:24:19 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 09:14:46 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	init_shell(t_mnsh *shell, char **envp);
 static char	*init_prompt(int exit_code);
 static void	handle_args(int argc, char **argv);
-static void	looping_shell(t_mnsh *shell, t_env **env);
+static void	looping_shell(t_env **env);
 
 void		check_args(int argc, char **argv);
 
@@ -38,13 +38,13 @@ int	main(int argc, char **argv, char **envp)
 	parent_signals();///////////////// check signals
 	init_shell(shell, envp);
 	*env = make_ll_env(shell->envp);
+	free_shell(shell);
 
 	check_args(argc, argv);
-	looping_shell(shell, env);
+	looping_shell(env);
 
 	rl_clear_history();
 	free_all_env(*env);
-	free_shell(shell);
 	return (handle_exit_code(-1));
 }
 
@@ -68,15 +68,16 @@ void	check_args(int argc, char **argv)
 	}
 }
 
-static void	looping_shell(t_mnsh *shell, t_env **env)
+static void	looping_shell(t_env **env)
 {
-	char			*input;
+	char	*input;
+	char	*prompt;
 
 	while (TRUE)
 	{
-		shell->last_exit_code = handle_exit_code(-1);
-		input = readline(shell->prompt);
-		free(shell->prompt);
+		prompt = init_prompt(handle_exit_code(-1));
+		input = readline(prompt);
+		free(prompt);
 		if (input == NULL)
 			break ;
 		if (ft_check_input(input))
@@ -87,7 +88,7 @@ static void	looping_shell(t_mnsh *shell, t_env **env)
 			handle_exit_code(parse_n_exec_input(input, env));
 		display_ctrl_c(TRUE);///////// check signals
 		parent_signals();///////////// check signals
-		shell->prompt = init_prompt(handle_exit_code(-1));
+		//prompt = init_prompt(handle_exit_code(-1));
 	}
 	if (isatty(0) && isatty(2)) ////// check signals
 		ft_putstr_fd("exit\n", STDERR_FILENO);
@@ -142,7 +143,7 @@ void	free_shell(t_mnsh *shell)
 
 static void	init_shell(t_mnsh *shell, char **envp)
 {
-	shell->prompt = init_prompt(handle_exit_code(-1));
+	//shell->prompt = init_prompt(handle_exit_code(-1));
 	shell->envp = init_envp(envp);
 	handle_shlvl(shell);
 	shell->ast_head = NULL;
