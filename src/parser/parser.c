@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/01 12:03:48 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 13:53:40 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,9 +248,7 @@ int	exec_echo(char **args, t_env **env, int prev)
 	return (ft_echo(args));
 }
 
-	//(void) env;
-	//(void) prev;
-	//return (ft_echo(args));
+/*
 int	exec_exit(char **args, t_env **env, int prev)
 {
 	t_command	*cmd;
@@ -271,6 +269,7 @@ int	exec_exit(char **args, t_env **env, int prev)
 	free(cmd);
 	return (ret);
 }
+*/
 
 //int	ft_env(char **av, char **envp)
 int	exe_env(char **args, t_env **env, int prev)
@@ -340,7 +339,7 @@ int	exec_unset(char **args, t_env **env, int prev)
 		}
 		else
 		{
-			write(2, "\nTESTEEEEEEEE PATH EEEEEEEEEEEEEEEE\n", 36);
+			//write(2, "\nTESTEEEEEEEE PATH EEEEEEEEEEEEEEEE\n", 36);
 			env_remove(env, *args);
 		}
 		args++;
@@ -518,14 +517,14 @@ int	exec_builtin(int n, char **args, t_env **env, int prev)
 	//	ft_printf("Arg[%d]: %s\n", i, cmd->args[i]);
 	//ft_printf("Argc: %d\n", cmd->argc);
 
-	print_error(NULL, NULL, ">>>>TESTE exec_builtin: ARRIVAL");
+	//print_error(NULL, NULL, ">>>>TESTE exec_builtin: ARRIVAL");
 	//ret = execute_builtin(cmd, &shell);
 
 	//free(cmd);
 	//free_env_array(shell.envp);
 
 	ret = ((builtin_arr)[n](args, env, prev));
-	print_error(NULL, NULL, ">>>>TESTE exec_builtin: DEPARTURE");
+	//print_error(NULL, NULL, ">>>>TESTE exec_builtin: DEPARTURE");
 	return (ret);
 }
 

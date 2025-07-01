@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:02 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/06/30 21:38:31 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 14:03:24 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,35 @@ static int	is_num(char *av)
 	return (1);
 }
 
+int	exec_exit(char **args, t_env **env, int prev)
+{
+	int	i;
+
+	i = 0;
+	handle_exit_code(prev);
+	//write(2, "exit\n", 5);
+	while (args && *args)
+	{
+		if (i > 0)
+		{
+			print_error("exit", 0, "too many arguments");
+			return (handle_exit_code(1));
+		}
+		if (!is_num(*args) || ft_strlen(args[0]) > 19)
+		{
+			print_error("exit", *args, "numeric argument required");
+			env_add(env, "EXIT", "yes");
+			return (handle_exit_code(2));
+		}
+		handle_exit_code(ft_atoi(*args));
+		args++;
+		i++;
+	}
+	env_add(env, "EXIT", "yes");
+	return (handle_exit_code(-1));
+}
+
+/*
 int	ft_exit(int ac, char **av, int prev)
 {
 	write(2, "exit\n", 5);
@@ -57,3 +86,4 @@ int	ft_exit(int ac, char **av, int prev)
 	ft_dprintf(2, "minishell: exit: too many arguments\n");
 	return (handle_exit_code(1));
 }
+*/

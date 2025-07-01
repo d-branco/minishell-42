@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/01 12:27:18 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 13:55:54 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -362,5 +362,7 @@ void		handle_shlvl(t_mnsh *shell);
 //src/builtins/bridge.c
 char		**env_to_array(t_env *env);
 void		free_env_array(char **array);
+
+char		*ret_env_key(t_env *env, char *key);
 
 #endif

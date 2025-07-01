@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/01 12:27:01 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 13:57:52 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ static void	looping_shell(t_env **env)
 		display_ctrl_c(FALSE);//////// check signals
 		if (input[0])
 			handle_exit_code(parse_n_exec_input(input, env));
+		if (*ret_env_key(*env, "EXIT"))
+			break ;
 		display_ctrl_c(TRUE);///////// check signals
 		parent_signals();///////////// check signals
 	}
