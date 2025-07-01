@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/01 10:14:07 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:03:48 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1275,6 +1275,7 @@ int	start_child(t_exec *exec, int i)
 		fd_redirect(exec->cmds[i].in_fd, exec->cmds[i].out_fd);
 		close_fds(exec);
 		exec_cmd(exec, i);
+		ft_putstr_fd("\n                   TESTE\n\n", 2);
 		close(0);
 		close(1);
 		exit(exec->cmds[i].status);
@@ -2385,7 +2386,7 @@ int	get_str_token(char **word, char **str)
 	if (state.single_quote || state.double_quote)
 	{
 		ft_putstr_fd("Minishell: syntax error\n", STDERR_FILENO);
-		return (handle_exit_code(2));
+		return (handle_exit_code(SYNTAX_ERROR));
 	}
 	return (0);
 }

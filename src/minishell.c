@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/01 09:14:46 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:27:01 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ static void	looping_shell(t_env **env)
 			handle_exit_code(parse_n_exec_input(input, env));
 		display_ctrl_c(TRUE);///////// check signals
 		parent_signals();///////////// check signals
-		//prompt = init_prompt(handle_exit_code(-1));
 	}
 	if (isatty(0) && isatty(2)) ////// check signals
 		ft_putstr_fd("exit\n", STDERR_FILENO);
@@ -146,7 +145,7 @@ static void	init_shell(t_mnsh *shell, char **envp)
 	//shell->prompt = init_prompt(handle_exit_code(-1));
 	shell->envp = init_envp(envp);
 	handle_shlvl(shell);
-	shell->ast_head = NULL;
+	//shell->ast_head = NULL;
 	//ft_setup_interactive_signals();/////////////////////////////////////////
 }
 
