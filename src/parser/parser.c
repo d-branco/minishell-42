@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/01 13:53:40 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 14:59:59 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,8 @@ void		print_export(t_env *env);
 
 void		sort_env(t_env **env);
 void		ll_swap(char **str1, char **str2);
+
+void		command_failure(void);
 
 t_command	*parse_command(char **input);
 
@@ -1259,6 +1261,18 @@ int	*start_children(t_exec *exec)
 	return (pids);
 }
 
+void	command_failure(void)
+{
+	char	*args[4];
+
+	args[0] = "sh";
+	args[1] = "-c";
+	args[2] = "exit 127";
+	args[3] = NULL;
+	execve("/usr/bin/sh", args, NULL);
+
+}
+
 int	start_child(t_exec *exec, int i)
 {
 	int	pid;
@@ -1274,9 +1288,10 @@ int	start_child(t_exec *exec, int i)
 		fd_redirect(exec->cmds[i].in_fd, exec->cmds[i].out_fd);
 		close_fds(exec);
 		exec_cmd(exec, i);
-		ft_putstr_fd("\n                   TESTE\n\n", 2);
+		//ft_putstr_fd("\n                   TESTE\n\n", 2);
 		close(0);
 		close(1);
+		command_failure();
 		exit(exec->cmds[i].status);
 	}
 	return (pid);
