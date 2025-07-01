@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 14:29:16 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/06/30 11:47:00 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 09:23:20 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,7 @@ int	ft_cd(int argc, char **argv, t_mnsh *shell)
 		ft_dprintf(2, "minishell: cd: too many arguments\n");
 		return (handle_exit_code(1));
 	}
-	if (!getcwd(cwd, sizeof(cwd)))
-		return (handle_exit_code(1));
+	getcwd(cwd, sizeof(cwd));
 	oldpwd = ft_strdup(cwd);
 	if (!oldpwd)
 		return (handle_exit_code(1));

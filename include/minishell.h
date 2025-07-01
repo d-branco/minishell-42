@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/06/30 21:03:44 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 09:56:00 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,6 @@ typedef enum e_ast_type
 typedef struct s_mnsh
 {
 	int					last_exit_code;
-	int					export_status;
 	char				*prompt;
 	char				**envp;
 	struct s_ast_node	*ast_head;

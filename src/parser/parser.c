@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/01 08:55:07 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/01 10:14:07 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1972,11 +1972,22 @@ char	*dollar_expansion(
 	char	*ret;
 
 	if ((*str)[1] && ((*str)[1] == '?'))
+	{
+		//write(2, "    TESTE\n", 10);
 		ret = ft_itoa(retn);
-	else if ((*str)[1] && ((*str)[1] == '?'))
-		ret = ft_strdup("Minishell: Shell-A");
+		*str += 2;
+	}
+	else if ((*str)[1] && ((*str)[1] == '0'))
+	{
+		//write(2, "    TESTE\n", 10);
+		ret = ft_strdup("Shell-A");
+		*str += 2;
+	}
 	else
+	{
 		ret = expand_variable(str, env, state);
+		ft_putstr_fd(ret, 2);
+	}
 	return (ret);
 }
 

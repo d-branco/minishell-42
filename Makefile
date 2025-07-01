@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/06/30 20:48:25 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/07/01 10:23:24 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -172,7 +172,15 @@ test: supp_doc
 		| grep -v WRONG_SCOPE_COMMENT										\
 		| grep -v EMPTY_LINE_FUNCTION										\
 		| grep -v TOO_MANY_FUNCS										;	\
-	echo -n "$(COR)"
+	echo -n "$(COR)"													;	\
+	echo -n "Error count: "												;	\
+		norminette src/ include/ playground/								\
+			| grep -v OK 													\
+			| grep -v WRONG_SCOPE_COMMENT									\
+			| grep -v EMPTY_LINE_FUNCTION									\
+			| grep -v TOO_MANY_FUNCS										\
+			| grep -v Error!												\
+		| wc -l
 
 valgrind: supp_doc
 	@\
