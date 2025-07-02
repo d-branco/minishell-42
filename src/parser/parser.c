@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/02 14:42:06 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/02 17:09:58 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int			parse_n_exec_input(char *input, t_env **all_env);
 
 t_env		*make_ll_env(char **envp);
 void		env_add(t_env **env, char *key, char *value);
+t_env		*env_insert(t_env **env, char *key, t_env ***insert_ptr);
 t_env		*make_env(char *key, char *value, t_env *next);
 void		free_all_env(t_env *env);
 void		free_ll_env(t_env *env);
@@ -317,7 +318,8 @@ void	strarr_print(char **s)
 		return ;
 	while (*s)
 	{
-		ft_printf("%s\n", *s);
+		if (ft_strchr(*s, '='))
+			ft_printf("%s\n", *s);
 		s++;
 	}
 }
@@ -432,6 +434,8 @@ int	export_arg(char *str, t_env **env)
 	}
 	else if (value)
 		env_add(env, identifier, value);
+	else
+		env_add(env, identifier, NULL);
 	free(identifier);
 	free(value);
 	return (0);
@@ -462,9 +466,14 @@ void	print_export(t_env *env)
 	current = env;
 	while (current)
 	{
-		escaped = backslash_chars(current->value, TRUE);
-		ft_printf("declare -x %s=\"%s\"\n", current->key, escaped);
-		free(escaped);
+		if (current->value)
+		{
+			escaped = backslash_chars(current->value, TRUE);
+			ft_printf("declare -x %s=\"%s\"\n", current->key, escaped);
+			free(escaped);
+		}
+		else
+			ft_printf("declare -x %s\n", current->key);
 		current = current->next;
 	}
 }
@@ -1788,9 +1797,14 @@ char	**env_to_strarr(t_env *env)
 	i = 0;
 	while (i < size)
 	{
-		tmp = ft_strjoin(env->key, "=");
-		ret[i] = ft_strjoin(tmp, env->value);
-		free(tmp);
+		if (env->value == NULL)
+			ret[i] = ft_strdup(env->key);
+		else
+		{
+			tmp = ft_strjoin(env->key, "=");
+			ret[i] = ft_strjoin(tmp, env->value);
+			free(tmp);
+		}
 		env = env->next;
 		i++;
 	}
@@ -2520,30 +2534,50 @@ t_env	*make_ll_env(char **envp)
 
 void	env_add(t_env **env, char *key, char *value)
 {
-	t_env	*current;
-	t_env	**ptr;
+	t_env	*found_node;
+	t_env	**insert_ptr;
 	t_env	*new_node;
 
 	if (!*key)
 		return ;
+	found_node = env_insert(env, key, &insert_ptr);
+	if (found_node)
+	{
+		free(found_node->value);
+		if (value == NULL)
+			found_node->value = NULL;
+		else
+			found_node->value = ft_strdup(value);
+	}
+	else
+	{
+		if (value == NULL)
+			new_node = make_env(ft_strdup(key), NULL, NULL);
+		else
+			new_node = make_env(ft_strdup(key), ft_strdup(value), NULL);
+		*insert_ptr = new_node;
+	}
+}
+
+t_env	*env_insert(t_env **env, char *key, t_env ***insert_ptr)
+{
+	t_env	*current;
+	t_env	**ptr;
+
 	ptr = env;
 	current = *env;
 	while (current)
 	{
 		if (ft_strcmp(current->key, key) == 0)
 		{
-			free(current->value);
-			current->value = ft_strdup(value);
-			break ;
+			*insert_ptr = NULL;
+			return (current);
 		}
 		ptr = &current->next;
 		current = current->next;
 	}
-	if (current == NULL)
-	{
-		new_node = make_env(ft_strdup(key), ft_strdup(value), NULL);
-		*ptr = new_node;
-	}
+	*insert_ptr = ptr;
+	return (NULL);
 }
 
 t_env	*make_env(char *key, char *value, t_env *next)
