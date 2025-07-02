@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/02 13:18:56 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/02 14:42:06 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1989,21 +1989,21 @@ char	*dollar_expansion(
 
 	if ((*str)[1] && ((*str)[1] == '?'))
 	{
-		//write(2, "    TESTE\n", 10);
 		ret = ft_itoa(retn);
 		*str += 2;
 	}
 	else if ((*str)[1] && ((*str)[1] == '0'))
 	{
-		//write(2, "    TESTE\n", 10);
 		ret = ft_strdup("Shell-A");
 		*str += 2;
 	}
-	else
+	else if ((*str)[1] && ((*str)[1] == '*'))
 	{
-		ret = expand_variable(str, env, state);
-		//ft_putstr_fd(ret, 2);
+		ret = ft_strdup("");
+		*str += 2;
 	}
+	else
+		ret = expand_variable(str, env, state);
 	return (ret);
 }
 

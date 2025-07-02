@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/07/01 10:23:24 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/07/02 14:52:29 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBFT_DIR	:= libft
 ##################################################################### Compiler #
 CC			= cc
 CFLAGS		+= -Wall -Wextra
-#CFLAGS		+= -Werror
+CFLAGS		+= -Werror
 READFLAGS	= -lreadline
 
 #CFLAGS		+= -g
@@ -167,14 +167,14 @@ test: supp_doc
 	$(COR)RETURN VALUE: $$?"											&&	\
 	\
 	echo -n "$(YELLOW)" 												;	\
-		norminette src/ include/ playground/								\
+		norminette src/ include/											\
 		| grep -v OK 														\
 		| grep -v WRONG_SCOPE_COMMENT										\
 		| grep -v EMPTY_LINE_FUNCTION										\
 		| grep -v TOO_MANY_FUNCS										;	\
 	echo -n "$(COR)"													;	\
 	echo -n "Error count: "												;	\
-		norminette src/ include/ playground/								\
+		norminette src/ include/ 											\
 			| grep -v OK 													\
 			| grep -v WRONG_SCOPE_COMMENT									\
 			| grep -v EMPTY_LINE_FUNCTION									\
