@@ -23,11 +23,14 @@ int	ft_pwd(t_mnsh *shell)
 	{
 		printf("%s\n", cwd);
 		free(cwd);
+		free(pwd_env);
 		return (handle_exit_code(0));
 	}
 	if (pwd_env)
 	{
 		printf("%s\n", pwd_env);
+		free(pwd_env);
+		free(cwd);
 		return (handle_exit_code(0));
 	}
 	ft_dprintf(2, "Minishell: pwd: error current directory\n");

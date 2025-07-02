@@ -17,6 +17,7 @@ static void	handle_dquoted(const char *arg, t_expctx ctx)
 	int		start;
 	char	*literal;
 
+	printf("TTTT\n");
 	*(ctx.i) += 2;
 	start = *(ctx.i);
 	while (arg[*(ctx.i)] && arg[*(ctx.i)] != '"')
