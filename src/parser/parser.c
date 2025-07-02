@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/01 14:59:59 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/02 13:18:56 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char		*dollar_expansion(
 				char **str, t_env *env, int retn, t_quote_state *state);
 char		*expand_variable(char **str, t_env *env, t_quote_state *state);
 char		*ret_env_key(t_env *env, char *key);
-void		insert_value(char **buf, char *val, int *pos, int extra_space);
+void		insert_value(char **buf, char *val, int pos, int extra_space);
 
 t_tube		*make_tube(t_tube *new);
 t_tube		*separate_tube(t_tube *tube);
@@ -1969,7 +1969,8 @@ char	*param_expansion(char *str, t_env *env, int retn)
 		if (*str == '$' && !state.escaped && !state.single_quote)
 		{
 			val = dollar_expansion(&str, env, retn, &state);
-			insert_value(&res, val, &i, (ft_strlen(str) + 1));
+			insert_value(&res, val, i, (ft_strlen(str) + 1));
+			i += ft_strlen(val);
 			free(val);
 		}
 		else
@@ -2001,7 +2002,7 @@ char	*dollar_expansion(
 	else
 	{
 		ret = expand_variable(str, env, state);
-		ft_putstr_fd(ret, 2);
+		//ft_putstr_fd(ret, 2);
 	}
 	return (ret);
 }
@@ -2049,17 +2050,17 @@ char	*ret_env_key(t_env *env, char *key)
 	return (empty);
 }
 
-void	insert_value(char **buf, char *val, int *pos, int extra_space)
+void	insert_value(char **buf, char *val, int pos, int extra_space)
 {
 	int		len;
 	char	*tmp;
 
-	(*buf)[*pos] = 0;
+	(*buf)[pos] = 0;
 	len = ft_strlen(*buf) + ft_strlen(val) + extra_space;
 	tmp = ft_malloc(1 * len);
 	ft_strlcpy(tmp, *buf, len);
 	ft_strlcat(tmp, val, len);
-	*pos += ft_strlen(val);
+	pos += ft_strlen(val);
 	free(*buf);
 	*buf = tmp;
 }
