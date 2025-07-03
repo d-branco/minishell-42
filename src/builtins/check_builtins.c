@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:24:23 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/06/25 23:40:31 by alde-alm         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:23:56 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,22 @@ int	is_builtin(t_command *cmd)
 
 int	execute_builtin(t_command *cmd, t_mnsh *shell)
 {
-	if (strncmp(cmd->command, "cd", ft_strlen(cmd->command)) == 0)
-		return (ft_cd(cmd->argc, cmd->args, shell));
-	else if (ft_strncmp(cmd->command, "echo", ft_strlen(cmd->command)) == 0)
-		return (ft_echo(cmd->args));
-	else if (ft_strncmp(cmd->command, "env", ft_strlen(cmd->command)) == 0)
-		return (ft_env(cmd->args, shell->envp));
+	(void) cmd;
+	(void) shell;
+	//if (strncmp(cmd->command, "cd", ft_strlen(cmd->command)) == 0)
+	//	return (ft_cd(cmd->argc, cmd->args, shell));
+	//else if (ft_strncmp(cmd->command, "echo", ft_strlen(cmd->command)) == 0)
+	//	return (ft_echo(cmd->args));
+	//else if (ft_strncmp(cmd->command, "env", ft_strlen(cmd->command)) == 0)
+	//	return (ft_env(cmd->args, shell->envp));
 	//else if (ft_strncmp(cmd->command, "exit", ft_strlen(cmd->command)) == 0)
 	//	return (ft_exit(cmd->argc, cmd->args, shell));
-	else if (ft_strncmp(cmd->command, "export", ft_strlen(cmd->command)) == 0)
-		return (ft_export(cmd->args, shell));
-	else if (ft_strncmp(cmd->command, "pwd", ft_strlen(cmd->command)) == 0)
-		return (ft_pwd(shell));
-	else if (ft_strncmp(cmd->command, "unset", ft_strlen(cmd->command)) == 0)
-		return (ft_unset(cmd->args, &shell->envp));
+	//else if (ft_strncmp(cmd->command, "export", ft_strlen(cmd->command)) == 0)
+	//	return (ft_export(cmd->args, shell));
+	//else if (ft_strncmp(cmd->command, "pwd", ft_strlen(cmd->command)) == 0)
+	//	return (ft_pwd(shell));
+	//else if (ft_strncmp(cmd->command, "unset", ft_strlen(cmd->command)) == 0)
+	//	return (ft_unset(cmd->args, &shell->envp));
 	return (0);
 }
 

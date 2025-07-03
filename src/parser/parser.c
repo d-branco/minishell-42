@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/02 17:09:58 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:24:34 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ int			check_ending_wildcard(
 
 int			exec_builtin(int n, char **args, t_env **env, int prev);
 int			exec_pwd(char **args, t_env **env, int prev);
-int			exec_cd(char **args, t_env **env, int prev);
+//int			exec_cd(char **args, t_env **env, int prev);
 int			exec_echo(char **args, t_env **env, int prev);
 int			exec_exit(char **args, t_env **env, int prev);
 
@@ -220,7 +220,7 @@ int	exec_pwd(char **args, t_env **env, int prev)
 	return (ret);
 }
 
-int	exec_cd(char **args, t_env **env, int prev)
+/*int	exec_cd(char **args, t_env **env, int prev)
 {
 	t_command	*cmd;
 	t_mnsh		shell;
@@ -242,7 +242,7 @@ int	exec_cd(char **args, t_env **env, int prev)
 	free_env_array(shell.envp);
 	free(cmd);
 	return (ret);
-}
+}*/
 
 int	exec_echo(char **args, t_env **env, int prev)
 {
@@ -1834,7 +1834,8 @@ void	free_strarr(char **s)
 		i++;
 	while (i >= 0)
 	{
-		free(s[i]);
+		if (s[i])
+			free(s[i]);
 		i--;
 	}
 	free(s);

@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:06:16 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/01 13:55:54 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:21:19 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,7 +334,8 @@ void		next_token(t_token **list);
 
 //bulti-ins
 //src/builtins/cd.c
-int			ft_cd(int ac, char **av, t_mnsh *shell);
+int			exec_cd(char **args, t_env **env, int prev);
+//int			ft_cd(int ac, char **av, t_mnsh *shell);
 //src/builtins/echo.c
 int			ft_echo(char **av);
 //src/builtins/env.c

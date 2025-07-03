@@ -6,12 +6,13 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 14:29:16 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/07/01 09:23:20 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:19:36 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/*
 static void	print_cd_error(const char *path)
 {
 	ft_dprintf(2, "minishell: cd: %s: ", path);
@@ -87,4 +88,46 @@ int	ft_cd(int argc, char **argv, t_mnsh *shell)
 		return (cd_no_args(shell, oldpwd));
 	else
 		return (cd_with_path(argv[0], oldpwd, shell));
+}
+*/
+
+static int	update_env(t_env **env);
+
+int	exec_cd(char **args, t_env **env, int prev)
+{
+	char	*home;
+	char	*path;
+
+	(void) prev;
+	if (*args)
+		path = *args;
+	else
+	{
+		home = ret_env_key(*env, "HOME");
+		if (!home || !*home)
+			return (print_error("cd", 0, "HOME not set"), ERROR);
+		path = home;
+	}
+	if (chdir(path) != 0)
+		return (print_error("cd", path, strerror(errno)), ERROR);
+	if (update_env(env) != SUCCESS)
+		return (ERROR);
+	return (SUCCESS);
+}
+
+static int	update_env(t_env **env)
+{
+	char	newpwd[PATH_MAX + 1];
+	char	*oldpwd;
+
+	if (getcwd(newpwd, sizeof(newpwd)) != NULL)
+	{
+		oldpwd = ft_strdup(ret_env_key(*env, "PWD"));
+		env_add(env, "OLDPWD", oldpwd);
+		free(oldpwd);
+		env_add(env, "PWD", newpwd);
+	}
+	else
+		return (print_error("cd", 0, strerror(errno)), ERROR);
+	return (SUCCESS);
 }
