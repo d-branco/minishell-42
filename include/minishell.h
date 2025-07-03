@@ -347,7 +347,7 @@ int			ft_export(char **av, t_mnsh *shell);
 //src/builtins/pwd.c
 int			ft_pwd(t_mnsh *shell);
 char		**init_expo(char **envp);
-//int			ft_pwd(void);
+void		free_env_array(char **array);
 //src/builtins/unset.c
 int			ft_unset(char **av, char ***envp);
 //src/builtins/check_builtins.c
@@ -362,7 +362,6 @@ char		**init_envp(char **envp);
 void		handle_shlvl(t_mnsh *shell);
 //src/builtins/bridge.c
 char		**env_to_array(t_env *env);
-void		free_env_array(char **array);
 
 char		*ret_env_key(t_env *env, char *key);
 

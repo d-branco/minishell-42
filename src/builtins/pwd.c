@@ -63,3 +63,15 @@ char	**init_expo(char **envp)
 	new_envp[count] = NULL;
 	return (new_envp);
 }
+
+void	free_env_array(char **array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i] != NULL)
+		free(array[i++]);
+	free(array);
+}
