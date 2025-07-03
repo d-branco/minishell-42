@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/01 13:57:52 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:05:12 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ int	main(int argc, char **argv, char **envp)
 	t_mnsh			*shell;
 	static t_env	*env[1];
 
-	if (isatty(0) && isatty(2)) ////// check signals
-		rl_outstream = stderr;//////// check signals
+	if (isatty(0) && isatty(2))
+		rl_outstream = stderr;
 	handle_args(argc, argv);
 	shell = ft_malloc(sizeof(t_mnsh) * 1);
-	display_ctrl_c(TRUE);///////////// check signals
-	parent_signals();///////////////// check signals
+	display_ctrl_c(TRUE);
+	parent_signals();
 	init_shell(shell, envp);
 	*env = make_ll_env(shell->envp);
 	free_shell(shell);
@@ -82,18 +82,18 @@ static void	looping_shell(t_env **env)
 			break ;
 		if (ft_check_input(input))
 			add_history(input);
-		silent_signals();///////////// check signals
-		display_ctrl_c(FALSE);//////// check signals
+		silent_signals();
+		display_ctrl_c(FALSE);
 		if (input[0])
 			handle_exit_code(parse_n_exec_input(input, env));
 		if (*ret_env_key(*env, "EXIT"))
 			break ;
-		display_ctrl_c(TRUE);///////// check signals
-		parent_signals();///////////// check signals
+		display_ctrl_c(TRUE);
+		parent_signals();
 	}
-	if (isatty(0) && isatty(2)) ////// check signals
+	if (isatty(0) && isatty(2))
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-	display_ctrl_c(FALSE);//////////// check signals
+	display_ctrl_c(FALSE);
 }
 
 static void	handle_args(int argc, char **argv)
@@ -102,7 +102,6 @@ static void	handle_args(int argc, char **argv)
 	{
 		if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
 		{
-			//single line minishell goes here
 			ft_putstr_fd("Minishell: try it with bash!\n", STDERR_FILENO);
 			exit (SYNTAX_ERROR);
 		}
@@ -129,9 +128,6 @@ void	free_shell(t_mnsh *shell)
 {
 	int	i;
 
-	//if (shell->prompt)
-	//	free(shell->prompt);
-	//free ast;
 	if (shell->envp)
 	{
 		i = 0;
@@ -144,11 +140,8 @@ void	free_shell(t_mnsh *shell)
 
 static void	init_shell(t_mnsh *shell, char **envp)
 {
-	//shell->prompt = init_prompt(handle_exit_code(-1));
 	shell->envp = init_envp(envp);
 	handle_shlvl(shell);
-	//shell->ast_head = NULL;
-	//ft_setup_interactive_signals();/////////////////////////////////////////
 }
 
 static char	*init_prompt(int exit_code)
@@ -165,7 +158,7 @@ static char	*init_prompt(int exit_code)
 	if (!prompt)
 		return (free(exit_code_str), NULL);
 	i = 0;
-	while (exit_code_str[i])
+	while (FALSE)
 	{
 		prompt[i] = exit_code_str[i];
 		i++;

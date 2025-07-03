@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:02 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/07/01 14:03:24 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:02:40 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	exec_exit(char **args, t_env **env, int prev)
 
 	i = 0;
 	handle_exit_code(prev);
-	//write(2, "exit\n", 5);
 	while (args && *args)
 	{
 		if (i > 0)

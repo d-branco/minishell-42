@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:46:47 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/03 14:24:34 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:02:30 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,18 +282,9 @@ int	exe_env(char **args, t_env **env, int prev)
 	int			ret;
 
 	(void) prev;
-	//print_error(NULL, NULL, ">>>>TESTE ft_env: env_to_array");
 	shell.envp = env_to_array(*env);
-	//print_error(NULL, NULL, ">>>>TESTE ft_env: parse_command");
 	cmd = parse_command(args);
-
-	//ft_printf("Command: %s\n", cmd->command);
-	//for (int i = 0; i < cmd->argc; i++)///////////////////// TEST
-	//	ft_printf("Arg[%d]: %s\n", i, cmd->args[i]);
-	//ft_printf("Argc: %d\n", cmd->argc);
-
 	ret = ft_env(cmd->args, shell.envp);
-
 	free_env_array(shell.envp);
 	free(cmd);
 	return (ret);
@@ -346,7 +337,6 @@ int	exec_unset(char **args, t_env **env, int prev)
 		}
 		else
 		{
-			//write(2, "\nTESTEEEEEEEE PATH EEEEEEEEEEEEEEEE\n", 36);
 			env_remove(env, *args);
 		}
 		args++;
@@ -523,22 +513,7 @@ int	exec_builtin(int n, char **args, t_env **env, int prev)
 
 	if (n > 7 || n < 0)
 		return (0);
-	//shell.envp = env_to_array(*env);
-	//cmd = parse_command(args);
-
-	//ft_printf("Command: %s\n", cmd->command);
-	//for (int i = 0; i < cmd->argc; i++)///////////////////// TEST
-	//	ft_printf("Arg[%d]: %s\n", i, cmd->args[i]);
-	//ft_printf("Argc: %d\n", cmd->argc);
-
-	//print_error(NULL, NULL, ">>>>TESTE exec_builtin: ARRIVAL");
-	//ret = execute_builtin(cmd, &shell);
-
-	//free(cmd);
-	//free_env_array(shell.envp);
-
 	ret = ((builtin_arr)[n](args, env, prev));
-	//print_error(NULL, NULL, ">>>>TESTE exec_builtin: DEPARTURE");
 	return (ret);
 }
 
@@ -559,7 +534,6 @@ int	parse_n_exec_input(char *input, t_env **all_env)
 	if (parse_ast(&ast, &lst_tkn) != SYNTAX_ERROR)
 	{
 		handle_exit_code(exec_ast(ast, all_env, handle_exit_code(-1)));
-		//free_all_env(*all_env);
 	}
 	else
 		handle_exit_code(SYNTAX_ERROR);
@@ -1282,7 +1256,6 @@ void	command_failure(void)
 	args[2] = "exit 127";
 	args[3] = NULL;
 	execve("/usr/bin/sh", args, NULL);
-
 }
 
 int	start_child(t_exec *exec, int i)
@@ -1300,7 +1273,6 @@ int	start_child(t_exec *exec, int i)
 		fd_redirect(exec->cmds[i].in_fd, exec->cmds[i].out_fd);
 		close_fds(exec);
 		exec_cmd(exec, i);
-		//ft_putstr_fd("\n                   TESTE\n\n", 2);
 		close(0);
 		close(1);
 		command_failure();
@@ -1752,7 +1724,7 @@ int	**get_pipes(int n)
 		pipes[i] = ft_malloc(sizeof(int) * 2);
 		if (pipe(pipes[i]) != 0)
 		{
-			perror("failed to open pipe");//////////////////////////////////////
+			perror("failed to open pipe");
 			exit(3);
 		}
 		i++;
