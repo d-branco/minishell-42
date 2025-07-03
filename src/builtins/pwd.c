@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 02:59:19 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/06/29 12:48:36 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:48:42 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,17 @@ void	free_env_array(char **array)
 	while (array[i] != NULL)
 		free(array[i++]);
 	free(array);
+}
+
+int	exec_pwd(char **args, t_env **env, int prev)
+{
+	t_mnsh	shell;
+	int		ret;
+
+	(void) args;
+	(void) prev;
+	shell.envp = env_to_array(*env);
+	ret = ft_pwd(&shell);
+	free_env_array(shell.envp);
+	return (ret);
 }

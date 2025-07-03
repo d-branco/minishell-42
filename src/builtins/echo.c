@@ -6,7 +6,7 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 16:46:29 by alde-alm          #+#    #+#             */
-/*   Updated: 2025/06/30 12:09:28 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:49:09 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,11 @@ int	ft_echo(char **av)
 	}
 	printf("%c", nflag);
 	return (handle_exit_code(0));
+}
+
+int	exec_echo(char **args, t_env **env, int prev)
+{
+	(void) env;
+	(void) prev;
+	return (ft_echo(args));
 }

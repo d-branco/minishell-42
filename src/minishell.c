@@ -6,24 +6,11 @@
 /*   By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:29:34 by abessa-m          #+#    #+#             */
-/*   Updated: 2025/07/03 16:05:12 by abessa-m         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:30:50 by abessa-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-static void	init_shell(t_mnsh *shell, char **envp);
-static char	*init_prompt(int exit_code);
-static void	handle_args(int argc, char **argv);
-static void	looping_shell(t_env **env);
-
-void		check_args(int argc, char **argv);
-
-void		display_ctrl_c(int toggle);
-void		sigint_handler(int sig);
-void		silent_signal(int sig);
-void		parent_signals(void);
-void		silent_signals(void);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -39,10 +26,8 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(shell, envp);
 	*env = make_ll_env(shell->envp);
 	free_shell(shell);
-
 	check_args(argc, argv);
 	looping_shell(env);
-
 	rl_clear_history();
 	free_all_env(*env);
 	return (handle_exit_code(-1));
@@ -68,16 +53,13 @@ void	check_args(int argc, char **argv)
 	}
 }
 
-static void	looping_shell(t_env **env)
+void	looping_shell(t_env **env)
 {
 	char	*input;
-	char	*prompt;
 
 	while (TRUE)
 	{
-		prompt = init_prompt(handle_exit_code(-1));
-		input = readline(prompt);
-		free(prompt);
+		input = readline("% ");
 		if (input == NULL)
 			break ;
 		if (ft_check_input(input))
@@ -96,54 +78,7 @@ static void	looping_shell(t_env **env)
 	display_ctrl_c(FALSE);
 }
 
-static void	handle_args(int argc, char **argv)
-{
-	if (argc > 1)
-	{
-		if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
-		{
-			ft_putstr_fd("Minishell: try it with bash!\n", STDERR_FILENO);
-			exit (SYNTAX_ERROR);
-		}
-		else
-		{
-			ft_putstr_fd("Too many arguments, dear ;)\n", STDERR_FILENO);
-			exit (SYNTAX_ERROR);
-		}
-	}
-}
-
-bool	ft_check_input(const char *input)
-{
-	while (*input)
-	{
-		if (!ft_isspace(*input))
-			return (true);
-		input++;
-	}
-	return (false);
-}
-
-void	free_shell(t_mnsh *shell)
-{
-	int	i;
-
-	if (shell->envp)
-	{
-		i = 0;
-		while (shell->envp[i])
-			free(shell->envp[i++]);
-		free (shell->envp);
-	}
-	free (shell);
-}
-
-static void	init_shell(t_mnsh *shell, char **envp)
-{
-	shell->envp = init_envp(envp);
-	handle_shlvl(shell);
-}
-
+/*
 static char	*init_prompt(int exit_code)
 {
 	char	*exit_code_str;
@@ -169,6 +104,7 @@ static char	*init_prompt(int exit_code)
 	free(exit_code_str);
 	return (prompt);
 }
+*/
 
 int	handle_exit_code(int newcode)
 {

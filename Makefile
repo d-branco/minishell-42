@@ -6,7 +6,7 @@
 #    By: abessa-m <abessa-m@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 13:55:42 by abessa-m          #+#    #+#              #
-#    Updated: 2025/07/02 14:52:29 by abessa-m         ###   ########.fr        #
+#    Updated: 2025/07/03 18:34:25 by abessa-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,41 +32,56 @@ INCLUDES	:= -I./include
 SRCS		:=	\
 	src/minishell.c															\
 																			\
+	src/builtins/bridge.c													\
+	src/builtins/cd.c														\
+	src/builtins/check_builtins.c											\
+	src/builtins/echo.c														\
+	src/builtins/env.c														\
+	src/builtins/env_utils-2.c												\
+	src/builtins/env_utils-3.c												\
+	src/builtins/env_utils.c												\
+	src/builtins/exit.c														\
+	src/builtins/export.c													\
+	src/builtins/export_utils-2.c											\
+	src/builtins/export_utils.c												\
+	src/builtins/pwd.c														\
+	src/builtins/replace_add_var.c											\
+	src/builtins/unset.c													\
+	src/builtins/unset_utils.c												\
+																			\
+	src/execution/parser.c													\
+	src/execution/parser-0-lexer.c											\
+	src/execution/parser-2.c												\
+	src/execution/parser-3.c												\
+	src/execution/parser-4.c												\
+	src/execution/parser-5.c												\
+	src/execution/parser-6-fd.c												\
+	src/execution/parser-7-heredoc.c										\
+	src/execution/parser-8.c												\
+	src/execution/parser-9.c												\
+	src/execution/parser-10.c												\
+	src/execution/parser-11.c												\
+	src/execution/parser-12.c												\
+	src/execution/parser-13.c												\
+	src/execution/parser-14.c												\
+	src/execution/parser-15.c												\
+	src/execution/parser-16.c												\
+																			\
+	src/expansion/dollar.c													\
+	src/expansion/wildcards-2.c											\
+	src/expansion/wildcards-3.c											\
+	src/expansion/wildcards-4.c											\
+	src/expansion/wildcards-5.c											\
+	src/expansion/wildcards.c												\
+																			\
+	src/utils/error-0.c													\
 	src/utils/ft_dprintf.c													\
 	src/utils/ft_isspace.c													\
 	src/utils/ft_malloc.c													\
 	src/utils/ft_strcmp.c													\
-																			\
-	src/builtins/cd.c														\
-	src/builtins/echo.c														\
-	src/builtins/env.c														\
-	src/builtins/exit.c														\
-	src/builtins/export.c													\
-	src/builtins/pwd.c														\
-	src/builtins/unset.c													\
-	src/builtins/check_builtins.c											\
-	src/builtins/init_utils.c												\
-	src/builtins/export_utils.c												\
-	src/builtins/replace_add_var.c											\
-	src/builtins/bridge.c													\
-																			\
-	src/parser/parser.c
-
-#	src/parser/expander.c													\
-#	src/parser/expander_util.c												\
-#	src/parser/lexer.c														\
-#	src/parser/lexer-list.c													\
-#	src/parser/lexer-token.c												\
-#	src/parser/lexer-tokenizer.c											\
-#	src/parser/ast.c														\
-#	src/parser/ast-free.c													\
-#	src/parser/ast-parse-cmd.c												\
-#	src/parser/ast-parse-cmd2.c												\
-#	src/parser/ast-print.c													\
-#	src/parser/ast-redirect.c												\
-#																			\
-#	src/execution/exe.c														\
-#	src/execution/signal.c													\
+	src/utils/init_n_etc.c													\
+	src/utils/init_utils.c													\
+	src/utils/signals.c
 
 OBJS		:= $(SRCS:.c=.o)
 
