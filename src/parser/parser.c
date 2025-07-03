@@ -314,13 +314,16 @@ int	exec_env(char **args, t_env **env, int prev)
 
 void	strarr_print(char **s)
 {
+	int		i;
+
 	if (!*s)
 		return ;
-	while (*s)
+	i = -1;
+	while (s[++i])
 	{
-		if (ft_strchr(*s, '='))
-			ft_printf("%s\n", *s);
-		s++;
+		if (!ft_strchr(s[i], '='))
+			continue ;
+		ft_printf("%s\n", s[i]);
 	}
 }
 
@@ -1174,7 +1177,7 @@ int	tkn_error(t_token *tok)
 	int			len;
 
 	tok_str = get_tkn_as_str(tok->type);
-	prefix = "Minishell: syntax error";
+	prefix = "Minishell: syntax error: '";
 	suffix = "'\n";
 	len = ft_strlen(tok_str) + ft_strlen(prefix) + ft_strlen(suffix) + 1;
 	buffer = ft_malloc(sizeof(*buffer) * len);
