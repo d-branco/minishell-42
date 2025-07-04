@@ -12,8 +12,6 @@
 
 #include "../../include/minishell.h"
 
-static void	mark_tube_no_quote_remove(t_tube *t);
-
 int	pipeline_expansion(t_list **pipeline, t_env *env, int error_code)
 {
 	t_list	*current;
@@ -71,8 +69,6 @@ int	expand_tube(t_tube *tube, t_tube **res, t_env *env, int error_code)
 		free(tube->word);
 		tube->word = tmp;
 		tubo = separate_tube(tube);
-		if(ft_strchr(tmp, '\'') || ft_strchr(tmp, '\"'))
-			mark_tube_no_quote_remove(tubo);
 		handle_wildcards(res, tubo);
 		if (tube->modifier != -1 && (!*res || (*res)->next))
 			code = -1;
@@ -90,6 +86,13 @@ void	lst_quote_remove(t_tube *lst)
 
 	while (lst)
 	{
+		if (lst->word && lst->word[0] == '\1')
+		{
+			tmp = ft_strdup(lst->word + 1);
+			free(lst->word);
+			lst->word = tmp;
+			lst->no_quote_remove = 1;
+		}
 		if (!lst->no_quote_remove)
 		{
 			tmp = quote_remove(lst->word);
@@ -100,20 +103,6 @@ void	lst_quote_remove(t_tube *lst)
 	}
 }
 
-/*
-void	lst_quote_remove(t_tube *lst)
-{
-	char	*tmp;
-
-	while (lst)
-	{
-		tmp = quote_remove(lst->word);
-		free(lst->word);
-		lst->word = tmp;
-		lst = lst->next;
-	}
-}
-*/
 char	*quote_remove(char *str)
 {
 	int				i;
@@ -135,13 +124,3 @@ char	*quote_remove(char *str)
 	res[i] = 0;
 	return (res);
 }
-
-static void	mark_tube_no_quote_remove(t_tube *t)
-{
-	while (t)
-	{
-		t->no_quote_remove = 1;
-		t = t->next;
-	}
-}
-

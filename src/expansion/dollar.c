@@ -13,6 +13,8 @@
 #include "../../include/minishell.h"
 
 static char	*handle_dollar_quotes(char **str);
+static void	handle_normal_char(
+				char **str, char *res, int *i, t_quote_state *state);
 
 char	*dollar_expansion(
 			char **str, t_env *env, int retn, t_quote_state *state)
@@ -50,44 +52,26 @@ char	*expand_variable(char **str, t_env *env, t_quote_state *state)
 	(void) state;
 	while (ft_isalnum((*str)[i]) || (*str)[i] == '_')
 		i++;
-	/*if (i == 1)
-	{
-		ret = ft_strdup("$");
-		*str += i;
-		return (ret);
-	}*/
 	if (i == 1)
 	{
 		if ((*str)[1] == '\'' || (*str)[1] == '"')
 			return (handle_dollar_quotes(str));
-		ret = ft_strdup("$");
 		*str += i;
-		return (ret);
+		return (ft_strdup("$"));
 	}
 	key = ft_substr(*str, 1, i - 1);
 	value = ret_env_key(env, key);
 	free(key);
 	*str += i;
-	if (state->double_quote)
-		ret = backslash_chars(value, TRUE);
-	else
-		ret = backslash_chars(value, FALSE);
+	ret = backslash_chars(value, state->double_quote);
 	return (ret);
 }
 
-char	*ret_env_key(t_env *env, char *key)
+static void	handle_normal_char(
+		char **str, char *res, int *i, t_quote_state *state)
 {
-	static char	empty[1] = "";
-
-	while (env)
-	{
-		if (ft_strcmp(env->key, key) == 0)
-		{
-			return (env->value);
-		}
-		env = env->next;
-	}
-	return (empty);
+	handle_quote(*str, state);
+	res[(*i)++] = *((*str)++);
 }
 
 char	*param_expansion(char *str, t_env *env, int retn)
@@ -113,58 +97,10 @@ char	*param_expansion(char *str, t_env *env, int retn)
 			free(val);
 		}
 		else
-		{
-			handle_quote(str, &state);
-			res[i++] = *(str++);
-		}
+			handle_normal_char(&str, res, &i, &state);
 	}
 	res[i] = 0;
-	printf("RES: %s\n", res);
 	return (res);
-}
-
-/*
-char	*param_expansion(char *str, t_env *env, int retn)
-{
-	char			*val;
-	char			*res;
-	int				i;
-	t_quote_state	state;
-
-	res = ft_malloc(1 * (ft_strlen(str) + 1));
-	state = (t_quote_state){0, 0, 0};
-	i = 0;
-	while (*str)
-	{
-		if (*str == '$' && !state.escaped && !state.single_quote)
-		{
-			val = dollar_expansion(&str, env, retn, &state);
-			insert_value(&res, val, i, (ft_strlen(str) + 1));
-			i += ft_strlen(val);
-			free(val);
-		}
-		else
-		{
-			handle_quote(str, &state);
-			res[i++] = *(str++);
-		}
-	}
-	return (res[i] = 0, res);
-}
-*/
-void	insert_value(char **buf, char *val, int pos, int extra_space)
-{
-	int		len;
-	char	*tmp;
-
-	(*buf)[pos] = 0;
-	len = ft_strlen(*buf) + ft_strlen(val) + extra_space;
-	tmp = ft_malloc(1 * len);
-	ft_strlcpy(tmp, *buf, len);
-	ft_strlcat(tmp, val, len);
-	pos += ft_strlen(val);
-	free(*buf);
-	*buf = tmp;
 }
 
 static char	*handle_dollar_quotes(char **str)
@@ -172,17 +108,15 @@ static char	*handle_dollar_quotes(char **str)
 	char	quote;
 	int		len;
 	char	*res;
+	char	*tagged;
 
-	quote = (*str)[1]; // ' ou "
-	*str += 2; // pula $ e a aspa inicial
-
-	if (**str == quote) // caso especial: $'' ou $""
+	quote = (*str)[1];
+	*str += 2;
+	if (**str == quote)
 	{
 		*str += 1;
-		printf("AQUIIIIII\n");
-		return (ft_strdup(""));
+		return (ft_strdup("\1"));
 	}
-
 	len = 0;
 	while ((*str)[len] && (*str)[len] != quote)
 		len++;
@@ -190,6 +124,7 @@ static char	*handle_dollar_quotes(char **str)
 	*str += len;
 	if (**str == quote)
 		*str += 1;
-	return (res);
+	tagged = ft_strjoin("\1", res);
+	free(res);
+	return (tagged);
 }
-

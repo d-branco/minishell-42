@@ -97,13 +97,13 @@ int	parse_tube(t_tube **tube, t_token **tok)
 		next_tkn(tok);
 		if (check_tkn(*tok, e_WORD) != 0)
 			return (SYNTAX_ERROR);
-		*tube = make_tube(&(t_tube){ft_strdup((*tok)->str), modifier, 0, NULL});
+		*tube = make_tube(&(t_tube){(*tok)->str, modifier, 0, NULL});
 		next_tkn(tok);
 	}
 	else if ((*tok)->type == e_WORD)
 	{
 		*tube = make_tube(
-				&(t_tube){ft_strdup((*tok)->str), -1, 0, NULL});
+				&(t_tube){(*tok)->str, -1, 0, NULL});
 		next_tkn(tok);
 	}
 	else

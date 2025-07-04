@@ -53,3 +53,33 @@ t_tube	*get_last_tube(t_tube *t)
 		return (t);
 	return (get_last_tube(t->next));
 }
+
+void	insert_value(char **buf, char *val, int pos, int extra_space)
+{
+	int		len;
+	char	*tmp;
+
+	(*buf)[pos] = 0;
+	len = ft_strlen(*buf) + ft_strlen(val) + extra_space;
+	tmp = ft_malloc(1 * len);
+	ft_strlcpy(tmp, *buf, len);
+	ft_strlcat(tmp, val, len);
+	pos += ft_strlen(val);
+	free(*buf);
+	*buf = tmp;
+}
+
+char	*ret_env_key(t_env *env, char *key)
+{
+	static char	empty[1] = "";
+
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) == 0)
+		{
+			return (env->value);
+		}
+		env = env->next;
+	}
+	return (empty);
+}

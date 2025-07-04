@@ -91,7 +91,9 @@ int	handle_quote(char *c, t_quote_state *state)
 	if (*c == '\'' && !state->double_quote && !state->escaped)
 		state->single_quote = !state->single_quote;
 	else if (*c == '"' && !state->single_quote && !state->escaped)
+	{
 		state->double_quote = !state->double_quote;
+	}
 	else if (*c == '\\' && !state->single_quote && !state->escaped
 		&& needs_escaping(*(c + 1), state))
 		state->escaped = TRUE;
