@@ -225,6 +225,7 @@ typedef struct s_tube
 {
 	char			*word;
 	int				modifier;
+	int				no_quote_remove;
 	struct s_tube	*next;
 }	t_tube;
 

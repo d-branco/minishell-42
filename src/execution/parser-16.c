@@ -16,6 +16,32 @@ t_tube	*make_tube(t_tube *new)
 {
 	t_tube	*tube;
 
+	tube = ft_malloc(sizeof(*tube));
+	if (new)
+	{
+		tube->modifier = new->modifier;
+		if (new->word)
+			tube->word = ft_strdup(new->word);
+		else
+			tube->word = NULL;
+		tube->no_quote_remove = new->no_quote_remove;
+		tube->next = NULL;
+	}
+	else
+	{
+		tube->modifier = -1;
+		tube->word = NULL;
+		tube->no_quote_remove = 0;
+		tube->next = NULL;
+	}
+	return (tube);
+}
+
+/*
+t_tube	*make_tube(t_tube *new)
+{
+	t_tube	*tube;
+
 	tube = ft_malloc(sizeof(*tube) * 1);
 	if (new)
 	{
@@ -30,7 +56,7 @@ t_tube	*make_tube(t_tube *new)
 		tube->next = NULL;
 	}
 	return (tube);
-}
+}*/
 
 t_tube	*separate_tube(t_tube *tube)
 {
@@ -50,7 +76,7 @@ t_tube	*separate_tube(t_tube *tube)
 			free(word);
 			break ;
 		}
-		*current = make_tube(&(t_tube){word, tube->modifier, NULL});
+		*current = make_tube(&(t_tube){word, tube->modifier, tube->no_quote_remove, NULL});
 		current = &(*current)->next;
 	}
 	return (section);

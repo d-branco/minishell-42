@@ -12,6 +12,8 @@
 
 #include "../../include/minishell.h"
 
+static char	*handle_dollar_quotes(char **str);
+
 char	*dollar_expansion(
 			char **str, t_env *env, int retn, t_quote_state *state)
 {
@@ -48,8 +50,16 @@ char	*expand_variable(char **str, t_env *env, t_quote_state *state)
 	(void) state;
 	while (ft_isalnum((*str)[i]) || (*str)[i] == '_')
 		i++;
+	/*if (i == 1)
+	{
+		ret = ft_strdup("$");
+		*str += i;
+		return (ret);
+	}*/
 	if (i == 1)
 	{
+		if ((*str)[1] == '\'' || (*str)[1] == '"')
+			return (handle_dollar_quotes(str));
 		ret = ft_strdup("$");
 		*str += i;
 		return (ret);
@@ -94,6 +104,40 @@ char	*param_expansion(char *str, t_env *env, int retn)
 	{
 		if (*str == '$' && !state.escaped && !state.single_quote)
 		{
+			if (str[1] == '\'' || str[1] == '"')
+				val = handle_dollar_quotes(&str);
+			else
+				val = dollar_expansion(&str, env, retn, &state);
+			insert_value(&res, val, i, ft_strlen(str) + 1);
+			i += ft_strlen(val);
+			free(val);
+		}
+		else
+		{
+			handle_quote(str, &state);
+			res[i++] = *(str++);
+		}
+	}
+	res[i] = 0;
+	printf("RES: %s\n", res);
+	return (res);
+}
+
+/*
+char	*param_expansion(char *str, t_env *env, int retn)
+{
+	char			*val;
+	char			*res;
+	int				i;
+	t_quote_state	state;
+
+	res = ft_malloc(1 * (ft_strlen(str) + 1));
+	state = (t_quote_state){0, 0, 0};
+	i = 0;
+	while (*str)
+	{
+		if (*str == '$' && !state.escaped && !state.single_quote)
+		{
 			val = dollar_expansion(&str, env, retn, &state);
 			insert_value(&res, val, i, (ft_strlen(str) + 1));
 			i += ft_strlen(val);
@@ -107,7 +151,7 @@ char	*param_expansion(char *str, t_env *env, int retn)
 	}
 	return (res[i] = 0, res);
 }
-
+*/
 void	insert_value(char **buf, char *val, int pos, int extra_space)
 {
 	int		len;
@@ -122,3 +166,30 @@ void	insert_value(char **buf, char *val, int pos, int extra_space)
 	free(*buf);
 	*buf = tmp;
 }
+
+static char	*handle_dollar_quotes(char **str)
+{
+	char	quote;
+	int		len;
+	char	*res;
+
+	quote = (*str)[1]; // ' ou "
+	*str += 2; // pula $ e a aspa inicial
+
+	if (**str == quote) // caso especial: $'' ou $""
+	{
+		*str += 1;
+		printf("AQUIIIIII\n");
+		return (ft_strdup(""));
+	}
+
+	len = 0;
+	while ((*str)[len] && (*str)[len] != quote)
+		len++;
+	res = ft_substr(*str, 0, len);
+	*str += len;
+	if (**str == quote)
+		*str += 1;
+	return (res);
+}
+
