@@ -74,7 +74,7 @@ int	expand_tube(t_tube *tube, t_tube **res, t_env *env, int error_code)
 			code = -1;
 	}
 	else
-		*res = make_tube(&(t_tube){ft_strdup(word), e_HERE_DOC, 0, NULL});
+		*res = make_tube(&(t_tube){word, e_HERE_DOC, 0, NULL});
 	lst_quote_remove(*res);
 	free(word);
 	return (code);
