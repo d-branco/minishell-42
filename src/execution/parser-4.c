@@ -73,7 +73,6 @@ int	cmds_with_forks(t_exec *exec)
 	int			ret;
 
 	pids = start_children(exec);
-	write_all_heredocs(exec);
 	close_fds(exec);
 	ret = wait_all(exec->n, pids);
 	free(pids);

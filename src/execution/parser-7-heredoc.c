@@ -12,59 +12,50 @@
 
 #include "../../include/minishell.h"
 
-void	read_single_heredoc(char **buffer, char *delim)
+static char	*expand_line(char *line, t_env *env);
+void		heredoc_loop(int write_fd, char *delim, t_env *env);
+
+static void	handle_heredoc_result(int *in_fd, int *pipe_fd, int pid)
 {
-	char	*line;
+	int	status;
 
-	free(*buffer);
-	*buffer = ft_strdup("");
-	while (TRUE)
+	close(pipe_fd[1]);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
-		line = get_input_line("> ");
-		if (line == NULL || ft_strcmp(line, delim) == 0)
-		{
-			free(line);
-			break ;
-		}
-		add_line(buffer, line);
-	}
-}
-
-void	add_line(char **buffer, char *line)
-{
-	char	*tmp;
-	int		size;
-
-	size = ft_strlen(line) + 2;
-	if (*buffer)
-		size += ft_strlen(*buffer);
-	tmp = ft_malloc(sizeof(*tmp) * size);
-	if (*buffer)
-	{
-		ft_strlcpy(tmp, *buffer, size);
-		ft_strlcat(tmp, line, size);
+		write(1, "\n", 1);
+		handle_exit_code(130);
+		close(pipe_fd[0]);
+		*in_fd = -1;
 	}
 	else
-		ft_strlcpy(tmp, line, size);
-	tmp[size - 2] = '\n';
-	tmp[size - 1] = '\0';
-	free(*buffer);
-	free(line);
-	*buffer = tmp;
+		*in_fd = pipe_fd[0];
 }
 
-char	*get_input_line(char *prompt)
+void	read_single_heredoc(int *in_fd, char *delim, t_env *env)
 {
-	char	*line;
+	int	pipe_fd[2];
+	int	pid;
 
-	if (isatty(0) && isatty(2))
-		line = readline(prompt);
-	else
+	if (pipe(pipe_fd) == -1)
 	{
-		line = get_next_line(0);
-		remove_endl(line);
+		perror("pipe");
+		exit(1);
 	}
-	return (line);
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(1);
+	}
+	if (pid == 0)
+	{
+		close(pipe_fd[0]);
+		heredoc_loop(pipe_fd[1], delim, env);
+		close(pipe_fd[1]);
+		exit(0);
+	}
+	handle_heredoc_result(in_fd, pipe_fd, pid);
 }
 
 void	remove_endl(char *line)
@@ -80,5 +71,33 @@ void	remove_endl(char *line)
 			break ;
 		}
 		i++;
+	}
+}
+
+static char	*expand_line(char *line, t_env *env)
+{
+	return (param_expansion(line, env, 0));
+}
+
+void	heredoc_loop(int write_fd, char *delim, t_env *env)
+{
+	char	*line;
+	char	*expanded;
+
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || ft_strcmp(line, delim) == 0)
+		{
+			free(line);
+			break ;
+		}
+		expanded = expand_line(line, env);
+		write(write_fd, expanded, ft_strlen(expanded));
+		write(write_fd, "\n", 1);
+		free(line);
+		free(expanded);
 	}
 }

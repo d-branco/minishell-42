@@ -78,8 +78,13 @@ int	update_fd_in(t_cmd *cmd, t_tube *redir, t_exec *exec)
 	}
 	else if (redir->modifier == e_HERE_DOC)
 	{
-		read_single_heredoc(&cmd->hd_buffer, redir->word);
-		cmd->in_fd = exec->hd_pipes[cmd->i][0];
+		read_single_heredoc(&cmd->in_fd, redir->word, *exec->env);
+		if (cmd->in_fd == -1)
+		{
+			cmd->status = 1;
+			return (-1);
+		}
+		exec->fd_count++;
 	}
 	return (0);
 }

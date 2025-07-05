@@ -451,9 +451,9 @@ void		print_error(char *program, char *arg, char *msg);
 int			calc_len(char *prefix, char *program, char *arg, char *msg);
 
 int			update_fd_in(t_cmd *cmd, t_tube *redir, t_exec *exec);
-void		read_single_heredoc(char **buffer, char *delim);
-void		add_line(char **buffer, char *line);
-char		*get_input_line(char *prompt);
+void		read_single_heredoc(int *in_fd, char *delim, t_env *env);
+//void		add_line(char **buffer, char *line);
+//char		*get_input_line(char *prompt);
 void		remove_endl(char *line);
 
 int			fd_builtin(t_exec *exec, int i);

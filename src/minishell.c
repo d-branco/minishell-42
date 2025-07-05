@@ -56,7 +56,7 @@ void	check_args(int argc, char **argv)
 void	looping_shell(t_env **env)
 {
 	char	*input;
-
+	
 	while (TRUE)
 	{
 		input = readline("% ");
