@@ -71,3 +71,14 @@ const char	*ret_builtin_literal(int n)
 		return (NULL);
 	return (tkn_str[n]);
 }
+
+void	heredoc_failure(void)
+{
+	char	*args[4];
+
+	args[0] = "sh";
+	args[1] = "-c";
+	args[2] = "exit 130";
+	args[3] = NULL;
+	execve("/usr/bin/sh", args, NULL);
+}

@@ -345,6 +345,7 @@ char		**extract_args(t_tube *lst);
 void		init_cmd_path(t_cmd *cmd, t_exec *exec);
 int			ret_builtin_enum(char *str);
 const char	*ret_builtin_literal(int n);
+void		heredoc_failure(void);
 //src/execution/parser-10.c
 int			**free_pipes(int **pipes, int n);
 void		free_cmd(t_cmd *cmd);

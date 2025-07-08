@@ -42,6 +42,8 @@ int	start_child(t_exec *exec, int i)
 		close(1);
 		if (exec->cmds[i].status == 0)
 			exit_ve();
+		if (handle_exit_code(-1) == 130)
+			heredoc_failure();
 		command_failure();
 		exit(exec->cmds[i].status);
 	}
