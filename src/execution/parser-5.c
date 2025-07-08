@@ -40,6 +40,8 @@ int	start_child(t_exec *exec, int i)
 		exec_cmd(exec, i);
 		close(0);
 		close(1);
+		if (exec->cmds[i].status == 0)
+			exit_ve();
 		command_failure();
 		exit(exec->cmds[i].status);
 	}
