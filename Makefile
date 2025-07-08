@@ -18,11 +18,6 @@ CC			= cc
 CFLAGS		+= -Wall -Wextra
 CFLAGS		+= -Werror
 READFLAGS	= -lreadline
-
-#CFLAGS		+= -g
-#CFLAGS		+= -g3
-#CFLAGS		+= -D DEBUG=1
-#CFLAGS		+= -fsanitize=address -fsanitize=leak
 ########################################################### Intermidiate steps #
 RM			:= rm -f
 AR			:= ar rcs
@@ -68,13 +63,13 @@ SRCS		:=	\
 	src/execution/parser-16.c												\
 																			\
 	src/expansion/dollar.c													\
-	src/expansion/wildcards-2.c											\
-	src/expansion/wildcards-3.c											\
-	src/expansion/wildcards-4.c											\
-	src/expansion/wildcards-5.c											\
+	src/expansion/wildcards-2.c												\
+	src/expansion/wildcards-3.c												\
+	src/expansion/wildcards-4.c												\
+	src/expansion/wildcards-5.c												\
 	src/expansion/wildcards.c												\
 																			\
-	src/utils/error-0.c													\
+	src/utils/error-0.c														\
 	src/utils/ft_dprintf.c													\
 	src/utils/ft_isspace.c													\
 	src/utils/ft_malloc.c													\
@@ -84,9 +79,6 @@ SRCS		:=	\
 	src/utils/signals.c
 
 OBJS		:= $(SRCS:.c=.o)
-
-#SRCS_BONUS	:=
-#OBJS_BONUS	:= $(SRCS_BONUS:.c=.o)
 ###################################################################### Targets #
 all: $(NAME)
 
@@ -143,7 +135,8 @@ clean:
 
 fclean: clean
 	@\
-	make --silent --no-print-directory -C $(LIBFT_DIR) fclean			;	\
+	make --silent --no-print-directory -C $(LIBFT_DIR) fclean			&&	\
+	echo "$(GRAY)Libft cleaned.$(COR)"									;	\
 	$(RM) $(NAME)														&&	\
 	echo "$(GRAY)File fcleaned.$(COR)"
 
@@ -181,11 +174,9 @@ test: supp_doc
 	$(COR)$(GRAY)========================================== $(NAME) END\n\
 	$(COR)RETURN VALUE: $$?"											&&	\
 	\
-	echo -n "$(YELLOW)" 												;	\
 		norminette src/ include/											\
 		| grep -v OK 														\
 		| grep -v 'Setting locale to en_US'								;	\
-	echo -n "$(COR)"													;	\
 	echo -n "Error count: "												;	\
 		norminette src/ include/ 											\
 			| grep -v OK 													\
