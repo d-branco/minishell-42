@@ -53,7 +53,7 @@ void	read_single_heredoc(int *in_fd, char *delim, t_env *env)
 		close(pipe_fd[0]);
 		heredoc_loop(pipe_fd[1], delim, env);
 		close(pipe_fd[1]);
-		exit(0);
+		exit_ve();
 	}
 	handle_heredoc_result(in_fd, pipe_fd, pid);
 }

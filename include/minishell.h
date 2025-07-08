@@ -470,7 +470,8 @@ int			start_child(t_exec *exec, int i);
 int			fd_redirect(int input_fd, int output_fd);
 void		exec_cmd(t_exec *exec, int i);
 
-void		write_all_heredocs(t_exec *exec);
+//void		write_all_heredocs(t_exec *exec);
+void		exit_ve(void);
 int			wait_all(int n, int *pids);
 int			get_return_value(int status);
 

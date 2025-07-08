@@ -12,22 +12,33 @@
 
 #include "../../include/minishell.h"
 
-void	write_all_heredocs(t_exec *exec)
-{
-	int	i;
+//void	write_all_heredocs(t_exec *exec)
+//{
+//	int	i;
+//
+//	i = 0;
+//	while (i < exec->n)
+//	{
+//		if (exec->cmds[i].hd_buffer)
+//		{
+//			write(exec->hd_pipes[i][1],
+//				exec->cmds[i].hd_buffer,
+//				ft_strlen(exec->cmds[i].hd_buffer));
+//			close(exec->hd_pipes[i][1]);
+//		}
+//		i++;
+//	}
+//}
 
-	i = 0;
-	while (i < exec->n)
-	{
-		if (exec->cmds[i].hd_buffer)
-		{
-			write(exec->hd_pipes[i][1],
-				exec->cmds[i].hd_buffer,
-				ft_strlen(exec->cmds[i].hd_buffer));
-			close(exec->hd_pipes[i][1]);
-		}
-		i++;
-	}
+void	exit_ve(void)
+{
+	char	*args[4];
+
+	args[0] = "sh";
+	args[1] = "-c";
+	args[2] = "exit 0";
+	args[3] = NULL;
+	execve("/usr/bin/sh", args, NULL);
 }
 
 int	wait_all(int n, int *pids)

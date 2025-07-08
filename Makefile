@@ -184,16 +184,12 @@ test: supp_doc
 	echo -n "$(YELLOW)" 												;	\
 		norminette src/ include/											\
 		| grep -v OK 														\
-		| grep -v WRONG_SCOPE_COMMENT										\
-		| grep -v EMPTY_LINE_FUNCTION										\
-		| grep -v TOO_MANY_FUNCS										;	\
+		| grep -v 'Setting locale to en_US'								;	\
 	echo -n "$(COR)"													;	\
 	echo -n "Error count: "												;	\
 		norminette src/ include/ 											\
 			| grep -v OK 													\
-			| grep -v WRONG_SCOPE_COMMENT									\
-			| grep -v EMPTY_LINE_FUNCTION									\
-			| grep -v TOO_MANY_FUNCS										\
+			| grep -v 'Setting locale to en_US'								\
 			| grep -v Error!												\
 		| wc -l
 
