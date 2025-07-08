@@ -11,6 +11,7 @@
 # **************************************************************************** #
 
 NAME		:= minishell
+NAME-BONUS	:= minishell_bonus
 LIBFT		:= libft/libft.a
 LIBFT_DIR	:= libft
 ##################################################################### Compiler #
@@ -79,6 +80,61 @@ SRCS		:=	\
 	src/utils/signals.c
 
 OBJS		:= $(SRCS:.c=.o)
+
+SRCS-BONUS	:=	\
+	src_bonus/minishell_bonus.c															\
+																						\
+	src_bonus/builtins/bridge_bonus.c													\
+	src_bonus/builtins/cd_bonus.c														\
+	src_bonus/builtins/check_builtins_bonus.c											\
+	src_bonus/builtins/echo_bonus.c														\
+	src_bonus/builtins/env_bonus.c														\
+	src_bonus/builtins/env_utils-2_bonus.c												\
+	src_bonus/builtins/env_utils-3_bonus.c												\
+	src_bonus/builtins/env_utils_bonus.c												\
+	src_bonus/builtins/exit_bonus.c														\
+	src_bonus/builtins/export_bonus.c													\
+	src_bonus/builtins/export_utils-2_bonus.c											\
+	src_bonus/builtins/export_utils_bonus.c												\
+	src_bonus/builtins/pwd_bonus.c														\
+	src_bonus/builtins/replace_add_var_bonus.c											\
+	src_bonus/builtins/unset_bonus.c													\
+	src_bonus/builtins/unset_utils_bonus.c												\
+																						\
+	src_bonus/execution/parser_bonus.c													\
+	src_bonus/execution/parser-0-lexer_bonus.c											\
+	src_bonus/execution/parser-2_bonus.c												\
+	src_bonus/execution/parser-3_bonus.c												\
+	src_bonus/execution/parser-4_bonus.c												\
+	src_bonus/execution/parser-5_bonus.c												\
+	src_bonus/execution/parser-6-fd_bonus.c												\
+	src_bonus/execution/parser-7-heredoc_bonus.c										\
+	src_bonus/execution/parser-8_bonus.c												\
+	src_bonus/execution/parser-9_bonus.c												\
+	src_bonus/execution/parser-10_bonus.c												\
+	src_bonus/execution/parser-11_bonus.c												\
+	src_bonus/execution/parser-12_bonus.c												\
+	src_bonus/execution/parser-13_bonus.c												\
+	src_bonus/execution/parser-14_bonus.c												\
+	src_bonus/execution/parser-15_bonus.c												\
+	src_bonus/execution/parser-16_bonus.c												\
+	src_bonus/expansion/dollar_bonus.c													\
+	src_bonus/expansion/wildcards-2_bonus.c												\
+	src_bonus/expansion/wildcards-3_bonus.c												\
+	src_bonus/expansion/wildcards-4_bonus.c												\
+	src_bonus/expansion/wildcards-5_bonus.c												\
+	src_bonus/expansion/wildcards_bonus.c												\
+																						\
+	src_bonus/utils/error-0_bonus.c														\
+	src_bonus/utils/ft_dprintf_bonus.c													\
+	src_bonus/utils/ft_isspace_bonus.c													\
+	src_bonus/utils/ft_malloc_bonus.c													\
+	src_bonus/utils/ft_strcmp_bonus.c													\
+	src_bonus/utils/init_n_etc_bonus.c													\
+	src_bonus/utils/init_utils_bonus.c													\
+	src_bonus/utils/signals_bonus.c
+
+OBJS-BONUS	:= $(SRCS-BONUS:.c=.o)
 ###################################################################### Targets #
 all: $(NAME)
 
@@ -86,7 +142,6 @@ $(NAME): $(LIBFT) $(OBJS) supp_doc
 	@\
 	echo "$(GRAY)Compile flags:$(COR)	$(CC) $(CFLAGS)"				;	\
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(READFLAGS)
-
 
 %.o: %.c
 	@\
@@ -117,7 +172,12 @@ supp_doc:
 	}\n\
 	" > .readline.txt
 
-bonus: $(NAME)
+bonus: $(NAME-BONUS)
+
+$(NAME-BONUS): $(LIBFT) $(OBJS-BONUS) supp_doc
+	@\
+	echo "$(GRAY)Compile flags:$(COR)	$(CC) $(CFLAGS)"				;	\
+	$(CC) $(CFLAGS) $(OBJS-BONUS) $(LIBFT) -o $(NAME-BONUS) $(READFLAGS)
 
 debug:
 	@\
@@ -128,7 +188,8 @@ debug:
 clean:
 	@\
 	make --silent --no-print-directory -C $(LIBFT_DIR) clean			;	\
-	$(RM) *.o include/*.gch *.exe $(OBJS) $(OBJS_BONUS) 				;	\
+	$(RM) *.o include/*.gch *.exe $(OBJS)				 				;	\
+	$(RM) *.o include_bonus/*.gch *.exe $(OBJS-BONUS)					;	\
 	$(RM) ./a.out														;	\
 	$(RM) ./playground/a.out											;	\
 	echo "$(GRAY)Files cleaned.$(COR)"
@@ -137,7 +198,7 @@ fclean: clean
 	@\
 	make --silent --no-print-directory -C $(LIBFT_DIR) fclean			&&	\
 	echo "$(GRAY)Libft cleaned.$(COR)"									;	\
-	$(RM) $(NAME)														&&	\
+	$(RM) $(NAME) $(NAME-BONUS)											&&	\
 	echo "$(GRAY)File fcleaned.$(COR)"
 
 re: fclean all
