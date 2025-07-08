@@ -23,6 +23,7 @@ int	main(int argc, char **argv, char **envp)
 	shell = ft_malloc(sizeof(t_mnsh) * 1);
 	display_ctrl_c(TRUE);
 	parent_signals();
+	signal(SIGPIPE, SIG_IGN);
 	init_shell(shell, envp);
 	*env = make_ll_env(shell->envp);
 	free_shell(shell);
@@ -56,7 +57,7 @@ void	check_args(int argc, char **argv)
 void	looping_shell(t_env **env)
 {
 	char	*input;
-	
+
 	while (TRUE)
 	{
 		input = readline("% ");
@@ -78,34 +79,6 @@ void	looping_shell(t_env **env)
 	display_ctrl_c(FALSE);
 }
 
-/*
-static char	*init_prompt(int exit_code)
-{
-	char	*exit_code_str;
-	char	*prompt;
-	int		i;
-
-	exit_code_str = ft_itoa(exit_code);
-	if (!exit_code_str)
-		return (NULL);
-	i = ft_strlen(exit_code_str);
-	prompt = (char *)ft_malloc(sizeof(char) * (i + 3));
-	if (!prompt)
-		return (free(exit_code_str), NULL);
-	i = 0;
-	while (FALSE)
-	{
-		prompt[i] = exit_code_str[i];
-		i++;
-	}
-	prompt[i++] = '%';
-	prompt[i++] = ' ';
-	prompt[i] = '\0';
-	free(exit_code_str);
-	return (prompt);
-}
-*/
-
 int	handle_exit_code(int newcode)
 {
 	static int	code = 0;
@@ -115,9 +88,3 @@ int	handle_exit_code(int newcode)
 	code = newcode;
 	return (code);
 }
-
-//		input = "ls -l | grep .c && echo success || (echo"
-//			" failure > output.txt && echo -n \"failure but redirected\")";
-
-//char *input = "ls -l | grep .c && echo success || echo failure > output.txt";
-//char *input = "a&&b|c||(d&&e&&(f||g))";

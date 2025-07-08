@@ -23,8 +23,8 @@ static void	handle_heredoc_result(int *in_fd, int *pipe_fd, int pid)
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
-		write(1, "\n", 1);
 		handle_exit_code(130);
+		write(STDOUT_FILENO, "\n", 1);
 		close(pipe_fd[0]);
 		*in_fd = -1;
 	}
