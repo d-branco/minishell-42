@@ -38,12 +38,12 @@ int	ft_echo(char **av)
 		nflag = '\0';
 	while (av[i])
 	{
-		printf("%s", av[i]);
+		ft_printf("%s", av[i]);
 		if (av[i + 1])
-			printf(" ");
+			ft_printf(" ");
 		i++;
 	}
-	printf("%c", nflag);
+	ft_printf("%c", nflag);
 	return (handle_exit_code(0));
 }
 
