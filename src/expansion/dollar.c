@@ -28,7 +28,7 @@ char	*dollar_expansion(
 	}
 	else if ((*str)[1] && ((*str)[1] == '0'))
 	{
-		ret = ft_strdup("Shell-A");
+		ret = ft_strdup("Shell-Bye");
 		*str += 2;
 	}
 	else if ((*str)[1] && ((*str)[1] == '*'))
