@@ -77,7 +77,7 @@ static char	*shlvl_to_str(int n)
 {
 	if (n > 999)
 	{
-		printf("minishell: warning: shell level (%d) too high, "
+		ft_printf("minishell: warning: shell level (%d) too high, "
 			"resetting to 1\n", n);
 		return (ft_strdup("1"));
 	}

@@ -21,14 +21,14 @@ int	ft_pwd(t_mnsh *shell)
 	cwd = getcwd(NULL, 0);
 	if (cwd)
 	{
-		printf("%s\n", cwd);
+		ft_printf("%s\n", cwd);
 		free(cwd);
 		free(pwd_env);
 		return (handle_exit_code(0));
 	}
 	if (pwd_env)
 	{
-		printf("%s\n", pwd_env);
+		ft_printf("%s\n", pwd_env);
 		free(cwd);
 		free(pwd_env);
 		return (handle_exit_code(0));

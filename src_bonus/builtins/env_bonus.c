@@ -28,7 +28,7 @@ int	ft_env(char **av, char **envp)
 	{
 		if (!ft_strchr(envp[i], '='))
 			continue ;
-		printf("%s\n", envp[i]);
+		ft_printf("%s\n", envp[i]);
 	}
 	return (handle_exit_code(0));
 }

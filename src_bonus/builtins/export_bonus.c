@@ -39,7 +39,7 @@ static void	print_export_format(char *env_var)
 	if (equal_posit)
 	{
 		*equal_posit = '\0';
-		printf("%s=\"%s\"\n", env_var, equal_posit + 1);
+		ft_printf("%s=\"%s\"\n", env_var, equal_posit + 1);
 		*equal_posit = '=';
 	}
 	else
