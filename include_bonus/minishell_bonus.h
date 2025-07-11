@@ -454,12 +454,14 @@ int			exec_exit(char **args, t_env **env, int prev);
 //int			ft_exit(int ac, char **av, int prev);
 //src/builtins/export.c
 int			ft_export(char **av, t_mnsh *shell);
+int			is_valid_arg(const char *av);
 //src/builtind/export_utils.c
 int			export_var(const char *av, char ***envp);
 //src/builtind/export_utils-2.c
 int			exec_export(char **args, t_env **env, int prev);
 int			export_arg(char *str, t_env **env);
 int			split_equal(char *str, char **identifier, char **value);
+void		env_append(t_env **env, char *key, char *value);
 void		print_export(t_env *env);
 //src/builtins/pwd.c
 int			ft_pwd(t_mnsh *shell);

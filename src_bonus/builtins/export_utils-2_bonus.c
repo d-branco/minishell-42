@@ -36,12 +36,18 @@ int	export_arg(char *str, t_env **env)
 	char	*quoted;
 
 	split_equal(str, &identifier, &value);
-	if (!is_valid_identifier(identifier))
+	if (!is_valid_identifier(identifier)
+		&& !is_valid_arg((const char *) identifier))
 	{
 		quoted = in_quotes(str);
 		print_error("export", quoted, "not a valid identifier");
 		free(quoted);
 		return (-1);
+	}
+	if ((value) && (identifier[(ft_strlen(identifier) - 1)] == '+'))
+	{
+		identifier[(ft_strlen(identifier) - 1)] = '\0';
+		env_append(env, identifier, value);
 	}
 	else if (value)
 		env_add(env, identifier, value);
@@ -50,6 +56,32 @@ int	export_arg(char *str, t_env **env)
 	free(identifier);
 	free(value);
 	return (0);
+}
+
+void	env_append(t_env **env, char *key, char *value)
+{
+	t_env	*found_node;
+	t_env	**insert_ptr;
+	t_env	*new_node;
+	char	*appended_str;
+
+	if (!*key)
+		return ;
+	found_node = env_insert(env, key, &insert_ptr);
+	if (found_node)
+	{
+		appended_str = ft_strjoin(found_node->value, value);
+		free(found_node->value);
+		found_node->value = appended_str;
+	}
+	else
+	{
+		if (value == NULL)
+			new_node = make_env(ft_strdup(key), NULL, NULL);
+		else
+			new_node = make_env(ft_strdup(key), ft_strdup(value), NULL);
+		*insert_ptr = new_node;
+	}
 }
 
 int	split_equal(char *str, char **identifier, char **value)
