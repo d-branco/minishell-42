@@ -21,7 +21,7 @@ int	is_valid_arg(const char *av)
 	i = 1;
 	if (!av || (!ft_isalpha(av[0]) && av[0] != '_'))
 		return (0);
-	while (av[i] && av[i] != '=' && !(av[i] == '+' && av[i + 1] == '='))
+	while (av[i] && av[i] != '=' && !(av[i] == '+'))
 	{
 		if (!ft_isalnum(av[i]) && av[i] != '_')
 			return (0);
