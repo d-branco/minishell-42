@@ -28,7 +28,7 @@ char	*dollar_expansion(
 	}
 	else if ((*str)[1] && ((*str)[1] == '0'))
 	{
-		ret = ft_strdup("Shell-Sea");
+		ret = ft_strdup("C_shell");
 		*str += 2;
 	}
 	else if ((*str)[1] && ((*str)[1] == '*'))
