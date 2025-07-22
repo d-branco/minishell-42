@@ -29,7 +29,7 @@ Project Instructions
 ====================
 ## Restrictions
 - [x] Use **one global variable** at most (to indicate a received signal);
-- [ ] Follow the [norm](doc/normv4.pdf);
+- [x] Follow the [norm](doc/normv4.pdf);
 - [x] Limited use of function to the [allowed bellow](#allowed-functions).
 ## Comand Prompt
  - [x] **display a prompt** when waiting for a command;
@@ -45,21 +45,21 @@ Project Instructions
   - [x] `<<` (here-document);
   - [x] `>>` (append output redirection).
 ## Command Line Parsing
-- [ ] Parse command lines with quotes (single `'` and double `"`);
+- [x] Parse command lines with quotes (single `'` and double `"`);
 - [x] Ignore unclosed quotes and special characters (like backslash`\` or semicolon `;`);
-- [ ] Handle environment variables `($NAME)` expansion;
+- [x] Handle environment variables `($NAME)` expansion;
 - [x] Handle exit status `$?`;
-- [ ] handle `ctrl-C`, `ctrl-D`, and `ctrl-\` signals (similar to bash);
-- [ ] `BONUS` Handle wildcards `*` in the current working directory;
+- [x] handle `ctrl-C`, `ctrl-D`, and `ctrl-\` signals (similar to bash);
+- [x] `BONUS` Handle wildcards `*` in the current working directory;
 - [x] `BONUS` Handle logical operators `AND` (`&&`) and `OR` (`||`) with parentheses.
 ## Builtins commands
-- [ ] `echo` with option `-n`;
-- [ ] `cd` with relative or absolute path;
-- [ ] `pwd` without options;
-- [ ] `export` without options;
-- [ ] `unset` without options;
-- [ ] `env` without options or arguments;
-- [ ] `exit` without options.
+- [x] `echo` with option `-n`;
+- [x] `cd` with relative or absolute path;
+- [x] `pwd` without options;
+- [x] `export` without options;
+- [x] `unset` without options;
+- [x] `env` without options or arguments;
+- [x] `exit` without options.
 
 Directory organization
 ======================
